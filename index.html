@@ -1,1264 +1,532 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión - Taller de Reparaciones (Nube)</title>
-    <style>
-        /* (MISMOS ESTILOS QUE ANTES, SE MANTIENEN IGUAL PARA NO ALARGAR) */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --primary: #2563eb; --primary-dark: #1e40af; --secondary: #10b981; --danger: #ef4444; --warning: #f59e0b; --bg: #f3f4f6; --card: #ffffff; --text: #1f2937; --text-light: #6b7280; --border: #e5e7eb; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; }
-        .login-card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 400px; }
-        .login-card h1 { text-align: center; margin-bottom: 10px; font-size: 28px; }
-        .login-card p { text-align: center; color: var(--text-light); margin-bottom: 30px; }
-        .header { background: white; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; border-radius: 12px; }
-        .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .header h1 { font-size: 24px; color: var(--primary); }
-        .user-info { display: flex; align-items: center; gap: 15px; }
-        .user-email { color: var(--text-light); font-size: 14px; }
-        .nav-tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
-        .nav-tab { padding: 12px 24px; background: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 500; transition: all 0.3s; color: var(--text); }
-        .nav-tab:hover { background: var(--bg); }
-        .nav-tab.active { background: var(--primary); color: white; }
-        .card { background: var(--card); border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .card h2 { font-size: 20px; margin-bottom: 20px; }
-        .card h3 { font-size: 18px; margin-bottom: 15px; margin-top: 15px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
-        .form-group textarea { resize: vertical; min-height: 100px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
-        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: inline-block; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-secondary { background: var(--secondary); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-block { width: 100%; }
-        .table-container { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
-        th { background: var(--bg); font-weight: 600; }
-        tbody tr { cursor: pointer; transition: background 0.2s; }
-        tbody tr:hover { background: #eef2ff; }
-        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-block; }
-        .status-diagnostico { background: #dbeafe; color: #1e40af; }
-        .status-revisar { background: #fef3c7; color: #92400e; }
-        .status-revisado { background: #e0e7ff; color: #3730a3; }
-        .status-autorizacion { background: #fed7aa; color: #9a3412; }
-        .status-reparado { background: #d1fae5; color: #065f46; }
-        .status-entregado { background: #e5e7eb; color: #374151; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .stat-card h3 { font-size: 14px; color: var(--text-light); margin-bottom: 8px; text-transform: uppercase; }
-        .stat-card .stat-value { font-size: 32px; font-weight: 700; color: var(--primary); }
-        .status-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 25px; }
-        .status-card { background: white; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; }
-        .status-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .status-card.active { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2); }
-        .status-card-icon { font-size: 28px; margin-bottom: 8px; }
-        .status-card-name { font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
-        .status-card-count { font-size: 28px; font-weight: 700; }
-        .status-card.diagnostico { background: #dbeafe; } .status-card.diagnostico .status-card-count { color: #1e40af; }
-        .status-card.revisar { background: #fef3c7; } .status-card.revisar .status-card-count { color: #92400e; }
-        .status-card.revisado { background: #e0e7ff; } .status-card.revisado .status-card-count { color: #3730a3; }
-        .status-card.autorizacion { background: #fed7aa; } .status-card.autorizacion .status-card-count { color: #9a3412; }
-        .status-card.reparado { background: #d1fae5; } .status-card.reparado .status-card-count { color: #065f46; }
-        .status-card.entregado { background: #e5e7eb; } .status-card.entregado .status-card-count { color: #374151; }
-        .status-card.todos { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .status-card.todos .status-card-name { color: white; } .status-card.todos .status-card-count { color: white; }
-        .current-view-label { background: var(--primary); color: white; padding: 10px 18px; border-radius: 8px; display: inline-block; margin-bottom: 15px; font-weight: 500; }
-        .search-filter { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .search-filter input { padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; flex: 1; min-width: 200px; }
-        .refaccion-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg); border-radius: 8px; margin-bottom: 10px; }
-        .refaccion-info { flex: 1; }
-        .refaccion-cost { font-weight: 600; color: var(--primary); margin-right: 10px; }
-        .new-order-box { background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
-        .new-order-info h3 { margin: 0; font-size: 18px; color: white; }
-        .new-order-info p { margin: 5px 0 0 0; opacity: 0.9; font-size: 14px; }
-        .btn-new-order { background: white; color: #059669; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        .btn-new-order:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-overlay.active { display: flex; }
-        .modal-box { background: white; border-radius: 16px; padding: 30px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .close-modal { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-light); line-height: 1; }
-        .close-modal:hover { color: var(--danger); }
-        .status-flow { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-        .status-flow-btn { padding: 8px 16px; border: 2px solid var(--border); border-radius: 20px; background: white; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s; }
-        .status-flow-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
-        .detail-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
-        .detail-folio { font-size: 14px; opacity: 0.9; margin-bottom: 5px; }
-        .detail-client-name { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
-        .detail-status-big { display: inline-block; padding: 8px 16px; background: rgba(255,255,255,0.25); border-radius: 20px; font-size: 14px; font-weight: 500; }
-        .detail-section { background: var(--bg); padding: 16px; border-radius: 10px; margin-bottom: 15px; }
-        .detail-section-title { font-size: 13px; text-transform: uppercase; color: var(--text-light); font-weight: 600; margin-bottom: 10px; letter-spacing: 0.5px; }
-        .detail-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-        .detail-row:last-child { border-bottom: none; }
-        .detail-row-label { color: var(--text-light); font-weight: 500; }
-        .detail-row-value { font-weight: 600; text-align: right; max-width: 60%; word-break: break-word; }
-        .detail-highlight { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 15px; }
-        .detail-highlight-label { font-size: 12px; text-transform: uppercase; opacity: 0.9; margin-bottom: 5px; }
-        .detail-highlight-value { font-size: 28px; font-weight: 700; }
-        .detail-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-        .detail-actions .btn { flex: 1; min-width: 120px; }
-        .action-btns { display: flex; gap: 5px; flex-wrap: wrap; }
-        .btn-sm { padding: 6px 12px; font-size: 14px; }
-        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-light); }
-        .empty-state-icon { font-size: 48px; margin-bottom: 10px; }
-        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 2000; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--primary); font-weight: bold; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller de Reparaciones</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f3f4f6;color:#1f2937;line-height:1.6}
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea,#764ba2);padding:20px}
+.login-card{background:white;padding:40px;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.3);width:100%;max-width:400px}
+.login-card h1{text-align:center;margin-bottom:10px;font-size:28px}
+.login-card p{text-align:center;color:#6b7280;margin-bottom:30px}
+.form-group{margin-bottom:20px}
+.form-group label{display:block;margin-bottom:8px;font-weight:500}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:8px;font-size:16px}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#2563eb}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:768px){.form-row{grid-template-columns:1fr}}
+.btn{padding:12px 24px;border:none;border-radius:8px;font-size:16px;font-weight:500;cursor:pointer;display:inline-block}
+.btn-primary{background:#2563eb;color:white}
+.btn-secondary{background:#10b981;color:white}
+.btn-warning{background:#f59e0b;color:white}
+.btn-danger{background:#ef4444;color:white}
+.btn-block{width:100%}
+.btn-sm{padding:6px 12px;font-size:14px}
+.container{max-width:1200px;margin:0 auto;padding:20px}
+.header{background:white;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.1);margin-bottom:30px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.header h1{font-size:24px;color:#2563eb}
+.user-info{display:flex;align-items:center;gap:15px}
+.nav-tabs{display:flex;gap:10px;margin-bottom:30px;flex-wrap:wrap}
+.nav-tab{padding:12px 24px;background:white;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:500;color:#1f2937}
+.nav-tab.active{background:#2563eb;color:white}
+.card{background:white;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.card h2{font-size:20px;margin-bottom:20px}
+.card h3{font-size:18px;margin-bottom:15px;margin-top:15px}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #e5e7eb}
+th{background:#f3f4f6;font-weight:600}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:#eef2ff}
+.status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500;display:inline-block}
+.s-diag{background:#dbeafe;color:#1e40af}
+.s-rev{background:#fef3c7;color:#92400e}
+.s-revisado{background:#e0e7ff;color:#3730a3}
+.s-aut{background:#fed7aa;color:#9a3412}
+.s-rep{background:#d1fae5;color:#065f46}
+.s-ent{background:#e5e7eb;color:#374151}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px}
+.stat-card{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.05);text-align:center}
+.stat-card h3{font-size:13px;color:#6b7280;text-transform:uppercase;margin-bottom:5px}
+.stat-card .val{font-size:28px;font-weight:700;color:#2563eb}
+.status-panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px}
+.status-card{border-radius:12px;padding:14px;cursor:pointer;text-align:center;border:2px solid transparent;transition:all .3s}
+.status-card:hover{transform:translateY(-2px)}
+.status-card.active{border-color:#2563eb}
+.status-card .icon{font-size:24px}
+.status-card .name{font-size:12px;font-weight:600;margin:5px 0}
+.status-card .count{font-size:24px;font-weight:700}
+.sc-all{background:linear-gradient(135deg,#667eea,#764ba2);color:white}
+.sc-0{background:#dbeafe}.sc-0 .count{color:#1e40af}
+.sc-1{background:#fef3c7}.sc-1 .count{color:#92400e}
+.sc-2{background:#e0e7ff}.sc-2 .count{color:#3730a3}
+.sc-3{background:#fed7aa}.sc-3 .count{color:#9a3412}
+.sc-4{background:#d1fae5}.sc-4 .count{color:#065f46}
+.sc-5{background:#e5e7eb}.sc-5 .count{color:#374151}
+.new-order-box{background:linear-gradient(135deg,#10b981,#059669);border-radius:12px;padding:20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;color:white}
+.new-order-box h3{margin:0;color:white;font-size:18px}
+.new-order-box p{margin:5px 0 0;opacity:.9;font-size:14px}
+.btn-new{background:white;color:#059669;padding:12px 24px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal-box{background:white;border-radius:16px;padding:30px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.close-modal{background:none;border:none;font-size:28px;cursor:pointer;color:#6b7280}
+.status-flow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.status-flow-btn{padding:8px 14px;border:2px solid #e5e7eb;border-radius:20px;background:white;cursor:pointer;font-size:12px;font-weight:500}
+.status-flow-btn.selected{background:#2563eb;color:white;border-color:#2563eb}
+.refaccion-item{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#f3f4f6;border-radius:8px;margin-bottom:8px}
+.detail-header{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:20px;border-radius:12px;margin-bottom:20px}
+.detail-section{background:#f3f4f6;padding:16px;border-radius:10px;margin-bottom:15px}
+.detail-section-title{font-size:13px;text-transform:uppercase;color:#6b7280;font-weight:600;margin-bottom:10px}
+.detail-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e5e7eb;font-size:14px}
+.detail-row:last-child{border-bottom:none}
+.detail-row-label{color:#6b7280}
+.detail-row-value{font-weight:600;text-align:right;max-width:60%;word-break:break-word}
+.detail-highlight{background:linear-gradient(135deg,#10b981,#059669);color:white;padding:15px;border-radius:10px;text-align:center;margin-bottom:15px}
+.detail-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.detail-actions .btn{flex:1;min-width:100px}
+.search-filter{margin-bottom:15px}
+.search-filter input{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:8px;font-size:16px}
+.section{display:none}
+.section.active{display:block}
+.action-btns{display:flex;gap:5px;flex-wrap:wrap}
+.empty-state{text-align:center;padding:30px;color:#6b7280}
+@media print{body *{visibility:hidden}.print-area,.print-area *{visibility:visible}.print-area{position:absolute;left:0;top:0;width:100%}}
+.print-area{display:none}
+.receipt-page{width:8.5in;height:11in;padding:.5in;display:flex;flex-direction:column}
+.receipt-half{flex:1;border:2px solid #000;padding:15px;margin-bottom:10px}
+.receipt-header{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:10px}
+.receipt-section{margin-bottom:10px}
+.receipt-section h3{font-size:13px;border-bottom:1px solid #ccc;padding-bottom:4px;margin-bottom:6px}
+.receipt-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px}
+.receipt-footer{margin-top:auto;padding-top:10px;border-top:1px solid #ccc;font-size:10px}
+.signature-line{margin-top:25px;border-top:1px solid #000;width:180px;text-align:center;padding-top:4px;font-size:10px}
+</style>
 </head>
 <body>
-    <div id="loading" class="loading-overlay">Conectando con la nube...</div>
-
-    <div id="loginScreen" class="login-screen">
-        <div class="login-card">
-            <h1>🔧 Taller de Reparaciones</h1>
-            <p>Inicia sesión para sincronizar en la nube</p>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label>Correo electrónico</label>
-                    <input type="email" id="loginEmail" value="ismaelrh@velocell.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="loginPassword" value="ROHI981115HTSDNS07" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
-            </form>
-        </div.
-    </div>
-
-    <div id="mainApp" style="display: none;">
-        <div class="container">
-            <div class="header">
-                <div class="header-content">
-                    <h1>🔧 Sistema de Gestión (Nube)</h1>
-                    <div class="user-info">
-                        <span class="user-email" id="userEmail"></span>
-                        <button class="btn btn-danger" id="logoutBtn">Cerrar Sesión</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-tabs">
-                <button class="nav-tab active" data-section="dashboard">📊 Dashboard</button>
-                <button class="nav-tab" data-section="taller">🔧 Taller</button>
-                <button class="nav-tab" data-section="finanzas">💰 Finanzas Personales</button>
-            </div>
-
-            <!-- Dashboard -->
-            <div id="dashboard" class="section active">
-                <div class="stats-grid">
-                    <div class="stat-card"><h3>Servicios Activos</h3><div class="stat-value" id="statActive">0</div></div>
-                    <div class="stat-card"><h3>Pendientes de Cobro</h3><div class="stat-value" id="statPending">$0</div></div>
-                    <div class="stat-card"><h3>Ganancias del Mes</h3><div class="stat-value" id="statProfit">$0</div></div>
-                    <div class="stat-card"><h3>Equipos Listos</h3><div class="stat-value" id="statReady">0</div></div>
-                </div>
-                <div class="card">
-                    <h2>📋 Servicios Recientes</h2>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Estado</th><th>Fecha</th></tr></thead>
-                            <tbody id="recentServices"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Taller -->
-            <div id="taller" class="section">
-                <div class="new-order-box">
-                    <div class="new-order-info">
-                        <h3>📝 Crear Nueva Orden de Servicio</h3>
-                        <p>Registra un nuevo cliente y equipo. Se guardará en la nube al instante.</p>
-                    </div>
-                    <button class="btn-new-order" onclick="openNewOrderModal()">➕ Nueva Orden</button>
-                </div>
-
-                <div class="card">
-                    <h2>📂 Servicios por Estado</h2>
-                    <p style="color: var(--text-light); margin-bottom: 15px; font-size: 14px;">Haz clic en un estado para filtrar</p>
-                    <div class="status-panel" id="statusPanel"></div>
-                </div>
-
-                <div class="card">
-                    <div id="currentViewLabel"></div>
-                    <h2>📋 <span id="servicesListTitle">Todos los Servicios</span></h2>
-                    <div class="search-filter">
-                        <input type="text" id="searchClient" placeholder="🔍 Buscar por nombre, teléfono o folio...">
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Estado</th><th>Costo</th><th>Ganancia</th><th>Acciones</th></tr></thead>
-                            <tbody id="servicesList"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Finanzas -->
-            <div id="finanzas" class="section">
-                <div class="card">
-                    <h2>💸 Registrar Gasto Personal</h2>
-                    <form id="expenseForm">
-                        <div class="form-row">
-                            <div class="form-group"><label>Fecha *</label><input type="date" id="expenseDate" required></div>
-                            <div class="form-group"><label>Monto *</label><input type="number" id="expenseAmount" step="0.01" required></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Categoría *</label>
-                            <select id="expenseCategory" required>
-                                <option value="">Seleccionar...</option>
-                                <option value="Comida">Comida</option><option value="Transporte">Transporte</option>
-                                <option value="Servicios">Servicios</option><option value="Entretenimiento">Entretenimiento</option>
-                                <option value="Salud">Salud</option><option value="Educación">Educación</option><option value="Otros">Otros</option>
-                            </select>
-                        </div>
-                        <div class="form-group"><label>Descripción *</label><textarea id="expenseDescription" required></textarea></div>
-                        <button type="submit" class="btn btn-primary btn-block">Registrar Gasto</button>
-                    </form>
-                </div>
-                <div class="card">
-                    <h2>💰 Resumen del Mes</h2>
-                    <div class="stats-grid">
-                        <div class="stat-card"><h3>Total Gastos</h3><div class="stat-value" id="totalExpenses">$0</div></div>
-                        <div class="stat-card"><h3>Ganancia del Taller</h3><div class="stat-value" id="workshopProfit">$0</div></div>
-                        <div class="stat-card"><h3>Balance</h3><div class="stat-value" id="balance">$0</div></div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h2>📋 Historial de Gastos</h2>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Monto</th><th>Acciones</th></tr></thead>
-                            <tbody id="expensesList"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modales (Nueva Orden, Detalle, Edición) -->
-    <div class="modal-overlay" id="newOrderModal">
-        <div class="modal-box">
-            <div class="modal-header"><h2>📝 Nueva Orden de Servicio</h2><button class="close-modal" onclick="closeNewOrderModal()">&times;</button></div>
-            <form id="serviceForm">
-                <h3>Datos del Cliente</h3>
-                <div class="form-row"><!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión - Taller de Reparaciones (Nube)</title>
-    <style>
-        /* (MISMOS ESTILOS QUE ANTES, SE MANTIENEN IGUAL PARA NO ALARGAR) */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --primary: #2563eb; --primary-dark: #1e40af; --secondary: #10b981; --danger: #ef4444; --warning: #f59e0b; --bg: #f3f4f6; --card: #ffffff; --text: #1f2937; --text-light: #6b7280; --border: #e5e7eb; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; }
-        .login-card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 400px; }
-        .login-card h1 { text-align: center; margin-bottom: 10px; font-size: 28px; }
-        .login-card p { text-align: center; color: var(--text-light); margin-bottom: 30px; }
-        .header { background: white; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; border-radius: 12px; }
-        .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .header h1 { font-size: 24px; color: var(--primary); }
-        .user-info { display: flex; align-items: center; gap: 15px; }
-        .user-email { color: var(--text-light); font-size: 14px; }
-        .nav-tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
-        .nav-tab { padding: 12px 24px; background: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 500; transition: all 0.3s; color: var(--text); }
-        .nav-tab:hover { background: var(--bg); }
-        .nav-tab.active { background: var(--primary); color: white; }
-        .card { background: var(--card); border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .card h2 { font-size: 20px; margin-bottom: 20px; }
-        .card h3 { font-size: 18px; margin-bottom: 15px; margin-top: 15px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
-        .form-group textarea { resize: vertical; min-height: 100px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
-        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: inline-block; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-secondary { background: var(--secondary); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-block { width: 100%; }
-        .table-container { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
-        th { background: var(--bg); font-weight: 600; }
-        tbody tr { cursor: pointer; transition: background 0.2s; }
-        tbody tr:hover { background: #eef2ff; }
-        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-block; }
-        .status-diagnostico { background: #dbeafe; color: #1e40af; }
-        .status-revisar { background: #fef3c7; color: #92400e; }
-        .status-revisado { background: #e0e7ff; color: #3730a3; }
-        .status-autorizacion { background: #fed7aa; color: #9a3412; }
-        .status-reparado { background: #d1fae5; color: #065f46; }
-        .status-entregado { background: #e5e7eb; color: #374151; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .stat-card h3 { font-size: 14px; color: var(--text-light); margin-bottom: 8px; text-transform: uppercase; }
-        .stat-card .stat-value { font-size: 32px; font-weight: 700; color: var(--primary); }
-        .status-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 25px; }
-        .status-card { background: white; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; }
-        .status-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .status-card.active { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2); }
-        .status-card-icon { font-size: 28px; margin-bottom: 8px; }
-        .status-card-name { font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
-        .status-card-count { font-size: 28px; font-weight: 700; }
-        .status-card.diagnostico { background: #dbeafe; } .status-card.diagnostico .status-card-count { color: #1e40af; }
-        .status-card.revisar { background: #fef3c7; } .status-card.revisar .status-card-count { color: #92400e; }
-        .status-card.revisado { background: #e0e7ff; } .status-card.revisado .status-card-count { color: #3730a3; }
-        .status-card.autorizacion { background: #fed7aa; } .status-card.autorizacion .status-card-count { color: #9a3412; }
-        .status-card.reparado { background: #d1fae5; } .status-card.reparado .status-card-count { color: #065f46; }
-        .status-card.entregado { background: #e5e7eb; } .status-card.entregado .status-card-count { color: #374151; }
-        .status-card.todos { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .status-card.todos .status-card-name { color: white; } .status-card.todos .status-card-count { color: white; }
-        .current-view-label { background: var(--primary); color: white; padding: 10px 18px; border-radius: 8px; display: inline-block; margin-bottom: 15px; font-weight: 500; }
-        .search-filter { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .search-filter input { padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; flex: 1; min-width: 200px; }
-        .refaccion-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg); border-radius: 8px; margin-bottom: 10px; }
-        .refaccion-info { flex: 1; }
-        .refaccion-cost { font-weight: 600; color: var(--primary); margin-right: 10px; }
-        .new-order-box { background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
-        .new-order-info h3 { margin: 0; font-size: 18px; color: white; }
-        .new-order-info p { margin: 5px 0 0 0; opacity: 0.9; font-size: 14px; }
-        .btn-new-order { background: white; color: #059669; padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        .btn-new-order:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-overlay.active { display: flex; }
-        .modal-box { background: white; border-radius: 16px; padding: 30px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .close-modal { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-light); line-height: 1; }
-        .close-modal:hover { color: var(--danger); }
-        .status-flow { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-        .status-flow-btn { padding: 8px 16px; border: 2px solid var(--border); border-radius: 20px; background: white; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.3s; }
-        .status-flow-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
-        .detail-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
-        .detail-folio { font-size: 14px; opacity: 0.9; margin-bottom: 5px; }
-        .detail-client-name { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
-        .detail-status-big { display: inline-block; padding: 8px 16px; background: rgba(255,255,255,0.25); border-radius: 20px; font-size: 14px; font-weight: 500; }
-        .detail-section { background: var(--bg); padding: 16px; border-radius: 10px; margin-bottom: 15px; }
-        .detail-section-title { font-size: 13px; text-transform: uppercase; color: var(--text-light); font-weight: 600; margin-bottom: 10px; letter-spacing: 0.5px; }
-        .detail-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-        .detail-row:last-child { border-bottom: none; }
-        .detail-row-label { color: var(--text-light); font-weight: 500; }
-        .detail-row-value { font-weight: 600; text-align: right; max-width: 60%; word-break: break-word; }
-        .detail-highlight { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 15px; }
-        .detail-highlight-label { font-size: 12px; text-transform: uppercase; opacity: 0.9; margin-bottom: 5px; }
-        .detail-highlight-value { font-size: 28px; font-weight: 700; }
-        .detail-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-        .detail-actions .btn { flex: 1; min-width: 120px; }
-        .action-btns { display: flex; gap: 5px; flex-wrap: wrap; }
-        .btn-sm { padding: 6px 12px; font-size: 14px; }
-        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-light); }
-        .empty-state-icon { font-size: 48px; margin-bottom: 10px; }
-        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 2000; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--primary); font-weight: bold; }
-    </style>
-</head>
-<body>
-    <div id="loading" class="loading-overlay">Conectando con la nube...</div>
-
-    <div id="loginScreen" class="login-screen">
-        <div class="login-card">
-            <h1>🔧 Taller de Reparaciones</h1>
-            <p>Inicia sesión para sincronizar en la nube</p>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label>Correo electrónico</label>
-                    <input type="email" id="loginEmail" value="ismaelrh@velocell.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="loginPassword" value="ROHI981115HTSDNS07" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="mainApp" style="display: none;">
-        <div class="container">
-            <div class="header">
-                <div class="header-content">
-                    <h1>🔧 Sistema de Gestión (Nube)</h1>
-                    <div class="user-info">
-                        <span class="user-email" id="userEmail"></span>
-                        <button class="btn btn-danger" id="logoutBtn">Cerrar Sesión</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-tabs">
-                <button class="nav-tab active" data-section="dashboard">📊 Dashboard</button>
-                <button class="nav-tab" data-section="taller">🔧 Taller</button>
-                <button class="nav-tab" data-section="finanzas">💰 Finanzas Personales</button>
-            </div>
-
-            <!-- Dashboard -->
-            <div id="dashboard" class="section active">
-                <div class="stats-grid">
-                    <div class="stat-card"><h3>Servicios Activos</h3><div class="stat-value" id="statActive">0</div></div>
-                    <div class="stat-card"><h3>Pendientes de Cobro</h3><div class="stat-value" id="statPending">$0</div></div>
-                    <div class="stat-card"><h3>Ganancias del Mes</h3><div class="stat-value" id="statProfit">$0</div></div>
-                    <div class="stat-card"><h3>Equipos Listos</h3><div class="stat-value" id="statReady">0</div></div>
-                </div>
-                <div class="card">
-                    <h2>📋 Servicios Recientes</h2>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Estado</th><th>Fecha</th></tr></thead>
-                            <tbody id="recentServices"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Taller -->
-            <div id="taller" class="section">
-                <div class="new-order-box">
-                    <div class="new-order-info">
-                        <h3>📝 Crear Nueva Orden de Servicio</h3>
-                        <p>Registra un nuevo cliente y equipo. Se guardará en la nube al instante.</p>
-                    </div>
-                    <button class="btn-new-order" onclick="openNewOrderModal()">➕ Nueva Orden</button>
-                </div>
-
-                <div class="card">
-                    <h2>📂 Servicios por Estado</h2>
-                    <p style="color: var(--text-light); margin-bottom: 15px; font-size: 14px;">Haz clic en un estado para filtrar</p>
-                    <div class="status-panel" id="statusPanel"></div>
-                </div>
-
-                <div class="card">
-                    <div id="currentViewLabel"></div>
-                    <h2>📋 <span id="servicesListTitle">Todos los Servicios</span></h2>
-                    <div class="search-filter">
-                        <input type="text" id="searchClient" placeholder="🔍 Buscar por nombre, teléfono o folio...">
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Estado</th><th>Costo</th><th>Ganancia</th><th>Acciones</th></tr></thead>
-                            <tbody id="servicesList"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Finanzas -->
-            <div id="finanzas" class="section">
-                <div class="card">
-                    <h2>💸 Registrar Gasto Personal</h2>
-                    <form id="expenseForm">
-                        <div class="form-row">
-                            <div class="form-group"><label>Fecha *</label><input type="date" id="expenseDate" required></div>
-                            <div class="form-group"><label>Monto *</label><input type="number" id="expenseAmount" step="0.01" required></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Categoría *</label>
-                            <select id="expenseCategory" required>
-                                <option value="">Seleccionar...</option>
-                                <option value="Comida">Comida</option><option value="Transporte">Transporte</option>
-                                <option value="Servicios">Servicios</option><option value="Entretenimiento">Entretenimiento</option>
-                                <option value="Salud">Salud</option><option value="Educación">Educación</option><option value="Otros">Otros</option>
-                            </select>
-                        </div>
-                        <div class="form-group"><label>Descripción *</label><textarea id="expenseDescription" required></textarea></div>
-                        <button type="submit" class="btn btn-primary btn-block">Registrar Gasto</button>
-                    </form>
-                </div>
-                <div class="card">
-                    <h2>💰 Resumen del Mes</h2>
-                    <div class="stats-grid">
-                        <div class="stat-card"><h3>Total Gastos</h3><div class="stat-value" id="totalExpenses">$0</div></div>
-                        <div class="stat-card"><h3>Ganancia del Taller</h3><div class="stat-value" id="workshopProfit">$0</div></div>
-                        <div class="stat-card"><h3>Balance</h3><div class="stat-value" id="balance">$0</div></div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h2>📋 Historial de Gastos</h2>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Monto</th><th>Acciones</th></tr></thead>
-                            <tbody id="expensesList"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modales (Nueva Orden, Detalle, Edición) -->
-    <div class="modal-overlay" id="newOrderModal">
-        <div class="modal-box">
-            <div class="modal-header"><h2>📝 Nueva Orden de Servicio</h2><button class="close-modal" onclick="closeNewOrderModal()">&times;</button></div>
-            <form id="serviceForm">
-                <h3>Datos del Cliente</h3>
-                <div class="form-row">
-                    <div class="form-group"><label>Nombre completo *</label><input type="text" id="clientName" required></div>
-                    <div class="form-group"><label>Teléfono *</label><input type="tel" id="clientPhone" required></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Correo electrónico</label><input type="email" id="clientEmail"></div>
-                    <div class="form-group"><label>Dirección</label><input type="text" id="clientAddress"></div>
-                </div>
-                <h3>Datos del Equipo</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Marca *</label>
-                        <select id="deviceBrand" required>
-                            <option value="">Seleccionar...</option><option value="Samsung">Samsung</option><option value="iPhone">iPhone</option>
-                            <option value="Xiaomi">Xiaomi</option><option value="Huawei">Huawei</option><option value="Motorola">Motorola</option>
-                            <option value="LG">LG</option><option value="Otro">Otro</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Modelo *</label><input type="text" id="deviceModel" required></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label>IMEI / Número de serie</label><input type="text" id="deviceIMEI"></div>
-                    <div class="form-group"><label>Fecha estimada de entrega</label><input type="date" id="estimatedDelivery"></div>
-                </div>
-                <div class="form-group"><label>Descripción del problema *</label><textarea id="problemDescription" required></textarea></div>
-                <div class="form-group"><label>Accesorios que deja el cliente</label><textarea id="accessories" placeholder="Ej: Cargador, funda, SIM..."></textarea></div>
-                <h3>Información del Servicio</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Estado inicial *</label>
-                        <select id="serviceStatus" required>
-                            <option value="En diagnóstico">En diagnóstico</option><option value="Por revisar">Por revisar</option>
-                            <option value="Revisado">Revisado</option><option value="En espera de autorización">En espera de autorización</option>
-                            <option value="Reparado (en espera de que pasen por él)">Reparado</option><option value="Entregado">Entregado</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Costo de reparación / Mano de obra *</label><input type="number" id="repairCost" step="0.01" required></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Estado de pago</label>
-                        <select id="paymentStatus"><option value="Pendiente">Pendiente</option><option value="Abonado">Abonado</option><option value="Pagado">Pagado</option></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Método de pago</label>
-                        <select id="paymentMethod"><option value="">Seleccionar...</option><option value="Efectivo">Efectivo</option><option value="Transferencia">Transferencia</option><option value="Tarjeta">Tarjeta</option></select>
-                    </div>
-                </div>
-                <h3>Refacciones / Gastos del servicio</h3>
-                <div class="form-row">
-                    <div class="form-group"><label>Descripción de refacción</label><input type="text" id="partDescription" placeholder="Ej: Pantalla, batería..."></div>
-                    <div class="form-group"><label>Costo de refacción</label><input type="number" id="partCost" step="0.01" placeholder="0.00"></div>
-                </div>
-                <button type="button" class="btn btn-secondary btn-sm" id="addPartBtn">Agregar Refacción</button>
-                <div id="partsList"></div>
-                <div style="margin-top: 20px; padding: 15px; background: var(--bg); border-radius: 8px;">
-                    <strong>Total de refacciones: $<span id="totalParts">0.00</span></strong><br>
-                    <strong>Ganancia neta: $<span id="netProfit">0.00</span></strong>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">💾 Guardar en la Nube</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="detailModal">
-        <div class="modal-box">
-            <div class="modal-header"><h2>📄 Detalle del Servicio</h2><button class="close-modal" onclick="closeDetailModal()">&times;</button></div>
-            <div id="detailContent"></div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="editModal">
-        <div class="modal-box">
-            <div class="modal-header"><h2>✏️ Editar Servicio <span id="editFolio"></span></h2><button class="close-modal" id="closeEditModal">&times;</button></div>
-            <h3 style="margin-top:0;">Cambiar Estado del Servicio</h3>
-            <div class="status-flow" id="statusFlow"></div>
-            <div class="form-row">
-                <div class="form-group"><label>Costo de reparación</label><input type="number" id="editRepairCost" step="0.01"></div>
-                <div class="form-group">
-                    <label>Estado de pago</label>
-                    <select id="editPaymentStatus"><option value="Pendiente">Pendiente</option><option value="Abonado">Abonado</option><option value="Pagado">Pagado</option></select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Método de pago</label>
-                    <select id="editPaymentMethod"><option value="">Seleccionar...</option><option value="Efectivo">Efectivo</option><option value="Transferencia">Transferencia</option><option value="Tarjeta">Tarjeta</option></select>
-                </div>
-                <div class="form-group"><label>Fecha estimada de entrega</label><input type="date" id="editEstimatedDelivery"></div>
-            </div>
-            <h3>Refacciones actuales</h3>
-            <div id="editPartsList"></div>
-            <h3>Agregar nueva refacción</h3>
-            <div class="form-row">
-                <div class="form-group"><label>Descripción</label><input type="text" id="editPartDesc" placeholder="Ej: Pantalla, batería..."></div>
-                <div class="form-group"><label>Costo</label><input type="number" id="editPartCost" step="0.01" placeholder="0.00"></div>
-            </div>
-            <button type="button" class="btn btn-secondary btn-sm" id="addEditPartBtn">Agregar Refacción</button>
-            <div style="margin-top: 20px; padding: 15px; background: var(--bg); border-radius: 8px;">
-                <strong>Total de refacciones: $<span id="editTotalParts">0.00</span></strong><br>
-                <strong>Ganancia neta: $<span id="editNetProfit">0.00</span></strong>
-            </div>
-            <button class="btn btn-primary btn-block" style="margin-top: 20px;" id="saveEditBtn">💾 Guardar Cambios en la Nube</button>
-        </div>
-    </div>
-
-    <div class="print-area" id="printArea"></div>
-
-    <!-- FIREBASE SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        // ==========================================
-        // ⚠️ PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE
-        // ==========================================
-        const firebaseConfig = {
-            apiKey: "TU_API_KEY_AQUI",
-            authDomain: "TU_PROYECTO.firebaseapp.com",
-            projectId: "TU_PROYECTO_ID",
-            storageBucket: "TU_PROYECTO.appspot.com",
-            messagingSenderId: "TU_MESSAGING_ID",
-            appId: "TU_APP_ID"
-        };
-
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // Variables globales
-        let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-        let currentParts = [];
-        let editingServiceId = null;
-        let editParts = [];
-        let editSelectedStatus = '';
-        let currentStatusFilter = '';
-        let allServices = [];
-        let allExpenses = [];
-        let unsubscribeServices = null;
-        let unsubscribeExpenses = null;
-
-        const ALL_STATUSES = [
-            { key: 'En diagnóstico', label: 'En diagnóstico', icon: '🔍', class: 'diagnostico' },
-            { key: 'Por revisar', label: 'Por revisar', icon: '🔧', class: 'revisar' },
-            { key: 'Revisado', label: 'Revisado', icon: '✅', class: 'revisado' },
-            { key: 'En espera de autorización', label: 'Espera autorización', icon: '⏳', class: 'autorizacion' },
-            { key: 'Reparado (en espera de que pasen por él)', label: 'Reparado', icon: '📦', class: 'reparado' },
-            { key: 'Entregado', label: 'Entregado', icon: '🤝', class: 'entregado' }
-        ];
-
-        // ==========================================
-        // LÓGICA DE LOGIN (ADMIN FIJO)
-        // ==========================================
-        if (currentUser) {
-            showMainApp();
-        } else {
-            document.getElementById('loading').style.display = 'none';
-        }
-
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-
-            // VALIDACIÓN DEL ADMINISTRADOR FIJO
-            if (email === "ismaelrh@velocell.com" && password === "ROHI981115HTSDNS07") {
-                currentUser = { email: email, role: "admin" };
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                showMainApp();
-            } else {
-                alert('Correo o contraseña incorrectos. Usa las credenciales de administrador.');
-            }
-        });
-
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            if(unsubscribeServices) unsubscribeServices();
-            if(unsubscribeExpenses) unsubscribeExpenses();
-            currentUser = null;
-            localStorage.removeItem('currentUser');
-            location.reload();
-        });
-
-        function showMainApp() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('userEmail').textContent = currentUser.email;
-            document.getElementById('loading').style.display = 'none';
-            
-            setupRealtimeServices();
-            setupRealtimeExpenses();
-        }
-
-        // ==========================================
-        // SINCRONIZACIÓN EN TIEMPO REAL (LA MAGIA)
-        // ==========================================
-        function setupRealtimeServices() {
-            const q = query(collection(db, "services"), orderBy("date", "desc"));
-            unsubscribeServices = onSnapshot(q, (snapshot) => {
-                allServices = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderStatusPanel();
-                loadServices();
-                updateDashboard();
-            }, (error) => {
-                console.error("Error al sincronizar servicios:", error);
-                alert("Error de conexión con la base de datos. Revisa tu configuración de Firebase.");
-            });
-        }
-
-        function setupRealtimeExpenses() {
-            const q = query(collection(db, "expenses"), orderBy("date", "desc"));
-            unsubscribeExpenses = onSnapshot(q, (snapshot) => {
-                allExpenses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                loadExpenses();
-            });
-        }
-
-        // ==========================================
-        // GESTIÓN DE SERVICIOS
-        // ==========================================
-        function openNewOrderModal() {
-            document.getElementById('serviceForm').reset();
-            currentParts = [];
-            renderParts();
-            document.getElementById('newOrderModal').classList.add('active');
-        }
-
-        function closeNewOrderModal() {
-            document.getElementById('newOrderModal').classList.remove('active');
-        }
-
-        document.getElementById('addPartBtn').addEventListener('click', () => {
-            const description = document.getElementById('partDescription').value;
-            const cost = parseFloat(document.getElementById('partCost').value);
-            if (!description || !cost) { alert('Completa la descripción y el costo'); return; }
-            currentParts.push({ description, cost });
-            document.getElementById('partDescription').value = '';
-            document.getElementById('partCost').value = '';
-            renderParts();
-        });
-
-        function renderParts() {
-            const list = document.getElementById('partsList');
-            list.innerHTML = currentParts.map((part, index) => `
-                <div class="refaccion-item">
-                    <div class="refaccion-info"><strong>${part.description}</strong></div>
-                    <span class="refaccion-cost">$${part.cost.toFixed(2)}</span>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="window.removePartGlobal(${index})">Eliminar</button>
-                </div>
-            `).join('');
-            const total = currentParts.reduce((sum, part) => sum + part.cost, 0);
-            document.getElementById('totalParts').textContent = total.toFixed(2);
-            updateNetProfit();
-        }
-
-        window.removePartGlobal = function(index) { currentParts.splice(index, 1); renderParts(); }
-
-        function updateNetProfit() {
-            const repairCost = parseFloat(document.getElementById('repairCost').value) || 0;
-            const totalParts = currentParts.reduce((sum, part) => sum + part.cost, 0);
-            document.getElementById('netProfit').textContent = (repairCost - totalParts).toFixed(2);
-        }
-
-        document.getElementById('repairCost').addEventListener('input', updateNetProfit);
-
-        document.getElementById('serviceForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            document.getElementById('loading').style.display = 'flex';
-            document.getElementById('loading').textContent = 'Guardando en la nube...';
-
-            const repairCost = parseFloat(document.getElementById('repairCost').value);
-            const totalParts = currentParts.reduce((sum, part) => sum + part.cost, 0);
-
-            const service = {
-                folio: 'SRV-' + Date.now().toString().slice(-6),
-                client: {
-                    name: document.getElementById('clientName').value,
-                    phone: document.getElementById('clientPhone').value,
-                    email: document.getElementById('clientEmail').value,
-                    address: document.getElementById('clientAddress').value
-                },
-                device: {
-                    brand: document.getElementById('deviceBrand').value,
-                    model: document.getElementById('deviceModel').value,
-                    imei: document.getElementById('deviceIMEI').value,
-                    problem: document.getElementById('problemDescription').value,
-                    accessories: document.getElementById('accessories').value
-                },
-                service: {
-                    status: document.getElementById('serviceStatus').value,
-                    repairCost: repairCost,
-                    paymentStatus: document.getElementById('paymentStatus').value,
-                    paymentMethod: document.getElementById('paymentMethod').value,
-                    estimatedDelivery: document.getElementById('estimatedDelivery').value,
-                    parts: [...currentParts],
-                    totalParts: totalParts,
-                    netProfit: repairCost - totalParts
-                },
-                date: new Date().toISOString(),
-                userEmail: currentUser.email
-            };
-
-            try {
-                await addDoc(collection(db, "services"), service);
-                alert('✅ Orden creada y sincronizada en la nube');
-                closeNewOrderModal();
-            } catch (error) {
-                console.error("Error: ", error);
-                alert("Error al guardar en la nube. Revisa la consola.");
-            } finally {
-                document.getElementById('loading').style.display = 'none';
-            }
-        });
-
-        function renderStatusPanel() {
-            const panel = document.getElementById('statusPanel');
-            const counts = {};
-            ALL_STATUSES.forEach(s => counts[s.key] = 0);
-            allServices.forEach(s => {
-                if (counts[s.service.status] !== undefined) counts[s.service.status]++;
-            });
-
-            let html = `
-                <div class="status-card todos ${currentStatusFilter === '' ? 'active' : ''}" onclick="window.filterByStatusGlobal('')">
-                    <div class="status-card-icon">📋</div>
-                    <div class="status-card-name">Todos</div>
-                    <div class="status-card-count">${allServices.length}</div>
-                </div>
-            `;
-
-            ALL_STATUSES.forEach(status => {
-                html += `
-                    <div class="status-card ${status.class} ${currentStatusFilter === status.key ? 'active' : ''}" onclick="window.filterByStatusGlobal('${status.key}')">
-                        <div class="status-card-icon">${status.icon}</div>
-                        <div class="status-card-name">${status.label}</div>
-                        <div class="status-card-count">${counts[status.key]}</div>
-                    </div>
-                `;
-            });
-            panel.innerHTML = html;
-
-            const labelDiv = document.getElementById('currentViewLabel');
-            const titleSpan = document.getElementById('servicesListTitle');
-            if (currentStatusFilter === '') {
-                labelDiv.innerHTML = '';
-                titleSpan.textContent = 'Todos los Servicios';
-            } else {
-                const statusInfo = ALL_STATUSES.find(s => s.key === currentStatusFilter);
-                labelDiv.innerHTML = `<div class="current-view-label">${statusInfo.icon} Viendo: ${statusInfo.key} (${counts[currentStatusFilter]})</div>`;
-                titleSpan.textContent = statusInfo.label;
-            }
-        }
-
-        window.filterByStatusGlobal = function(status) {
-            currentStatusFilter = status;
-            renderStatusPanel();
-            loadServices();
-        }
-
-        function loadServices() {
-            const search = document.getElementById('searchClient').value.toLowerCase();
-            const filtered = allServices.filter(s => {
-                const matchSearch = !search || s.client.name.toLowerCase().includes(search) || s.client.phone.includes(search) || s.folio.toLowerCase().includes(search);
-                const matchStatus = !currentStatusFilter || s.service.status === currentStatusFilter;
-                return matchSearch && matchStatus;
-            });
-
-            const tbody = document.getElementById('servicesList');
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-state-icon">📭</div><p>No hay servicios ${currentStatusFilter ? 'con este estado' : 'registrados'}</p></div></td></tr>`;
-            } else {
-                tbody.innerHTML = filtered.map(service => `
-                    <tr onclick="window.openDetailModalGlobal('${service.id}')">
-                        <td><strong>${service.folio}</strong></td>
-                        <td>${service.client.name}<br><small style="color: var(--text-light);">${service.client.phone}</small></td>
-                        <td>${service.device.brand} ${service.device.model}</td>
-                        <td><span class="status-badge status-${getStatusClass(service.service.status)}">${service.service.status}</span></td>
-                        <td>$${service.service.repairCost.toFixed(2)}</td>
-                        <td>$${service.service.netProfit.toFixed(2)}</td>
-                        <td class="action-btns" onclick="event.stopPropagation()">
-                            <button class="btn btn-warning btn-sm" onclick="window.openEditModalGlobal('${service.id}')" title="Editar">✏️</button>
-                            <button class="btn btn-primary btn-sm" onclick="window.printReceiptGlobal('${service.id}')" title="Imprimir">🖨️</button>
-                            <button class="btn btn-danger btn-sm" onclick="window.deleteServiceGlobal('${service.id}')" title="Eliminar">🗑️</button>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            const recent = allServices.slice(0, 5);
-            document.getElementById('recentServices').innerHTML = recent.length === 0 ?
-                '<tr><td colspan="5" style="text-align:center; color: var(--text-light); padding: 20px;">No hay servicios aún</td></tr>' :
-                recent.map(service => `
-                    <tr onclick="window.openDetailModalGlobal('${service.id}')" style="cursor:pointer;">
-                        <td>${service.folio}</td>
-                        <td>${service.client.name}</td>
-                        <td>${service.device.brand} ${service.device.model}</td>
-                        <td><span class="status-badge status-${getStatusClass(service.service.status)}">${service.service.status}</span></td>
-                        <td>${new Date(service.date).toLocaleDateString()}</td>
-                    </tr>
-                `).join('');
-        }
-
-        function getStatusClass(status) {
-            if (status.includes('diagnóstico')) return 'diagnostico';
-            if (status.includes('revisar')) return 'revisar';
-            if (status.includes('Revisado')) return 'revisado';
-            if (status.includes('autorización')) return 'autorizacion';
-            if (status.includes('Reparado')) return 'reparado';
-            if (status.includes('Entregado')) return 'entregado';
-            return '';
-        }
-
-        window.deleteServiceGlobal = async function(id) {
-            if (!confirm('¿Estás seguro de eliminar este servicio de la nube?')) return;
-            document.getElementById('loading').style.display = 'flex';
-            document.getElementById('loading').textContent = 'Eliminando...';
-            try {
-                await deleteDoc(doc(db, "services", id));
-            } catch (error) {
-                console.error("Error: ", error);
-                alert("Error al eliminar");
-            } finally {
-                document.getElementById('loading').style.display = 'none';
-            }
-        }
-
-        // ==========================================
-        // MODAL DE DETALLE
-        // ==========================================
-        window.openDetailModalGlobal = function(id) {
-            const service = allServices.find(s => s.id === id);
-            if (!service) return;
-
-            const parts = service.service.parts || [];
-            const totalParts = parts.reduce((sum, p) => sum + p.cost, 0);
-            let partsHtml = parts.length === 0 ? '<p style="color: var(--text-light); font-size: 14px;">Sin refacciones</p>' : 
-                parts.map(p => `<div class="detail-row"><span class="detail-row-label">${p.description}</span><span class="detail-row-value">$${p.cost.toFixed(2)}</span></div>`).join('');
-
-            const content = `
-                <div class="detail-header">
-                    <div class="detail-folio">Folio: ${service.folio}</div>
-                    <div class="detail-client-name">${service.client.name}</div>
-                    <div class="detail-status-big">${service.service.status}</div>
-                </div>
-                <div class="detail-section">
-                    <div class="detail-section-title">👤 Cliente</div>
-                    <div class="detail-row"><span class="detail-row-label">Teléfono</span><span class="detail-row-value">${service.client.phone}</span></div>
-                    ${service.client.email ? `<div class="detail-row"><span class="detail-row-label">Correo</span><span class="detail-row-value">${service.client.email}</span></div>` : ''}
-                </div>
-                <div class="detail-section">
-                    <div class="detail-section-title">📱 Equipo</div>
-                    <div class="detail-row"><span class="detail-row-label">Marca / Modelo</span><span class="detail-row-value">${service.device.brand} ${service.device.model}</span></div>
-                    ${service.device.imei ? `<div class="detail-row"><span class="detail-row-label">IMEI</span><span class="detail-row-value">${service.device.imei}</span></div>` : ''}
-                    <div class="detail-row"><span class="detail-row-label">Problema</span><span class="detail-row-value">${service.device.problem}</span></div>
-                </div>
-                <div class="detail-section">
-                    <div class="detail-section-title">🔧 Refacciones</div>
-                    ${partsHtml}
-                    <div class="detail-row" style="border-top: 2px solid var(--border); margin-top: 8px; padding-top: 8px;">
-                        <span class="detail-row-label"><strong>Total refacciones</strong></span>
-                        <span class="detail-row-value"><strong>$${totalParts.toFixed(2)}</strong></span>
-                    </div>
-                </div>
-                <div class="detail-section">
-                    <div class="detail-section-title">💰 Finanzas</div>
-                    <div class="detail-row"><span class="detail-row-label">Costo de reparación</span><span class="detail-row-value">$${service.service.repairCost.toFixed(2)}</span></div>
-                    <div class="detail-row"><span class="detail-row-label">Estado de pago</span><span class="detail-row-value">${service.service.paymentStatus || 'Pendiente'}</span></div>
-                </div>
-                <div class="detail-highlight">
-                    <div class="detail-highlight-label">Ganancia Neta</div>
-                    <div class="detail-highlight-value">$${service.service.netProfit.toFixed(2)}</div>
-                </div>
-                <div class="detail-actions">
-                    <button class="btn btn-warning" onclick="closeDetailModal(); window.openEditModalGlobal('${service.id}');">✏️ Editar</button>
-                    <button class="btn btn-primary" onclick="window.printReceiptGlobal('${service.id}')">🖨️ Imprimir</button>
-                    <button class="btn btn-danger" onclick="if(confirm('¿Eliminar?')){window.deleteServiceGlobal('${service.id}'); closeDetailModal();}">🗑️ Eliminar</button>
-                </div>
-            `;
-            document.getElementById('detailContent').innerHTML = content;
-            document.getElementById('detailModal').classList.add('active');
-        }
-
-        window.closeDetailModal = function() { document.getElementById('detailModal').classList.remove('active'); }
-
-        // ==========================================
-        // MODAL DE EDICIÓN
-        // ==========================================
-        window.openEditModalGlobal = function(id) {
-            const service = allServices.find(s => s.id === id);
-            if (!service) return;
-
-            editingServiceId = id;
-            editParts = service.service.parts ? [...service.service.parts] : [];
-            editSelectedStatus = service.service.status;
-
-            document.getElementById('editFolio').textContent = service.folio;
-            document.getElementById('editRepairCost').value = service.service.repairCost;
-            document.getElementById('editPaymentStatus').value = service.service.paymentStatus || 'Pendiente';
-            document.getElementById('editPaymentMethod').value = service.service.paymentMethod || '';
-            document.getElementById('editEstimatedDelivery').value = service.service.estimatedDelivery || '';
-
-            renderStatusFlow();
-            renderEditParts();
-            document.getElementById('editModal').classList.add('active');
-        }
-
-        function renderStatusFlow() {
-            document.getElementById('statusFlow').innerHTML = ALL_STATUSES.map(status => `
-                <button type="button" class="status-flow-btn ${editSelectedStatus === status.key ? 'selected' : ''}" onclick="window.selectEditStatusGlobal('${status.key}')">
-                    ${status.icon} ${status.label}
-                </button>
-            `).join('');
-        }
-
-        window.selectEditStatusGlobal = function(status) {
-            editSelectedStatus = status;
-            renderStatusFlow();
-        }
-
-        function renderEditParts() {
-            const list = document.getElementById('editPartsList');
-            list.innerHTML = editParts.length === 0 ? '<p style="color: var(--text-light); font-size: 14px;">No hay refacciones</p>' : 
-                editParts.map((part, index) => `
-                    <div class="refaccion-item">
-                        <div class="refaccion-info"><strong>${part.description}</strong></div>
-                        <span class="refaccion-cost">$${part.cost.toFixed(2)}</span>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="window.removeEditPartGlobal(${index})">Eliminar</button>
-                    </div>
-                `).join('');
-            const total = editParts.reduce((sum, part) => sum + part.cost, 0);
-            document.getElementById('editTotalParts').textContent = total.toFixed(2);
-            updateEditNetProfit();
-        }
-
-        window.removeEditPartGlobal = function(index) { editParts.splice(index, 1); renderEditParts(); }
-
-        document.getElementById('addEditPartBtn').addEventListener('click', () => {
-            const desc = document.getElementById('editPartDesc').value;
-            const cost = parseFloat(document.getElementById('editPartCost').value);
-            if (!desc || !cost) { alert('Completa la descripción y el costo'); return; }
-            editParts.push({ description: desc, cost: cost });
-            document.getElementById('editPartDesc').value = '';
-            document.getElementById('editPartCost').value = '';
-            renderEditParts();
-        });
-
-        function updateEditNetProfit() {
-            const repairCost = parseFloat(document.getElementById('editRepairCost').value) || 0;
-            const totalParts = editParts.reduce((sum, part) => sum + part.cost, 0);
-            document.getElementById('editNetProfit').textContent = (repairCost - totalParts).toFixed(2);
-        }
-
-        document.getElementById('editRepairCost').addEventListener('input', updateEditNetProfit);
-
-        document.getElementById('saveEditBtn').addEventListener('click', async () => {
-            document.getElementById('loading').style.display = 'flex';
-            document.getElementById('loading').textContent = 'Actualizando en la nube...';
-            
-            const totalParts = editParts.reduce((sum, part) => sum + part.cost, 0);
-            const repairCost = parseFloat(document.getElementById('editRepairCost').value) || 0;
-
-            const updates = {
-                'service.status': editSelectedStatus,
-                'service.repairCost': repairCost,
-                'service.paymentStatus': document.getElementById('editPaymentStatus').value,
-                'service.paymentMethod': document.getElementById('editPaymentMethod').value,
-                'service.estimatedDelivery': document.getElementById('editEstimatedDelivery').value,
-                'service.parts': [...editParts],
-                'service.totalParts': totalParts,
-                'service.netProfit': repairCost - totalParts
-            };
-
-            try {
-                await updateDoc(doc(db, "services", editingServiceId), updates);
-                document.getElementById('editModal').classList.remove('active');
-                alert('✅ Servicio actualizado en la nube');
-            } catch (error) {
-                console.error("Error: ", error);
-                alert("Error al actualizar");
-            } finally {
-                document.getElementById('loading').style.display = 'none';
-            }
-        });
-
-        document.getElementById('closeEditModal').addEventListener('click', () => { document.getElementById('editModal').classList.remove('active'); });
-
-        // ==========================================
-        // IMPRESIÓN
-        // ==========================================
-        window.printReceiptGlobal = function(id) {
-            const service = allServices.find(s => s.id === id);
-            if (!service) return;
-            const printArea = document.getElementById('printArea');
-            printArea.innerHTML = `
-                <div class="receipt-page">
-                    <div class="receipt-half">
-                        <div class="receipt-header"><h2>Taller de Reparaciones</h2><p>Copia para el Cliente</p><p><strong>Folio: ${service.folio}</strong></p></div>
-                        <div class="receipt-section"><h3>Datos del Cliente</h3>
-                            <div class="receipt-row"><span>Nombre:</span><span>${service.client.name}</span></div>
-                            <div class="receipt-row"><span>Teléfono:</span><span>${service.client.phone}</span></div>
-                        </div>
-                        <div class="receipt-section"><h3>Datos del Equipo</h3>
-                            <div class="receipt-row"><span>Marca/Modelo:</span><span>${service.device.brand} ${service.device.model}</span></div>
-                            ${service.device.imei ? `<div class="receipt-row"><span>IMEI:</span><span>${service.device.imei}</span></div>` : ''}
-                            <div class="receipt-row"><span>Problema:</span><span>${service.device.problem}</span></div>
-                        </div>
-                        <div class="receipt-section"><h3>Información del Servicio</h3>
-                            <div class="receipt-row"><span>Fecha:</span><span>${new Date(service.date).toLocaleDateString()}</span></div>
-                            <div class="receipt-row"><span>Costo acordado:</span><span>$${service.service.repairCost.toFixed(2)}</span></div>
-                            <div class="receipt-row"><span>Estado:</span><span>${service.service.status}</span></div>
-                        </div>
-                        <div class="receipt-footer">
-                            <p>• 30 días de garantía en la reparación</p>
-                            <p>• Conserve esta nota para recoger su equipo</p>
-                            <div class="signature-line">Firma del Cliente</div>
-                        </div>
-                    </div>
-                    <div class="receipt-half">
-                        <div class="receipt-header"><h2>Taller de Reparaciones</h2><p>Copia para el Taller</p><p><strong>Folio: ${service.folio}</strong></p></div>
-                        <div class="receipt-section"><h3>Datos del Cliente</h3>
-                            <div class="receipt-row"><span>Nombre:</span><span>${service.client.name}</span></div>
-                            <div class="receipt-row"><span>Teléfono:</span><span>${service.client.phone}</span></div>
-                        </div>
-                        <div class="receipt-section"><h3>Datos del Equipo</h3>
-                            <div class="receipt-row"><span>Marca/Modelo:</span><span>${service.device.brand} ${service.device.model}</span></div>
-                            <div class="receipt-row"><span>Problema:</span><span>${service.device.problem}</span></div>
-                        </div>
-                        <div class="receipt-section"><h3>Información del Servicio</h3>
-                            <div class="receipt-row"><span>Costo acordado:</span><span>$${service.service.repairCost.toFixed(2)}</span></div>
-                            <div class="receipt-row"><span>Estado:</span><span>${service.service.status}</span></div>
-                            <div class="receipt-row"><span>Pago:</span><span>${service.service.paymentStatus}</span></div>
-                        </div>
-                        <div class="receipt-footer"><div class="signature-line">Firma del Técnico</div></div>
-                    </div>
-                </div>
-            `;
-            window.print();
-        }
-
-        // ==========================================
-        // FINANZAS PERSONALES
-        // ==========================================
-        document.getElementById('expenseForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            document.getElementById('loading').style.display = 'flex';
-            document.getElementById('loading').textContent = 'Guardando gasto...';
-
-            const expense = {
-                date: document.getElementById('expenseDate').value,
-                amount: parseFloat(document.getElementById('expenseAmount').value),
-                category: document.getElementById('expenseCategory').value,
-                description: document.getElementById('expenseDescription').value,
-                userEmail: currentUser.email,
-                timestamp: serverTimestamp()
-            };
-
-            try {
-                await addDoc(collection(db, "expenses"), expense);
-                alert('✅ Gasto registrado en la nube');
-                e.target.reset();
-            } catch (error) {
-                console.error("Error: ", error);
-                alert("Error al guardar");
-            } finally {
-                document.getElementById('loading').style.display = 'none';
-            }
-        });
-
-        function loadExpenses() {
-            const tbody = document.getElementById('expensesList');
-            tbody.innerHTML = allExpenses.length === 0 ?
-                '<tr><td colspan="5" style="text-align:center; color: var(--text-light); padding: 20px;">No hay gastos registrados</td></tr>' :
-                allExpenses.map(expense => `
-                    <tr>
-                        <td>${new Date(expense.date).toLocaleDateString()}</td>
-                        <td>${expense.category}</td>
-                        <td>${expense.description}</td>
-                        <td>$${expense.amount.toFixed(2)}</td>
-                        <td><button class="btn btn-danger btn-sm" onclick="window.deleteExpenseGlobal('${expense.id}')">Eliminar</button></td>
-                    </tr>
-                `).join('');
-
-            const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
-            
-            const monthExpenses = allExpenses.filter(e => {
-                const date = new Date(e.date);
-                return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-            });
-            const totalExpenses = monthExpenses.reduce((sum, e) => sum + e.amount, 0);
-            document.getElementById('totalExpenses').textContent = '$' + totalExpenses.toFixed(2);
-
-            const monthServices = allServices.filter(s => {
-                const date = new Date(s.date);
-                return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-            });
-            const workshopProfit = monthServices.reduce((sum, s) => sum + s.service.netProfit, 0);
-            document.getElementById('workshopProfit').textContent = '$' + workshopProfit.toFixed(2);
-            
-            const balance = workshopProfit - totalExpenses;
-            document.getElementById('balance').textContent = '$' + balance.toFixed(2);
-        }
-
-        window.deleteExpenseGlobal = async function(id) {
-            if (!confirm('¿Eliminar este gasto?')) return;
-            try { await deleteDoc(doc(db, "expenses", id)); } catch (error) { console.error(error); }
-        }
-
-        // ==========================================
-        // DASHBOARD Y BÚSQUEDA
-        // ==========================================
-        function updateDashboard() {
-            const activeServices = allServices.filter(s => s.service.status !== 'Entregado');
-            const pendingPayment = allServices.filter(s => s.service.paymentStatus !== 'Pagado');
-            const readyServices = allServices.filter(s => s.service.status === 'Reparado (en espera de que pasen por él)');
-            
-            document.getElementById('statActive').textContent = activeServices.length;
-            const pendingAmount = pendingPayment.reduce((sum, s) => sum + s.service.repairCost, 0);
-            document.getElementById('statPending').textContent = '$' + pendingAmount.toFixed(2);
-            
-            const now = new Date();
-            const monthServices = allServices.filter(s => new Date(s.date).getMonth() === now.getMonth() && new Date(s.date).getFullYear() === now.getFullYear());
-            const monthProfit = monthServices.reduce((sum, s) => sum + s.service.netProfit, 0);
-            document.getElementById('statProfit').textContent = '$' + monthProfit.toFixed(2);
-            document.getElementById('statReady').textContent = readyServices.length;
-        }
-
-        document.getElementById('searchClient').addEventListener('input', loadServices);
-        document.getElementById('expenseDate').valueAsDate = new Date();
-
-        // Navegación
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById(tab.dataset.section).classList.add('active');
-            });
-        });
-    </script>
+
+<div id="loginScreen" class="login-screen">
+<div class="login-card">
+<h1>🔧 Taller de Reparaciones</h1>
+<p>Inicia sesión para continuar</p>
+<form id="loginForm">
+<div class="form-group"><label>Correo electrónico</label><input type="email" id="loginEmail" required></div>
+<div class="form-group"><label>Contraseña</label><input type="password" id="loginPassword" required></div>
+<button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+</form>
+</div>
+</div>
+
+<div id="mainApp" style="display:none">
+<div class="container">
+<div class="header">
+<h1>🔧 Sistema de Gestión</h1>
+<div class="user-info">
+<span id="userEmail" style="color:#6b7280;font-size:14px"></span>
+<button class="btn btn-danger" onclick="logout()">Cerrar Sesión</button>
+</div>
+</div>
+<div class="nav-tabs">
+<button class="nav-tab active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
+<button class="nav-tab" onclick="showSection('taller',this)">🔧 Taller</button>
+<button class="nav-tab" onclick="showSection('finanzas',this)">💰 Finanzas</button>
+</div>
+
+<div id="dashboard" class="section active">
+<div class="stats-grid">
+<div class="stat-card"><h3>Servicios Activos</h3><div class="val" id="statActive">0</div></div>
+<div class="stat-card"><h3>Pendientes de Cobro</h3><div class="val" id="statPending">$0</div></div>
+<div class="stat-card"><h3>Ganancias del Mes</h3><div class="val" id="statProfit">$0</div></div>
+<div class="stat-card"><h3>Equipos Listos</h3><div class="val" id="statReady">0</div></div>
+</div>
+<div class="card"><h2>📋 Servicios Recientes</h2><div style="overflow-x:auto"><table><thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Estado</th><th>Fecha</th></tr></thead><tbody id="recentServices"></tbody></table></div></div>
+</div>
+
+<div id="taller" class="section">
+<div class="new-order-box">
+<div><h3>📝 Crear Nueva Orden de Servicio</h3><p>Registra un nuevo cliente y equipo</p></div>
+<button class="btn-new" onclick="openModal('newOrderModal')">➕ Nueva Orden</button>
+</div>
+<div class="card"><h2>📂 Servicios por Estado</h2><div class="status-panel" id="statusPanel"></div></div>
+<div class="card">
+<div id="currentViewLabel"></div>
+<h2>📋 <span id="servicesListTitle">Todos los Servicios</span></h2>
+<div class="search-filter"><input type="text" id="searchClient" placeholder="🔍 Buscar por nombre, teléfono o folio..." oninput="loadServices()"></div>
+<div style="overflow-x:auto"><table><thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Estado</th><th>Costo</th><th>Ganancia</th><th>Acciones</th></tr></thead><tbody id="servicesList"></tbody></table></div>
+</div>
+</div>
+
+<div id="finanzas" class="section">
+<div class="card">
+<h2>💸 Registrar Gasto Personal</h2>
+<form id="expenseForm">
+<div class="form-row">
+<div class="form-group"><label>Fecha *</label><input type="date" id="expenseDate" required></div>
+<div class="form-group"><label>Monto *</label><input type="number" id="expenseAmount" step="0.01" required></div>
+</div>
+<div class="form-group"><label>Categoría *</label><select id="expenseCategory" required><option value="">Seleccionar...</option><option>Comida</option><option>Transporte</option><option>Servicios</option><option>Entretenimiento</option><option>Salud</option><option>Educación</option><option>Otros</option></select></div>
+<div class="form-group"><label>Descripción *</label><textarea id="expenseDescription" required></textarea></div>
+<button type="submit" class="btn btn-primary btn-block">Registrar Gasto</button>
+</form>
+</div>
+<div class="card">
+<h2>💰 Resumen del Mes</h2>
+<div class="stats-grid">
+<div class="stat-card"><h3>Total Gastos</h3><div class="val" id="totalExpenses">$0</div></div>
+<div class="stat-card"><h3>Ganancia Taller</h3><div class="val" id="workshopProfit">$0</div></div>
+<div class="stat-card"><h3>Balance</h3><div class="val" id="balance">$0</div></div>
+</div>
+</div>
+<div class="card"><h2>📋 Historial de Gastos</h2><div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Monto</th><th>Acciones</th></tr></thead><tbody id="expensesList"></tbody></table></div></div>
+</div>
+</div>
+</div>
+
+<!-- MODAL NUEVA ORDEN -->
+<div class="modal-overlay" id="newOrderModal">
+<div class="modal-box">
+<div class="modal-header"><h2>📝 Nueva Orden de Servicio</h2><button class="close-modal" onclick="closeModal('newOrderModal')">&times;</button></div>
+<form id="serviceForm">
+<h3>Datos del Cliente</h3>
+<div class="form-row"><div class="form-group"><label>Nombre *</label><input type="text" id="clientName" required></div><div class="form-group"><label>Teléfono *</label><input type="tel" id="clientPhone" required></div></div>
+<div class="form-row"><div class="form-group"><label>Correo</label><input type="email" id="clientEmail"></div><div class="form-group"><label>Dirección</label><input type="text" id="clientAddress"></div></div>
+<h3>Datos del Equipo</h3>
+<div class="form-row"><div class="form-group"><label>Marca *</label><select id="deviceBrand" required><option value="">Seleccionar...</option><option>Samsung</option><option>iPhone</option><option>Xiaomi</option><option>Huawei</option><option>Motorola</option><option>LG</option><option>Otro</option></select></div><div class="form-group"><label>Modelo *</label><input type="text" id="deviceModel" required></div></div>
+<div class="form-row"><div class="form-group"><label>IMEI / Serie</label><input type="text" id="deviceIMEI"></div><div class="form-group"><label>Entrega estimada</label><input type="date" id="estimatedDelivery"></div></div>
+<div class="form-group"><label>Problema *</label><textarea id="problemDescription" required></textarea></div>
+<div class="form-group"><label>Accesorios</label><textarea id="accessories" placeholder="Cargador, funda, SIM..."></textarea></div>
+<h3>Servicio</h3>
+<div class="form-row"><div class="form-group"><label>Estado *</label><select id="serviceStatus" required><option>En diagnóstico</option><option>Por revisar</option><option>Revisado</option><option>En espera de autorización</option><option>Reparado (en espera de que pasen por él)</option><option>Entregado</option></select></div><div class="form-group"><label>Costo reparación *</label><input type="number" id="repairCost" step="0.01" required oninput="updateNetProfit()"></div></div>
+<div class="form-row"><div class="form-group"><label>Estado de pago</label><select id="paymentStatus"><option>Pendiente</option><option>Abonado</option><option>Pagado</option></select></div><div class="form-group"><label>Método de pago</label><select id="paymentMethod"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div></div>
+<h3>Refacciones</h3>
+<div class="form-row"><div class="form-group"><label>Descripción</label><input type="text" id="partDesc" placeholder="Pantalla, batería..."></div><div class="form-group"><label>Costo</label><input type="number" id="partCost" step="0.01" placeholder="0.00"></div></div>
+<button type="button" class="btn btn-secondary btn-sm" onclick="addPart()">Agregar Refacción</button>
+<div id="partsList" style="margin-top:10px"></div>
+<div style="margin-top:15px;padding:12px;background:#f3f4f6;border-radius:8px"><strong>Refacciones: $<span id="totalParts">0.00</span></strong><br><strong>Ganancia neta: $<span id="netProfit">0.00</span></strong></div>
+<button type="submit" class="btn btn-primary btn-block" style="margin-top:20px">💾 Guardar Orden</button>
+</form>
+</div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="modal-overlay" id="detailModal">
+<div class="modal-box">
+<div class="modal-header"><h2>📄 Detalle del Servicio</h2><button class="close-modal" onclick="closeModal('detailModal')">&times;</button></div>
+<div id="detailContent"></div>
+</div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal-overlay" id="editModal">
+<div class="modal-box">
+<div class="modal-header"><h2>✏️ Editar <span id="editFolio"></span></h2><button class="close-modal" onclick="closeModal('editModal')">&times;</button></div>
+<h3 style="margin-top:0">Estado del Servicio</h3>
+<div class="status-flow" id="statusFlow"></div>
+<div class="form-row"><div class="form-group"><label>Costo reparación</label><input type="number" id="editRepairCost" step="0.01" oninput="updateEditProfit()"></div><div class="form-group"><label>Estado de pago</label><select id="editPaymentStatus"><option>Pendiente</option><option>Abonado</option><option>Pagado</option></select></div></div>
+<div class="form-row"><div class="form-group"><label>Método de pago</label><select id="editPaymentMethod"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div><div class="form-group"><label>Entrega estimada</label><input type="date" id="editDelivery"></div></div>
+<h3>Refacciones</h3><div id="editPartsList"></div>
+<div class="form-row" style="margin-top:10px"><div class="form-group"><label>Descripción</label><input type="text" id="editPartDesc"></div><div class="form-group"><label>Costo</label><input type="number" id="editPartCost" step="0.01"></div></div>
+<button type="button" class="btn btn-secondary btn-sm" onclick="addEditPart()">Agregar Refacción</button>
+<div style="margin-top:15px;padding:12px;background:#f3f4f6;border-radius:8px"><strong>Refacciones: $<span id="editTotalParts">0.00</span></strong><br><strong>Ganancia neta: $<span id="editNetProfit">0.00</span></strong></div>
+<button class="btn btn-primary btn-block" style="margin-top:20px" onclick="saveEdit()">💾 Guardar Cambios</button>
+</div>
+</div>
+
+<div class="print-area" id="printArea"></div>
+
+<script>
+const ADMIN_EMAIL = "ismaelrh@velocell.com";
+const ADMIN_PASS = "ROHI981115HTSDNS07";
+const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
+const STATUS_ICONS = ['🔍','🔧','✅','⏳','📦','🤝'];
+const STATUS_CLASSES = ['s-diag','s-rev','s-revisado','s-aut','s-rep','s-ent'];
+
+let currentParts = [];
+let editParts = [];
+let editId = null;
+let editStatus = '';
+let statusFilter = '';
+
+// LOGIN
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const pass = document.getElementById('loginPassword').value;
+    if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
+        localStorage.setItem('logged', 'true');
+        showApp();
+    } else {
+        alert('Correo o contraseña incorrectos');
+    }
+});
+
+if (localStorage.getItem('logged') === 'true') showApp();
+
+function showApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    document.getElementById('userEmail').textContent = ADMIN_EMAIL;
+    refreshAll();
+}
+
+function logout() {
+    localStorage.removeItem('logged');
+    location.reload();
+}
+
+function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// SERVICIOS
+function getServices() { return JSON.parse(localStorage.getItem('services') || '[]'); }
+function saveServices(s) { localStorage.setItem('services', JSON.stringify(s)); }
+
+document.getElementById('serviceForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const rc = parseFloat(document.getElementById('repairCost').value);
+    const tp = currentParts.reduce((s,p) => s + p.cost, 0);
+    const svc = {
+        id: Date.now(),
+        folio: 'SRV-' + Date.now().toString().slice(-6),
+        client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value, email: document.getElementById('clientEmail').value, address: document.getElementById('clientAddress').value },
+        device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value },
+        service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: document.getElementById('paymentStatus').value, paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [...currentParts], totalParts: tp, netProfit: rc - tp },
+        date: new Date().toISOString()
+    };
+    const svcs = getServices();
+    svcs.push(svc);
+    saveServices(svcs);
+    alert('✅ Orden creada');
+    closeModal('newOrderModal');
+    this.reset();
+    currentParts = [];
+    renderParts();
+    refreshAll();
+});
+
+function addPart() {
+    const d = document.getElementById('partDesc').value;
+    const c = parseFloat(document.getElementById('partCost').value);
+    if (!d || !c) { alert('Completa descripción y costo'); return; }
+    currentParts.push({ description: d, cost: c });
+    document.getElementById('partDesc').value = '';
+    document.getElementById('partCost').value = '';
+    renderParts();
+}
+
+function renderParts() {
+    document.getElementById('partsList').innerHTML = currentParts.map((p,i) => `<div class="refaccion-item"><strong>${p.description}</strong><span style="color:#2563eb;font-weight:600">$${p.cost.toFixed(2)}</span><button class="btn btn-danger btn-sm" onclick="currentParts.splice(${i},1);renderParts()">X</button></div>`).join('');
+    const t = currentParts.reduce((s,p) => s + p.cost, 0);
+    document.getElementById('totalParts').textContent = t.toFixed(2);
+    updateNetProfit();
+}
+
+function updateNetProfit() {
+    const rc = parseFloat(document.getElementById('repairCost').value) || 0;
+    const tp = currentParts.reduce((s,p) => s + p.cost, 0);
+    document.getElementById('netProfit').textContent = (rc - tp).toFixed(2);
+}
+
+function getStatusInfo(status) {
+    const i = STATUSES.indexOf(status);
+    return { icon: STATUS_ICONS[i] || '📋', cls: STATUS_CLASSES[i] || '' };
+}
+
+function refreshAll() {
+    renderStatusPanel();
+    loadServices();
+    updateDashboard();
+    loadExpenses();
+}
+
+function renderStatusPanel() {
+    const svcs = getServices();
+    const counts = {};
+    STATUSES.forEach(s => counts[s] = 0);
+    svcs.forEach(s => { if (counts[s.service.status] !== undefined) counts[s.service.status]++; });
+    let html = `<div class="status-card sc-all ${statusFilter===''?'active':''}" onclick="statusFilter='';refreshAll()"><div class="icon">📋</div><div class="name">Todos</div><div class="count">${svcs.length}</div></div>`;
+    STATUSES.forEach((s,i) => {
+        html += `<div class="status-card sc-${i} ${statusFilter===s?'active':''}" onclick="statusFilter='${s}';refreshAll()"><div class="icon">${STATUS_ICONS[i]}</div><div class="name">${s.length > 20 ? s.substring(0,18)+'...' : s}</div><div class="count">${counts[s]}</div></div>`;
+    });
+    document.getElementById('statusPanel').innerHTML = html;
+    const lbl = document.getElementById('currentViewLabel');
+    const ttl = document.getElementById('servicesListTitle');
+    if (!statusFilter) { lbl.innerHTML = ''; ttl.textContent = 'Todos los Servicios'; }
+    else { const info = getStatusInfo(statusFilter); lbl.innerHTML = `<span style="background:#2563eb;color:white;padding:8px 14px;border-radius:8px;display:inline-block;margin-bottom:10px">${info.icon} ${statusFilter} (${counts[statusFilter]})</span>`; ttl.textContent = statusFilter; }
+}
+
+function loadServices() {
+    const svcs = getServices();
+    const search = document.getElementById('searchClient').value.toLowerCase();
+    const filtered = svcs.filter(s => {
+        const ms = !search || s.client.name.toLowerCase().includes(search) || s.client.phone.includes(search) || s.folio.toLowerCase().includes(search);
+        const mst = !statusFilter || s.service.status === statusFilter;
+        return ms && mst;
+    });
+    const tbody = document.getElementById('servicesList');
+    if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-state">📭 No hay servicios</td></tr>'; }
+    else {
+        tbody.innerHTML = filtered.map(s => {
+            const info = getStatusInfo(s.service.status);
+            return `<tr onclick="openDetail(${s.id})"><td><strong>${s.folio}</strong></td><td>${s.client.name}<br><small style="color:#6b7280">${s.client.phone}</small></td><td>${s.device.brand} ${s.device.model}</td><td><span class="status-badge ${info.cls}">${s.service.status}</span></td><td>$${s.service.repairCost.toFixed(2)}</td><td>$${s.service.netProfit.toFixed(2)}</td><td class="action-btns" onclick="event.stopPropagation()"><button class="btn btn-warning btn-sm" onclick="openEdit(${s.id})">✏️</button><button class="btn btn-primary btn-sm" onclick="printReceipt(${s.id})">🖨️</button><button class="btn btn-danger btn-sm" onclick="deleteSvc(${s.id})">🗑️</button></td></tr>`;
+        }).join('');
+    }
+    const recent = svcs.slice(-5).reverse();
+    document.getElementById('recentServices').innerHTML = recent.length ? recent.map(s => {
+        const info = getStatusInfo(s.service.status);
+        return `<tr onclick="openDetail(${s.id})"><td>${s.folio}</td><td>${s.client.name}</td><td>${s.device.brand} ${s.device.model}</td><td><span class="status-badge ${info.cls}">${s.service.status}</span></td><td>${new Date(s.date).toLocaleDateString()}</td></tr>`;
+    }).join('') : '<tr><td colspan="5" class="empty-state">No hay servicios aún</td></tr>';
+}
+
+function deleteSvc(id) {
+    if (!confirm('¿Eliminar este servicio?')) return;
+    saveServices(getServices().filter(s => s.id !== id));
+    refreshAll();
+}
+
+function openDetail(id) {
+    const s = getServices().find(x => x.id === id);
+    if (!s) return;
+    const parts = s.service.parts || [];
+    const tp = parts.reduce((sum,p) => sum + p.cost, 0);
+    const info = getStatusInfo(s.service.status);
+    document.getElementById('detailContent').innerHTML = `
+        <div class="detail-header"><div style="font-size:14px;opacity:.9">Folio: ${s.folio}</div><div style="font-size:22px;font-weight:700;margin:5px 0">${s.client.name}</div><span style="background:rgba(255,255,255,.25);padding:6px 14px;border-radius:20px;font-size:13px">${s.service.status}</span></div>
+        <div class="detail-section"><div class="detail-section-title">👤 Cliente</div><div class="detail-row"><span class="detail-row-label">Teléfono</span><span class="detail-row-value">${s.client.phone}</span></div>${s.client.email?`<div class="detail-row"><span class="detail-row-label">Correo</span><span class="detail-row-value">${s.client.email}</span></div>`:''}</div>
+        <div class="detail-section"><div class="detail-section-title">📱 Equipo</div><div class="detail-row"><span class="detail-row-label">Marca/Modelo</span><span class="detail-row-value">${s.device.brand} ${s.device.model}</span></div>${s.device.imei?`<div class="detail-row"><span class="detail-row-label">IMEI</span><span class="detail-row-value">${s.device.imei}</span></div>`:''}<div class="detail-row"><span class="detail-row-label">Problema</span><span class="detail-row-value">${s.device.problem}</span></div>${s.device.accessories?`<div class="detail-row"><span class="detail-row-label">Accesorios</span><span class="detail-row-value">${s.device.accessories}</span></div>`:''}</div>
+        <div class="detail-section"><div class="detail-section-title">🔧 Refacciones</div>${parts.length?parts.map(p=>`<div class="detail-row"><span class="detail-row-label">${p.description}</span><span class="detail-row-value">$${p.cost.toFixed(2)}</span></div>`).join(''):'<p style="color:#6b7280;font-size:14px">Sin refacciones</p>'}<div class="detail-row" style="border-top:2px solid #e5e7eb;margin-top:8px;padding-top:8px"><span class="detail-row-label"><strong>Total</strong></span><span class="detail-row-value"><strong>$${tp.toFixed(2)}</strong></span></div></div>
+        <div class="detail-section"><div class="detail-section-title">💰 Finanzas</div><div class="detail-row"><span class="detail-row-label">Costo reparación</span><span class="detail-row-value">$${s.service.repairCost.toFixed(2)}</span></div><div class="detail-row"><span class="detail-row-label">Pago</span><span class="detail-row-value">${s.service.paymentStatus}</span></div></div>
+        <div class="detail-highlight"><div style="font-size:12px;opacity:.9">GANANCIA NETA</div><div style="font-size:28px;font-weight:700">$${s.service.netProfit.toFixed(2)}</div></div>
+        <div class="detail-actions"><button class="btn btn-warning" onclick="closeModal('detailModal');openEdit(${s.id})">✏️ Editar</button><button class="btn btn-primary" onclick="printReceipt(${s.id})">🖨️ Imprimir</button><button class="btn btn-danger" onclick="if(confirm('¿Eliminar?')){deleteSvc(${s.id});closeModal('detailModal')}">🗑️</button></div>`;
+    openModal('detailModal');
+}
+
+function openEdit(id) {
+    const s = getServices().find(x => x.id === id);
+    if (!s) return;
+    editId = id;
+    editParts = s.service.parts ? [...s.service.parts] : [];
+    editStatus = s.service.status;
+    document.getElementById('editFolio').textContent = s.folio;
+    document.getElementById('editRepairCost').value = s.service.repairCost;
+    document.getElementById('editPaymentStatus').value = s.service.paymentStatus || 'Pendiente';
+    document.getElementById('editPaymentMethod').value = s.service.paymentMethod || '';
+    document.getElementById('editDelivery').value = s.service.estimatedDelivery || '';
+    renderEditStatus();
+    renderEditParts();
+    openModal('editModal');
+}
+
+function renderEditStatus() {
+    document.getElementById('statusFlow').innerHTML = STATUSES.map((s,i) => `<button type="button" class="status-flow-btn ${editStatus===s?'selected':''}" onclick="editStatus='${s}';renderEditStatus()">${STATUS_ICONS[i]} ${s.length>20?s.substring(0,18)+'...':s}</button>`).join('');
+}
+
+function renderEditParts() {
+    document.getElementById('editPartsList').innerHTML = editParts.length ? editParts.map((p,i) => `<div class="refaccion-item"><strong>${p.description}</strong><span style="color:#2563eb;font-weight:600">$${p.cost.toFixed(2)}</span><button class="btn btn-danger btn-sm" onclick="editParts.splice(${i},1);renderEditParts()">X</button></div>`).join('') : '<p style="color:#6b7280;font-size:14px">Sin refacciones</p>';
+    const t = editParts.reduce((s,p) => s + p.cost, 0);
+    document.getElementById('editTotalParts').textContent = t.toFixed(2);
+    updateEditProfit();
+}
+
+function addEditPart() {
+    const d = document.getElementById('editPartDesc').value;
+    const c = parseFloat(document.getElementById('editPartCost').value);
+    if (!d || !c) { alert('Completa descripción y costo'); return; }
+    editParts.push({ description: d, cost: c });
+    document.getElementById('editPartDesc').value = '';
+    document.getElementById('editPartCost').value = '';
+    renderEditParts();
+}
+
+function updateEditProfit() {
+    const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
+    const tp = editParts.reduce((s,p) => s + p.cost, 0);
+    document.getElementById('editNetProfit').textContent = (rc - tp).toFixed(2);
+}
+
+function saveEdit() {
+    const svcs = getServices();
+    const i = svcs.findIndex(s => s.id === editId);
+    if (i === -1) return;
+    const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
+    const tp = editParts.reduce((s,p) => s + p.cost, 0);
+    svcs[i].service.status = editStatus;
+    svcs[i].service.repairCost = rc;
+    svcs[i].service.paymentStatus = document.getElementById('editPaymentStatus').value;
+    svcs[i].service.paymentMethod = document.getElementById('editPaymentMethod').value;
+    svcs[i].service.estimatedDelivery = document.getElementById('editDelivery').value;
+    svcs[i].service.parts = [...editParts];
+    svcs[i].service.totalParts = tp;
+    svcs[i].service.netProfit = rc - tp;
+    saveServices(svcs);
+    closeModal('editModal');
+    alert('✅ Servicio actualizado');
+    refreshAll();
+}
+
+function printReceipt(id) {
+    const s = getServices().find(x => x.id === id);
+    if (!s) return;
+    document.getElementById('printArea').innerHTML = `<div class="receipt-page"><div class="receipt-half"><div class="receipt-header"><h2>Taller de Reparaciones</h2><p>Copia para el Cliente</p><p><strong>Folio: ${s.folio}</strong></p></div><div class="receipt-section"><h3>Cliente</h3><div class="receipt-row"><span>Nombre:</span><span>${s.client.name}</span></div><div class="receipt-row"><span>Teléfono:</span><span>${s.client.phone}</span></div></div><div class="receipt-section"><h3>Equipo</h3><div class="receipt-row"><span>Marca/Modelo:</span><span>${s.device.brand} ${s.device.model}</span></div><div class="receipt-row"><span>Problema:</span><span>${s.device.problem}</span></div>${s.device.accessories?`<div class="receipt-row"><span>Accesorios:</span><span>${s.device.accessories}</span></div>`:''}</div><div class="receipt-section"><h3>Servicio</h3><div class="receipt-row"><span>Fecha:</span><span>${new Date(s.date).toLocaleDateString()}</span></div><div class="receipt-row"><span>Costo:</span><span>$${s.service.repairCost.toFixed(2)}</span></div><div class="receipt-row"><span>Estado:</span><span>${s.service.status}</span></div></div><div class="receipt-footer"><p>• 30 días de garantía</p><p>• Conserve esta nota</p><p>• Equipo no reclamado en 60 días será abandonado</p><div class="signature-line">Firma del Cliente</div></div></div><div class="receipt-half"><div class="receipt-header"><h2>Taller de Reparaciones</h2><p>Copia para el Taller</p><p><strong>Folio: ${s.folio}</strong></p></div><div class="receipt-section"><h3>Cliente</h3><div class="receipt-row"><span>Nombre:</span><span>${s.client.name}</span></div><div class="receipt-row"><span>Teléfono:</span><span>${s.client.phone}</span></div></div><div class="receipt-section"><h3>Equipo</h3><div class="receipt-row"><span>Marca/Modelo:</span><span>${s.device.brand} ${s.device.model}</span></div><div class="receipt-row"><span>Problema:</span><span>${s.device.problem}</span></div></div><div class="receipt-section"><h3>Servicio</h3><div class="receipt-row"><span>Costo:</span><span>$${s.service.repairCost.toFixed(2)}</span></div><div class="receipt-row"><span>Estado:</span><span>${s.service.status}</span></div><div class="receipt-row"><span>Pago:</span><span>${s.service.paymentStatus}</span></div></div><div class="receipt-footer"><div class="signature-line">Firma del Técnico</div></div></div></div>`;
+    window.print();
+}
+
+// FINANZAS
+function getExpenses() { return JSON.parse(localStorage.getItem('expenses') || '[]'); }
+function saveExpenses(e) { localStorage.setItem('expenses', JSON.stringify(e)); }
+
+document.getElementById('expenseForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const exps = getExpenses();
+    exps.push({ id: Date.now(), date: document.getElementById('expenseDate').value, amount: parseFloat(document.getElementById('expenseAmount').value), category: document.getElementById('expenseCategory').value, description: document.getElementById('expenseDescription').value });
+    saveExpenses(exps);
+    alert('✅ Gasto registrado');
+    this.reset();
+    document.getElementById('expenseDate').valueAsDate = new Date();
+    refreshAll();
+});
+
+function loadExpenses() {
+    const exps = getExpenses();
+    document.getElementById('expensesList').innerHTML = exps.length ? exps.map(e => `<tr><td>${new Date(e.date).toLocaleDateString()}</td><td>${e.category}</td><td>${e.description}</td><td>$${e.amount.toFixed(2)}</td><td><button class="btn btn-danger btn-sm" onclick="deleteExp(${e.id})">X</button></td></tr>`).join('') : '<tr><td colspan="5" class="empty-state">No hay gastos</td></tr>';
+    const now = new Date();
+    const me = exps.filter(e => { const d = new Date(e.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
+    const te = me.reduce((s,e) => s + e.amount, 0);
+    document.getElementById('totalExpenses').textContent = '$' + te.toFixed(2);
+    const svcs = getServices();
+    const ms = svcs.filter(s => { const d = new Date(s.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
+    const wp = ms.reduce((s,x) => s + x.service.netProfit, 0);
+    document.getElementById('workshopProfit').textContent = '$' + wp.toFixed(2);
+    document.getElementById('balance').textContent = '$' + (wp - te).toFixed(2);
+}
+
+function deleteExp(id) {
+    if (!confirm('¿Eliminar?')) return;
+    saveExpenses(getExpenses().filter(e => e.id !== id));
+    refreshAll();
+}
+
+function updateDashboard() {
+    const svcs = getServices();
+    document.getElementById('statActive').textContent = svcs.filter(s => s.service.status !== 'Entregado').length;
+    document.getElementById('statPending').textContent = '$' + svcs.filter(s => s.service.paymentStatus !== 'Pagado').reduce((s,x) => s + x.service.repairCost, 0).toFixed(2);
+    const now = new Date();
+    const ms = svcs.filter(s => { const d = new Date(s.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
+    document.getElementById('statProfit').textContent = '$' + ms.reduce((s,x) => s + x.service.netProfit, 0).toFixed(2);
+    document.getElementById('statReady').textContent = svcs.filter(s => s.service.status === 'Reparado (en espera de que pasen por él)').length;
+}
+
+document.getElementById('expenseDate').valueAsDate = new Date();
+</script>
 </body>
 </html>
-                    <div class="form-group"><label>Nombre completo *</label><input type="text" id="clientName" required></div>
-                    <div class="form-group"><label>Teléfono *</label><input type="tel" id="clientPhone" required></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Correo electrónico</label><input type="email" id="clientEmail"></div>
-                    <div class="form-group"><label>Dirección</label><input type="text" id="clientAddress"></div>
-                </div>
-                <h3>Datos del Equipo</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Marca *</label>
-                        <select id="deviceBrand" required>
-                            <option value="">Seleccionar...</option><option value="Samsung">Samsung</option><option value="iPhone">iPhone</option>
-                            <option value="X
