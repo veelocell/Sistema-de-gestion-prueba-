@@ -18,7 +18,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .form-group textarea{resize:vertical;min-height:80px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
 @media(max-width:768px){.form-row{grid-template-columns:1fr}}
-.btn{padding:12px 24px;border:none;border-radius:8px;font-size:16px;font-weight:500;cursor:pointer;display:inline-block}
+.btn{padding:12px 24px;border:none;border-radius:8px;font-size:16px;font-weight:500;cursor:pointer;display:inline-block;margin:5px}
 .btn-primary{background:#2563eb;color:white}
 .btn-secondary{background:#10b981;color:white}
 .btn-warning{background:#f59e0b;color:white}
@@ -121,25 +121,27 @@ tbody tr:hover{background:#eef2ff}
 
 <div id="loading" class="loading">
   <div>⏳ Conectando con la nube...</div>
-  <div style="font-size:14px;color:#6b7280">Esto puede tomar unos segundos la primera vez</div>
+  <div style="font-size:14px;color:#6b7280">Esto puede tomar unos segundos</div>
 </div>
 
 <div id="loginScreen" class="login-screen">
 <div class="login-card">
-<h1>🔧 Taller de Reparaciones</h1>
+<h1> Taller de Reparaciones</h1>
 <p>Inicia sesión para sincronizar en la nube</p>
 <form id="loginForm">
-<div class="form-group"><label>Correo electrónico</label><input type="email" id="loginEmail" required></div>
-<div class="form-group"><label>Contraseña</label><input type="password" id="loginPassword" required></div>
+<div class="form-group"><label>Correo electrónico</label><input type="email" id="loginEmail" value="ismaelrh@velocell.com" required></div>
+<div class="form-group"><label>Contraseña</label><input type="password" id="loginPassword" value="ROHI981115HTSDNS07" required></div>
 <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
 </form>
+<button class="btn btn-secondary btn-block" onclick="emergencyLogin()" style="margin-top:10px">🚨 ENTRAR SIN CONTRASEÑA (emergencia)</button>
+<p style="margin-top:15px;text-align:center;font-size:12px;color:#6b7280">Si el botón de arriba funciona, Firebase está bien</p>
 </div>
 </div>
 
 <div id="mainApp" style="display:none">
 <div class="container">
 <div class="header">
-<h1>🔧 Sistema de Gestión (Nube)</h1>
+<h1> Sistema de Gestión (Nube)</h1>
 <div class="user-info">
 <span id="userEmail" style="color:#6b7280;font-size:14px"></span>
 <button class="btn btn-danger" onclick="window.logout()">Cerrar Sesión</button>
@@ -155,7 +157,7 @@ tbody tr:hover{background:#eef2ff}
 <div class="stats-grid">
 <div class="stat-card"><h3>Servicios Activos</h3><div class="val" id="statActive">0</div></div>
 <div class="stat-card red"><h3>Cobros Pendientes</h3><div class="val" id="statPending">$0</div></div>
-<div class="stat-card green"><h3>Ganancias Reales (Cobradas)</h3><div class="val" id="statProfit">$0</div></div>
+<div class="stat-card green"><h3>Ganancias Reales</h3><div class="val" id="statProfit">$0</div></div>
 <div class="stat-card orange"><h3>Equipos Listos</h3><div class="val" id="statReady">0</div></div>
 </div>
 <div class="card">
@@ -173,11 +175,11 @@ tbody tr:hover{background:#eef2ff}
 <button class="btn-action blue" onclick="window.openAddPartModal()">🔧 Agregar Refacción</button>
 </div>
 </div>
-<div class="card"><h2>📂 Servicios por Estado</h2><div class="status-panel" id="statusPanel"></div></div>
+<div class="card"><h2> Servicios por Estado</h2><div class="status-panel" id="statusPanel"></div></div>
 <div class="card">
 <div id="currentViewLabel"></div>
 <h2>📋 <span id="servicesListTitle">Todos los Servicios</span></h2>
-<div class="search-filter"><input type="text" id="searchClient" placeholder="🔍 Buscar por nombre, teléfono o folio..." oninput="window.loadServices()"></div>
+<div class="search-filter"><input type="text" id="searchClient" placeholder=" Buscar..." oninput="window.loadServices()"></div>
 <div style="overflow-x:auto"><table><thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Estado</th><th>Pago</th><th>Costo</th><th>Acciones</th></tr></thead><tbody id="servicesList"></tbody></table></div>
 </div>
 </div>
@@ -196,11 +198,11 @@ tbody tr:hover{background:#eef2ff}
 </form>
 </div>
 <div class="card">
-<h2>💰 Resumen del Mes (Solo lo COBRADO)</h2>
+<h2>💰 Resumen del Mes</h2>
 <div class="stats-grid">
 <div class="stat-card green"><h3>Ganancias Reales</h3><div class="val" id="workshopProfit">$0</div></div>
-<div class="stat-card red"><h3>Total Gastos Personales</h3><div class="val" id="totalExpenses">$0</div></div>
-<div class="stat-card"><h3>Balance Final</h3><div class="val" id="balance">$0</div></div>
+<div class="stat-card red"><h3>Total Gastos</h3><div class="val" id="totalExpenses">$0</div></div>
+<div class="stat-card"><h3>Balance</h3><div class="val" id="balance">$0</div></div>
 </div>
 </div>
 <div class="card"><h2>📋 Historial de Gastos</h2><div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Monto</th><th>Acciones</th></tr></thead><tbody id="expensesList"></tbody></table></div></div>
@@ -210,11 +212,11 @@ tbody tr:hover{background:#eef2ff}
 
 <div class="modal-overlay" id="newOrderModal">
 <div class="modal-box">
-<div class="modal-header"><h2>📝 Nueva Orden de Servicio</h2><button class="close-modal" onclick="window.closeModal('newOrderModal')">&times;</button></div>
+<div class="modal-header"><h2>📝 Nueva Orden</h2><button class="close-modal" onclick="window.closeModal('newOrderModal')">&times;</button></div>
 <form id="serviceForm">
 <h3>Datos del Cliente</h3>
 <div class="form-row">
-<div class="form-group"><label>Nombre completo *</label><input type="text" id="clientName" required></div>
+<div class="form-group"><label>Nombre *</label><input type="text" id="clientName" required></div>
 <div class="form-group"><label>Teléfono *</label><input type="tel" id="clientPhone" required></div>
 </div>
 <h3>Datos del Equipo</h3>
@@ -227,14 +229,13 @@ tbody tr:hover{background:#eef2ff}
 <div class="form-group"><label>Entrega estimada</label><input type="date" id="estimatedDelivery"></div>
 </div>
 <div class="form-group"><label>Problema *</label><textarea id="problemDescription" required></textarea></div>
-<div class="form-group"><label>Accesorios que deja</label><textarea id="accessories" placeholder="Cargador, funda, SIM..."></textarea></div>
+<div class="form-group"><label>Accesorios</label><textarea id="accessories" placeholder="Cargador, funda, SIM..."></textarea></div>
 <h3>Servicio</h3>
 <div class="form-row">
 <div class="form-group"><label>Estado *</label><select id="serviceStatus" required><option>En diagnóstico</option><option>Por revisar</option><option>Revisado</option><option>En espera de autorización</option><option>Reparado (en espera de que pasen por él)</option><option>Entregado</option></select></div>
 <div class="form-group"><label>Costo acordado *</label><input type="number" id="repairCost" step="0.01" required></div>
 </div>
-<div class="form-group"><label>Método de pago esperado</label><select id="paymentMethod"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
-<p style="color:#6b7280;font-size:13px;margin-top:10px">💡 Las refacciones se pueden agregar después desde el botón "Agregar Refacción" en Taller.</p>
+<div class="form-group"><label>Método de pago</label><select id="paymentMethod"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
 <button type="submit" class="btn btn-primary btn-block" style="margin-top:20px">💾 Guardar en la Nube</button>
 </form>
 </div>
@@ -242,29 +243,27 @@ tbody tr:hover{background:#eef2ff}
 
 <div class="modal-overlay" id="addPartModal">
 <div class="modal-box">
-<div class="modal-header"><h2>🔧 Agregar Refacción a Servicio</h2><button class="close-modal" onclick="window.closeModal('addPartModal')">&times;</button></div>
+<div class="modal-header"><h2>🔧 Agregar Refacción</h2><button class="close-modal" onclick="window.closeModal('addPartModal')">&times;</button></div>
 <div id="addPartStep1">
-<p style="margin-bottom:15px;color:#6b7280">Selecciona el servicio al que quieres agregar la refacción:</p>
-<div class="search-filter"><input type="text" id="searchServiceForPart" placeholder="🔍 Buscar servicio..." oninput="window.filterServicesForPart()"></div>
+<p style="margin-bottom:15px;color:#6b7280">Selecciona el servicio:</p>
+<div class="search-filter"><input type="text" id="searchServiceForPart" placeholder=" Buscar..." oninput="window.filterServicesForPart()"></div>
 <div id="servicesForPartList" style="max-height:400px;overflow-y:auto"></div>
 </div>
 <div id="addPartStep2" style="display:none">
 <div style="background:#dbeafe;padding:12px;border-radius:8px;margin-bottom:20px">
-<strong>Servicio seleccionado:</strong><br>
-<span id="selectedServiceInfo"></span>
+<strong>Servicio:</strong><br><span id="selectedServiceInfo"></span>
 <button class="btn btn-sm" style="background:#6b7280;color:white;margin-left:10px" onclick="window.backToServiceSelection()">← Cambiar</button>
 </div>
-<h3>Datos de la Refacción</h3>
-<div class="form-group"><label>Descripción de la refacción *</label><input type="text" id="newPartDesc" placeholder="Ej: Pantalla, batería..."></div>
-<div class="form-group"><label>Costo de la refacción *</label><input type="number" id="newPartCost" step="0.01" placeholder="0.00"></div>
-<button class="btn btn-primary btn-block" onclick="window.confirmAddPart()">💾 Agregar Refacción al Servicio</button>
+<div class="form-group"><label>Descripción *</label><input type="text" id="newPartDesc"></div>
+<div class="form-group"><label>Costo *</label><input type="number" id="newPartCost" step="0.01"></div>
+<button class="btn btn-primary btn-block" onclick="window.confirmAddPart()">💾 Agregar</button>
 </div>
 </div>
 </div>
 
 <div class="modal-overlay" id="detailModal">
 <div class="modal-box">
-<div class="modal-header"><h2>📄 Detalle del Servicio</h2><button class="close-modal" onclick="window.closeModal('detailModal')">&times;</button></div>
+<div class="modal-header"><h2>📄 Detalle</h2><button class="close-modal" onclick="window.closeModal('detailModal')">&times;</button></div>
 <div id="detailContent"></div>
 </div>
 </div>
@@ -272,21 +271,21 @@ tbody tr:hover{background:#eef2ff}
 <div class="modal-overlay" id="editModal">
 <div class="modal-box">
 <div class="modal-header"><h2>✏️ Editar <span id="editFolio"></span></h2><button class="close-modal" onclick="window.closeModal('editModal')">&times;</button></div>
-<h3 style="margin-top:0">Estado del Servicio</h3>
+<h3 style="margin-top:0">Estado</h3>
 <div class="status-flow" id="statusFlow"></div>
 <div class="form-row">
-<div class="form-group"><label>Costo acordado</label><input type="number" id="editRepairCost" step="0.01"></div>
+<div class="form-group"><label>Costo</label><input type="number" id="editRepairCost" step="0.01"></div>
 <div class="form-group"><label>Método de pago</label><select id="editPaymentMethod"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
 </div>
 <div class="form-group"><label>Entrega estimada</label><input type="date" id="editDelivery"></div>
-<h3>Refacciones actuales</h3>
+<h3>Refacciones</h3>
 <div id="editPartsList"></div>
 <div style="margin-top:15px;padding:12px;background:#f3f4f6;border-radius:8px">
 <strong>Refacciones: $<span id="editTotalParts">0.00</span></strong><br>
-<strong>Costo acordado: $<span id="editRepairCostDisplay">0.00</span></strong><br>
-<strong>Ganancia neta: $<span id="editNetProfit">0.00</span></strong>
+<strong>Costo: $<span id="editRepairCostDisplay">0.00</span></strong><br>
+<strong>Ganancia: $<span id="editNetProfit">0.00</span></strong>
 </div>
-<button class="btn btn-primary btn-block" style="margin-top:20px" onclick="window.saveEdit()">💾 Guardar Cambios</button>
+<button class="btn btn-primary btn-block" style="margin-top:20px" onclick="window.saveEdit()">💾 Guardar</button>
 </div>
 </div>
 
@@ -325,17 +324,25 @@ let selectedServiceForPart = null;
 let unsubscribeServices = null;
 let unsubscribeExpenses = null;
 
+// LOGIN NORMAL
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    const email = document.getElementById('loginEmail').value;
+    const email = document.getElementById('loginEmail').value.trim();
     const pass = document.getElementById('loginPassword').value;
+    console.log("Intentando login:", email, pass);
     if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
         currentUser = { email: email };
         window.showApp();
     } else {
-        alert('Correo o contraseña incorrectos');
+        alert('❌ Credenciales incorrectas\n\nEmail: ' + email + '\nPass: ' + pass + '\n\nEsperado:\nEmail: ' + ADMIN_EMAIL + '\nPass: ' + ADMIN_PASS);
     }
 });
+
+// LOGIN DE EMERGENCIA (sin contraseña)
+window.emergencyLogin = function() {
+    currentUser = { email: ADMIN_EMAIL + " (emergencia)" };
+    window.showApp();
+}
 
 window.showApp = function() {
     document.getElementById('loginScreen').style.display = 'none';
@@ -356,10 +363,11 @@ function startRealtimeSync() {
     const qServices = query(collection(db, "services"), orderBy("date", "desc"));
     unsubscribeServices = onSnapshot(qServices, (snapshot) => {
         allServices = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        console.log("Servicios cargados:", allServices.length);
         window.refreshAll();
     }, (error) => {
-        console.error("Error de sincronización:", error);
-        alert("Error de conexión con la base de datos. Verifica tu configuración de Firebase.");
+        console.error("Error Firebase:", error);
+        alert("❌ Error de Firebase: " + error.message + "\n\nRevisa las reglas en Firebase Console > Firestore > Reglas");
     });
 
     const qExpenses = query(collection(db, "expenses"), orderBy("date", "desc"));
@@ -382,7 +390,7 @@ window.closeModal = function(id) { document.getElementById(id).classList.remove(
 document.getElementById('serviceForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div>⏳ Guardando en la nube...</div>';
+    document.getElementById('loading').innerHTML = '<div>⏳ Guardando...</div>';
     
     const rc = parseFloat(document.getElementById('repairCost').value);
     const svc = {
@@ -396,12 +404,11 @@ document.getElementById('serviceForm').addEventListener('submit', async function
     
     try {
         await addDoc(collection(db, "services"), svc);
-        alert('✅ Orden creada y sincronizada en la nube');
+        alert('✅ Orden creada');
         window.closeModal('newOrderModal');
         this.reset();
     } catch (error) {
-        console.error("Error: ", error);
-        alert("Error al guardar: " + error.message);
+        alert("❌ Error: " + error.message);
     } finally {
         document.getElementById('loading').style.display = 'none';
     }
@@ -419,12 +426,12 @@ window.openAddPartModal = function() {
 }
 
 window.renderServicesForPartList = function(filter = '') {
-    const activeServices = allServices.filter(s => s.service.status !== 'Entregado');
-    const filtered = filter ? activeServices.filter(s => 
+    const active = allServices.filter(s => s.service.status !== 'Entregado');
+    const filtered = filter ? active.filter(s => 
         s.client.name.toLowerCase().includes(filter.toLowerCase()) ||
         s.client.phone.includes(filter) ||
         s.folio.toLowerCase().includes(filter.toLowerCase())
-    ) : activeServices;
+    ) : active;
     
     const container = document.getElementById('servicesForPartList');
     if (filtered.length === 0) {
@@ -434,13 +441,8 @@ window.renderServicesForPartList = function(filter = '') {
     
     container.innerHTML = filtered.map(s => `
         <div class="service-select-item" onclick="window.selectServiceForPart('${s.id}')">
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-                <div>
-                    <strong>${s.folio}</strong> - ${s.client.name}<br>
-                    <small style="color:#6b7280">${s.device.brand} ${s.device.model} • ${s.service.status}</small>
-                </div>
-                <span class="status-badge ${window.getStatusInfo(s.service.status).cls}">${STATUS_ICONS[STATUSES.indexOf(s.service.status)]}</span>
-            </div>
+            <strong>${s.folio}</strong> - ${s.client.name}<br>
+            <small style="color:#6b7280">${s.device.brand} ${s.device.model} • ${s.service.status}</small>
         </div>
     `).join('');
 }
@@ -454,8 +456,7 @@ window.selectServiceForPart = function(id) {
     if (!selectedServiceForPart) return;
     document.getElementById('selectedServiceInfo').innerHTML = `
         <strong>${selectedServiceForPart.folio}</strong> - ${selectedServiceForPart.client.name}<br>
-        ${selectedServiceForPart.device.brand} ${selectedServiceForPart.device.model}<br>
-        <small>Costo: $${selectedServiceForPart.service.repairCost.toFixed(2)} | Refacciones: $${(selectedServiceForPart.service.totalParts || 0).toFixed(2)}</small>
+        ${selectedServiceForPart.device.brand} ${selectedServiceForPart.device.model}
     `;
     document.getElementById('addPartStep1').style.display = 'none';
     document.getElementById('addPartStep2').style.display = 'block';
@@ -470,11 +471,11 @@ window.backToServiceSelection = function() {
 window.confirmAddPart = async function() {
     const desc = document.getElementById('newPartDesc').value.trim();
     const cost = parseFloat(document.getElementById('newPartCost').value);
-    if (!desc || !cost) { alert('Completa la descripción y el costo'); return; }
+    if (!desc || !cost) { alert('Completa descripción y costo'); return; }
     if (!selectedServiceForPart) { alert('Selecciona un servicio'); return; }
     
     document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div>⏳ Agregando refacción...</div>';
+    document.getElementById('loading').innerHTML = '<div>⏳ Agregando...</div>';
     
     try {
         const currentParts = selectedServiceForPart.service.parts || [];
@@ -497,9 +498,9 @@ window.confirmAddPart = async function() {
 }
 
 window.cobrarServicio = async function(id) {
-    if (!confirm('¿Confirmar cobro de este servicio? Se marcará como PAGADO.')) return;
+    if (!confirm('¿Confirmar cobro?')) return;
     document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div>⏳ Registrando cobro...</div>';
+    document.getElementById('loading').innerHTML = '<div> Cobrando...</div>';
     
     try {
         const svc = allServices.find(s => s.id === id);
@@ -508,9 +509,9 @@ window.cobrarServicio = async function(id) {
             'service.paidAmount': svc.service.repairCost,
             'service.paidDate': new Date().toISOString()
         });
-        alert('✅ Cobro registrado. Ganancia contabilizada.');
+        alert('✅ Cobro registrado');
     } catch (error) {
-        alert("Error al registrar cobro: " + error.message);
+        alert("Error: " + error.message);
     } finally {
         document.getElementById('loading').style.display = 'none';
     }
@@ -544,7 +545,7 @@ window.renderStatusPanel = function() {
     const lbl = document.getElementById('currentViewLabel');
     const ttl = document.getElementById('servicesListTitle');
     if (!statusFilter) { lbl.innerHTML = ''; ttl.textContent = 'Todos los Servicios'; }
-    else { const info = window.getStatusInfo(statusFilter); lbl.innerHTML = `<span style="background:#2563eb;color:white;padding:8px 14px;border-radius:8px;display:inline-block;margin-bottom:10px">${info.icon} ${statusFilter} (${counts[statusFilter]})</span>`; ttl.textContent = statusFilter; }
+    else { lbl.innerHTML = `<span style="background:#2563eb;color:white;padding:8px 14px;border-radius:8px;display:inline-block;margin-bottom:10px">${statusFilter} (${counts[statusFilter]})</span>`; ttl.textContent = statusFilter; }
 }
 
 window.setStatusFilter = function(s) { statusFilter = s; window.refreshAll(); }
@@ -562,8 +563,8 @@ window.loadServices = function() {
         tbody.innerHTML = filtered.map(s => {
             const info = window.getStatusInfo(s.service.status);
             const payBadge = getPaymentBadge(s.service.paymentStatus);
-            const cobrarBtn = s.service.paymentStatus !== 'Pagado' ? `<button class="btn btn-success btn-sm" onclick="event.stopPropagation();window.cobrarServicio('${s.id}')" title="Cobrar">💰</button>` : '';
-            return `<tr onclick="window.openDetail('${s.id}')"><td><strong>${s.folio}</strong></td><td>${s.client.name}<br><small style="color:#6b7280">${s.client.phone}</small></td><td>${s.device.brand} ${s.device.model}</td><td><span class="status-badge ${info.cls}">${s.service.status}</span></td><td>${payBadge}</td><td>$${s.service.repairCost.toFixed(2)}</td><td class="action-btns" onclick="event.stopPropagation()">${cobrarBtn}<button class="btn btn-warning btn-sm" onclick="window.openEdit('${s.id}')">✏️</button><button class="btn btn-primary btn-sm" onclick="window.printReceipt('${s.id}')">🖨️</button><button class="btn btn-danger btn-sm" onclick="window.deleteSvc('${s.id}')">🗑️</button></td></tr>`;
+            const cobrarBtn = s.service.paymentStatus !== 'Pagado' ? `<button class="btn btn-success btn-sm" onclick="event.stopPropagation();window.cobrarServicio('${s.id}')">💰</button>` : '';
+            return `<tr onclick="window.openDetail('${s.id}')"><td><strong>${s.folio}</strong></td><td>${s.client.name}<br><small style="color:#6b7280">${s.client.phone}</small></td><td>${s.device.brand} ${s.device.model}</td><td><span class="status-badge ${info.cls}">${s.service.status}</span></td><td>${payBadge}</td><td>$${s.service.repairCost.toFixed(2)}</td><td class="action-btns" onclick="event.stopPropagation()">${cobrarBtn}<button class="btn btn-warning btn-sm" onclick="window.openEdit('${s.id}')">✏️</button><button class="btn btn-primary btn-sm" onclick="window.printReceipt('${s.id}')">️</button><button class="btn btn-danger btn-sm" onclick="window.deleteSvc('${s.id}')">🗑️</button></td></tr>`;
         }).join('');
     }
     
@@ -591,16 +592,8 @@ window.loadServices = function() {
 }
 
 window.deleteSvc = async function(id) {
-    if (!confirm('¿Eliminar este servicio de la nube?')) return;
-    document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div>⏳ Eliminando...</div>';
-    try {
-        await deleteDoc(doc(db, "services", id));
-    } catch (error) {
-        alert("Error al eliminar: " + error.message);
-    } finally {
-        document.getElementById('loading').style.display = 'none';
-    }
+    if (!confirm('¿Eliminar?')) return;
+    try { await deleteDoc(doc(db, "services", id)); } catch (error) { alert("Error: " + error.message); }
 }
 
 window.openDetail = function(id) {
@@ -610,20 +603,18 @@ window.openDetail = function(id) {
     const tp = parts.reduce((sum,p) => sum + p.cost, 0);
     const isPaid = s.service.paymentStatus === 'Pagado';
     const payBadge = getPaymentBadge(s.service.paymentStatus);
-    const cobrarBtn = !isPaid ? `<button class="btn btn-success" onclick="window.closeModal('detailModal');window.cobrarServicio('${s.id}')">💰 Cobrar Ahora</button>` : `<button class="btn btn-secondary" disabled>✅ Ya Cobrado</button>`;
+    const cobrarBtn = !isPaid ? `<button class="btn btn-success" onclick="window.closeModal('detailModal');window.cobrarServicio('${s.id}')">💰 Cobrar</button>` : `<button class="btn btn-secondary" disabled>✅ Cobrado</button>`;
     
     document.getElementById('detailContent').innerHTML = `
         <div class="detail-header"><div style="font-size:14px;opacity:.9">Folio: ${s.folio}</div><div style="font-size:22px;font-weight:700;margin:5px 0">${s.client.name}</div><div style="margin-top:8px">${payBadge}</div></div>
-        <div class="detail-section"><div class="detail-section-title">👤 Cliente</div><div class="detail-row"><span class="detail-row-label">Teléfono</span><span class="detail-row-value">${s.client.phone}</span></div></div>
-        <div class="detail-section"><div class="detail-section-title">📱 Equipo</div><div class="detail-row"><span class="detail-row-label">Marca/Modelo</span><span class="detail-row-value">${s.device.brand} ${s.device.model}</span></div>${s.device.imei?`<div class="detail-row"><span class="detail-row-label">IMEI</span><span class="detail-row-value">${s.device.imei}</span></div>`:''}<div class="detail-row"><span class="detail-row-label">Problema</span><span class="detail-row-value">${s.device.problem}</span></div>${s.device.accessories?`<div class="detail-row"><span class="detail-row-label">Accesorios</span><span class="detail-row-value">${s.device.accessories}</span></div>`:''}</div>
-        <div class="detail-section"><div class="detail-section-title">🔧 Refacciones</div>${parts.length?parts.map(p=>`<div class="detail-row"><span class="detail-row-label">${p.description}</span><span class="detail-row-value">$${p.cost.toFixed(2)}</span></div>`).join(''):'<p style="color:#6b7280;font-size:14px">Sin refacciones</p>'}<div class="detail-row" style="border-top:2px solid #e5e7eb;margin-top:8px;padding-top:8px"><span class="detail-row-label"><strong>Total refacciones</strong></span><span class="detail-row-value"><strong>$${tp.toFixed(2)}</strong></span></div></div>
+        <div class="detail-section"><div class="detail-section-title"> Cliente</div><div class="detail-row"><span class="detail-row-label">Teléfono</span><span class="detail-row-value">${s.client.phone}</span></div></div>
+        <div class="detail-section"><div class="detail-section-title">📱 Equipo</div><div class="detail-row"><span class="detail-row-label">Marca/Modelo</span><span class="detail-row-value">${s.device.brand} ${s.device.model}</span></div>${s.device.imei?`<div class="detail-row"><span class="detail-row-label">IMEI</span><span class="detail-row-value">${s.device.imei}</span></div>`:''}<div class="detail-row"><span class="detail-row-label">Problema</span><span class="detail-row-value">${s.device.problem}</span></div></div>
+        <div class="detail-section"><div class="detail-section-title"> Refacciones</div>${parts.length?parts.map(p=>`<div class="detail-row"><span class="detail-row-label">${p.description}</span><span class="detail-row-value">$${p.cost.toFixed(2)}</span></div>`).join(''):'<p style="color:#6b7280">Sin refacciones</p>'}<div class="detail-row" style="border-top:2px solid #e5e7eb;margin-top:8px;padding-top:8px"><span class="detail-row-label"><strong>Total</strong></span><span class="detail-row-value"><strong>$${tp.toFixed(2)}</strong></span></div></div>
         <div class="detail-section"><div class="detail-section-title">💰 Finanzas</div>
-            <div class="detail-row"><span class="detail-row-label">Costo acordado</span><span class="detail-row-value">$${s.service.repairCost.toFixed(2)}</span></div>
-            <div class="detail-row"><span class="detail-row-label">Estado de pago</span><span class="detail-row-value">${payBadge}</span></div>
-            ${s.service.paymentMethod?`<div class="detail-row"><span class="detail-row-label">Método de pago</span><span class="detail-row-value">${s.service.paymentMethod}</span></div>`:''}
-            ${isPaid && s.service.paidDate?`<div class="detail-row"><span class="detail-row-label">Fecha de cobro</span><span class="detail-row-value">${new Date(s.service.paidDate).toLocaleDateString()}</span></div>`:''}
+            <div class="detail-row"><span class="detail-row-label">Costo</span><span class="detail-row-value">$${s.service.repairCost.toFixed(2)}</span></div>
+            <div class="detail-row"><span class="detail-row-label">Pago</span><span class="detail-row-value">${payBadge}</span></div>
         </div>
-        <div class="detail-highlight"><div style="font-size:12px;opacity:.9">${isPaid ? 'GANANCIA CONTABILIZADA' : 'GANANCIA PENDIENTE DE COBRO'}</div><div style="font-size:28px;font-weight:700">$${(s.service.repairCost - tp).toFixed(2)}</div></div>
+        <div class="detail-highlight"><div style="font-size:12px;opacity:.9">${isPaid ? 'GANANCIA CONTABILIZADA' : 'PENDIENTE'}</div><div style="font-size:28px;font-weight:700">$${(s.service.repairCost - tp).toFixed(2)}</div></div>
         <div class="detail-actions">
             ${cobrarBtn}
             <button class="btn btn-warning" onclick="window.closeModal('detailModal');window.openEdit('${s.id}')">✏️ Editar</button>
@@ -655,7 +646,7 @@ window.renderEditStatus = function() {
 window.setEditStatus = function(s) { editStatus = s; window.renderEditStatus(); }
 
 window.renderEditParts = function() {
-    document.getElementById('editPartsList').innerHTML = editParts.length ? editParts.map((p,i) => `<div class="refaccion-item"><strong>${p.description}</strong><span style="color:#2563eb;font-weight:600">$${p.cost.toFixed(2)}</span><button class="btn btn-danger btn-sm" onclick="window.removeEditPart(${i})">X</button></div>`).join('') : '<p style="color:#6b7280;font-size:14px">Sin refacciones</p>';
+    document.getElementById('editPartsList').innerHTML = editParts.length ? editParts.map((p,i) => `<div class="refaccion-item"><strong>${p.description}</strong><span style="color:#2563eb">$${p.cost.toFixed(2)}</span><button class="btn btn-danger btn-sm" onclick="window.removeEditPart(${i})">X</button></div>`).join('') : '<p style="color:#6b7280">Sin refacciones</p>';
     const t = editParts.reduce((s,p) => s + p.cost, 0);
     const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
     document.getElementById('editTotalParts').textContent = t.toFixed(2);
@@ -669,26 +660,25 @@ document.getElementById('editRepairCost').addEventListener('input', window.rende
 
 window.saveEdit = async function() {
     document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div>⏳ Actualizando en la nube...</div>';
+    document.getElementById('loading').innerHTML = '<div>⏳ Guardando...</div>';
     
     const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
     const tp = editParts.reduce((s,p) => s + p.cost, 0);
-    const updates = {
-        'service.status': editStatus,
-        'service.repairCost': rc,
-        'service.paymentMethod': document.getElementById('editPaymentMethod').value,
-        'service.estimatedDelivery': document.getElementById('editDelivery').value,
-        'service.parts': [...editParts],
-        'service.totalParts': tp,
-        'service.netProfit': rc - tp
-    };
     
     try {
-        await updateDoc(doc(db, "services", editId), updates);
+        await updateDoc(doc(db, "services", editId), {
+            'service.status': editStatus,
+            'service.repairCost': rc,
+            'service.paymentMethod': document.getElementById('editPaymentMethod').value,
+            'service.estimatedDelivery': document.getElementById('editDelivery').value,
+            'service.parts': [...editParts],
+            'service.totalParts': tp,
+            'service.netProfit': rc - tp
+        });
         window.closeModal('editModal');
-        alert('✅ Servicio actualizado en la nube');
+        alert('✅ Actualizado');
     } catch (error) {
-        alert("Error al actualizar: " + error.message);
+        alert("Error: " + error.message);
     } finally {
         document.getElementById('loading').style.display = 'none';
     }
@@ -698,16 +688,16 @@ window.printReceipt = function(id) {
     const s = allServices.find(x => x.id === id);
     if (!s) return;
     const parts = s.service.parts || [];
-    const partsHtml = parts.length ? parts.map(p => `<div class="receipt-row"><span>${p.description}</span><span>$${p.cost.toFixed(2)}</span></div>`).join('') : '<div class="receipt-row"><span>Sin refacciones</span><span></span></div>';
+    const partsHtml = parts.length ? parts.map(p => `<div class="receipt-row"><span>${p.description}</span><span>$${p.cost.toFixed(2)}</span></div>`).join('') : '';
     
-    document.getElementById('printArea').innerHTML = `<div class="receipt-page"><div class="receipt-half"><div class="receipt-header"><h2>Taller de Reparaciones</h2><p>Copia para el Cliente</p><p><strong>Folio: ${s.folio}</strong></p></div><div class="receipt-section"><h3>Cliente</h3><div class="receipt-row"><span>Nombre:</span><span>${s.client.name}</span></div><div class="receipt-row"><span>Teléfono:</span><span>${s.client.phone}</span></div></div><div class="receipt-section"><h3>Equipo</h3><div class="receipt-row"><span>Marca/Modelo:</span><span>${s.device.brand} ${s.device.model}</span></div>${s.device.imei?`<div class="receipt-row"><span>IMEI:</span><span>${s.device.imei}</span></div>`:''}<div class="receipt-row"><span>Problema:</span><span>${s.device.problem}</span></div>${s.device.accessories?`<div class="receipt-row"><span>Accesorios:</span><span>${s.device.accessories}</span></div>`:''}</div><div class="receipt-section"><h3>Servicio</h3><div class="receipt-row"><span>Fecha:</span><span>${new Date(s.date).toLocaleDateString()}</span></div><div class="receipt-row"><span>Costo acordado:</span><span>$${s.service.repairCost.toFixed(2)}</span></div><div class="receipt-row"><span>Estado:</span><span>${s.service.status}</span></div></div><div class="receipt-footer"><p>• 30 días de garantía</p><p>• Conserve esta nota</p><p>• Equipo no reclamado en 60 días será abandonado</p><div class="signature-line">Firma del Cliente</div></div></div><div class="receipt-half"><div class="receipt-header"><h2>Taller de Reparaciones</h2><p>Copia para el Taller</p><p><strong>Folio: ${s.folio}</strong></p></div><div class="receipt-section"><h3>Cliente</h3><div class="receipt-row"><span>Nombre:</span><span>${s.client.name}</span></div><div class="receipt-row"><span>Teléfono:</span><span>${s.client.phone}</span></div></div><div class="receipt-section"><h3>Equipo</h3><div class="receipt-row"><span>Marca/Modelo:</span><span>${s.device.brand} ${s.device.model}</span></div><div class="receipt-row"><span>Problema:</span><span>${s.device.problem}</span></div></div><div class="receipt-section"><h3>Refacciones</h3>${partsHtml}</div><div class="receipt-section"><h3>Servicio</h3><div class="receipt-row"><span>Costo:</span><span>$${s.service.repairCost.toFixed(2)}</span></div><div class="receipt-row"><span>Estado:</span><span>${s.service.status}</span></div><div class="receipt-row"><span>Pago:</span><span>${s.service.paymentStatus}</span></div></div><div class="receipt-footer"><div class="signature-line">Firma del Técnico</div></div></div></div>`;
+    document.getElementById('printArea').innerHTML = `<div class="receipt-page"><div class="receipt-half"><div class="receipt-header"><h2>Taller de Reparaciones</h2><p>Copia Cliente</p><p><strong>Folio: ${s.folio}</strong></p></div><div class="receipt-section"><h3>Cliente</h3><div class="receipt-row"><span>Nombre:</span><span>${s.client.name}</span></div><div class="receipt-row"><span>Tel:</span><span>${s.client.phone}</span></div></div><div class="receipt-section"><h3>Equipo</h3><div class="receipt-row"><span>Marca/Modelo:</span><span>${s.device.brand} ${s.device.model}</span></div><div class="receipt-row"><span>Problema:</span><span>${s.device.problem}</span></div></div><div class="receipt-section"><h3>Servicio</h3><div class="receipt-row"><span>Fecha:</span><span>${new Date(s.date).toLocaleDateString()}</span></div><div class="receipt-row"><span>Costo:</span><span>$${s.service.repairCost.toFixed(2)}</span></div><div class="receipt-row"><span>Estado:</span><span>${s.service.status}</span></div></div><div class="receipt-footer"><p>• 30 días garantía</p><p>• Conserve esta nota</p><div class="signature-line">Firma Cliente</div></div></div><div class="receipt-half"><div class="receipt-header"><h2>Taller de Reparaciones</h2><p>Copia Taller</p><p><strong>Folio: ${s.folio}</strong></p></div><div class="receipt-section"><h3>Cliente</h3><div class="receipt-row"><span>Nombre:</span><span>${s.client.name}</span></div><div class="receipt-row"><span>Tel:</span><span>${s.client.phone}</span></div></div><div class="receipt-section"><h3>Equipo</h3><div class="receipt-row"><span>Marca/Modelo:</span><span>${s.device.brand} ${s.device.model}</span></div><div class="receipt-row"><span>Problema:</span><span>${s.device.problem}</span></div></div><div class="receipt-section"><h3>Refacciones</h3>${partsHtml}</div><div class="receipt-section"><h3>Servicio</h3><div class="receipt-row"><span>Costo:</span><span>$${s.service.repairCost.toFixed(2)}</span></div><div class="receipt-row"><span>Estado:</span><span>${s.service.status}</span></div><div class="receipt-row"><span>Pago:</span><span>${s.service.paymentStatus}</span></div></div><div class="receipt-footer"><div class="signature-line">Firma Técnico</div></div></div></div>`;
     window.print();
 }
 
 document.getElementById('expenseForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div>⏳ Guardando gasto...</div>';
+    document.getElementById('loading').innerHTML = '<div>⏳ Guardando...</div>';
     
     const exp = {
         date: document.getElementById('expenseDate').value,
@@ -719,11 +709,11 @@ document.getElementById('expenseForm').addEventListener('submit', async function
     
     try {
         await addDoc(collection(db, "expenses"), exp);
-        alert('✅ Gasto registrado en la nube');
+        alert('✅ Gasto registrado');
         this.reset();
         document.getElementById('expenseDate').valueAsDate = new Date();
     } catch (error) {
-        alert("Error al guardar: " + error.message);
+        alert("Error: " + error.message);
     } finally {
         document.getElementById('loading').style.display = 'none';
     }
@@ -746,25 +736,20 @@ window.loadExpenses = function() {
 }
 
 window.deleteExp = async function(id) {
-    if (!confirm('¿Eliminar este gasto?')) return;
+    if (!confirm('¿Eliminar?')) return;
     try { await deleteDoc(doc(db, "expenses", id)); } catch (error) { console.error(error); }
 }
 
 window.updateDashboard = function() {
     document.getElementById('statActive').textContent = allServices.filter(s => s.service.status !== 'Entregado').length;
-    
     const pending = allServices.filter(s => s.service.paymentStatus !== 'Pagado');
-    const pendingAmount = pending.reduce((s,x) => s + x.service.repairCost, 0);
-    document.getElementById('statPending').textContent = '$' + pendingAmount.toFixed(2);
-    
+    document.getElementById('statPending').textContent = '$' + pending.reduce((s,x) => s + x.service.repairCost, 0).toFixed(2);
     const now = new Date();
     const paidThisMonth = allServices.filter(s => { 
         const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null;
         return s.service.paymentStatus === 'Pagado' && paidDate && paidDate.getMonth() === now.getMonth() && paidDate.getFullYear() === now.getFullYear();
     });
-    const realProfit = paidThisMonth.reduce((s,x) => s + (x.service.repairCost - (x.service.totalParts || 0)), 0);
-    document.getElementById('statProfit').textContent = '$' + realProfit.toFixed(2);
-    
+    document.getElementById('statProfit').textContent = '$' + paidThisMonth.reduce((s,x) => s + (x.service.repairCost - (x.service.totalParts || 0)), 0).toFixed(2);
     document.getElementById('statReady').textContent = allServices.filter(s => s.service.status === 'Reparado (en espera de que pasen por él)').length;
 }
 
