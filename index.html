@@ -29,54 +29,90 @@ tailwind.config = {
   ::-webkit-scrollbar-track { background:#f1f5f9; }
   ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:4px; }
   ::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
-  @media print {
-    body * { visibility: hidden !important; }
-    .print-area, .print-area * { visibility: visible !important; }
-    .print-area { position:absolute; left:0; top:0; width:100%; }
-  }
-  .print-area { 
+
+  /* ===== SISTEMA DE IMPRESIÓN ===== */
+  #printContainer {
     display: none;
     position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    z-index: 9999;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background: white;
+    z-index: 99999;
+    overflow-y: auto;
     padding: 20px;
-}
-.print-area.active {
-    display: block;
-}
-@media print {
-    body * { visibility: hidden !important; }
-    .print-area, .print-area * { visibility: visible !important; }
-    .print-area { 
-        position: absolute; 
-        left: 0; 
-        top: 0; 
-        width: 100%;
-        display: block !important;
-        background: white;
-    }
-    @page {
-        size: 80mm auto;
-        margin: 0;
-    }
-}
+  }
+  #printContainer.active { display: block; }
+
+  /* Vista previa en pantalla */
+  .preview-wrapper {
+    max-width: 380px;
+    margin: 20px auto;
+    background: white;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  }
+
   /* Formato térmico 80mm */
   .ticket-thermal {
     width: 80mm;
+    margin: 0 auto;
     padding: 3mm;
     font-family: 'Courier New', monospace;
     font-size: 11px;
     color: #000;
+    line-height: 1.4;
   }
-  .ticket-thermal .t-header { text-align:center; border-bottom: 1px dashed #000; padding-bottom: 4px; margin-bottom: 6px; }
-  .ticket-thermal .t-header h2 { font-size: 14px; margin: 0; }
-  .ticket-thermal .t-row { display:flex; justify-content:space-between; margin: 2px 0; }
+  .ticket-thermal .t-header { text-align:center; border-bottom: 1px dashed #000; padding-bottom: 6px; margin-bottom: 6px; }
+  .ticket-thermal .t-header h2 { font-size: 15px; margin: 0; font-weight: bold; }
+  .ticket-thermal .t-header p { margin: 2px 0; font-size: 11px; }
+  .ticket-thermal .t-row { display:flex; justify-content:space-between; margin: 2px 0; gap: 8px; }
   .ticket-thermal .t-divider { border-top: 1px dashed #000; margin: 6px 0; }
-  .ticket-thermal .t-total { font-size: 14px; font-weight: bold; }
+  .ticket-thermal .t-total { font-size: 13px; font-weight: bold; margin-top: 4px; }
   .ticket-thermal .t-footer { text-align:center; margin-top: 8px; font-size: 10px; }
+  .ticket-thermal .t-section-title { font-weight: bold; margin: 6px 0 3px 0; font-size: 11px; text-transform: uppercase; }
+  .ticket-thermal .t-warranty { background: #f0f0f0; padding: 5px; border-radius: 3px; margin: 6px 0; }
+
+  /* Al imprimir: solo mostrar el ticket */
+  @media print {
+    @page {
+      size: 80mm auto;
+      margin: 0;
+    }
+    body * { visibility: hidden !important; }
+    #printContainer, #printContainer * { visibility: visible !important; }
+    #printContainer {
+      display: block !important;
+      position: absolute !important;
+      top: 0; left: 0;
+      width: 80mm;
+      padding: 0;
+      background: white;
+    }
+    #printContainer .preview-wrapper {
+      border: none;
+      box-shadow: none;
+      margin: 0;
+      padding: 0;
+      max-width: 80mm;
+    }
+    #printContainer .no-print { display: none !important; }
+  }
+
+  /* Modal overlay genérico */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 50;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .modal-overlay.active { display: flex; }
 </style>
 </head>
 <body class="bg-surface-50 text-slate-800">
@@ -383,10 +419,10 @@ tailwind.config = {
 </div>
 
 <!-- ==================== MODAL NUEVA ORDEN ==================== -->
-<div class="modal-overlay hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" id="newOrderModal">
+<div class="modal-overlay" id="newOrderModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-      <h2 class="text-xl font-bold text-slate-800"> Nueva Orden de Servicio</h2>
+      <h2 class="text-xl font-bold text-slate-800">📝 Nueva Orden de Servicio</h2>
       <button onclick="closeModal('newOrderModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
@@ -428,7 +464,7 @@ tailwind.config = {
 </div>
 
 <!-- ==================== MODAL AGREGAR REFACCIÓN ==================== -->
-<div class="modal-overlay hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" id="addPartModal">
+<div class="modal-overlay" id="addPartModal">
   <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
       <h2 class="text-xl font-bold text-slate-800">🔧 Agregar Refacción</h2>
@@ -455,7 +491,7 @@ tailwind.config = {
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Descripción *</label><input type="text" id="newPartDesc" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: Pantalla, batería..."></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Costo interno de la refacción *</label><input type="number" id="newPartCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"></div>
           <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">
-            ️ Este es un <strong>registro interno</strong> para control de inventario y cálculo de ganancias. <strong>NO modifica</strong> el precio final al cliente.
+            ⚠️ Este es un <strong>registro interno</strong> para control de inventario y cálculo de ganancias. <strong>NO modifica</strong> el precio final al cliente.
           </div>
           <button onclick="confirmAddPart()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Agregar Refacción</button>
         </div>
@@ -465,7 +501,7 @@ tailwind.config = {
 </div>
 
 <!-- ==================== MODAL DETALLE ==================== -->
-<div class="modal-overlay hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" id="detailModal">
+<div class="modal-overlay" id="detailModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
       <h2 class="text-xl font-bold text-slate-800">📄 Detalle del Servicio</h2>
@@ -477,8 +513,8 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ==================== MODAL EDITAR (ampliado) ==================== -->
-<div class="modal-overlay hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" id="editModal">
+<!-- ==================== MODAL EDITAR ==================== -->
+<div class="modal-overlay" id="editModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
       <h2 class="text-xl font-bold text-slate-800">✏️ Editar <span id="editFolio"></span></h2>
@@ -530,7 +566,7 @@ tailwind.config = {
 </div>
 
 <!-- ==================== MODAL COBRO (CHECKOUT) ==================== -->
-<div class="modal-overlay hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" id="checkoutModal">
+<div class="modal-overlay" id="checkoutModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
       <h2 class="text-xl font-bold text-slate-800">💰 Cobrar Servicio</h2>
@@ -538,19 +574,18 @@ tailwind.config = {
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
-    <div class="p-6" id="checkoutContent">
-      <!-- Se llena dinámicamente -->
-    </div>
+    <div class="p-6" id="checkoutContent"></div>
   </div>
 </div>
+
+<!-- ==================== CONTENEDOR DE IMPRESIÓN ==================== -->
+<div id="printContainer"></div>
 
 <!-- Loading -->
 <div id="loading" class="hidden fixed inset-0 bg-white/95 z-[100] flex items-center justify-center flex-col gap-3">
   <div class="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
   <p class="text-slate-600 font-medium" id="loadingText">Procesando...</p>
 </div>
-
-<div class="print-area" id="printArea"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -675,8 +710,8 @@ window.toggleSidebar = function(forceState) {
     else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
 }
 
-window.openModal = function(id) { document.getElementById(id).classList.remove('hidden'); }
-window.closeModal = function(id) { document.getElementById(id).classList.add('hidden'); }
+window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
+window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
 
 // NUEVA ORDEN
 document.getElementById('serviceForm').addEventListener('submit', async function(e) {
@@ -709,7 +744,7 @@ document.getElementById('serviceForm').addEventListener('submit', async function
     } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
 
-// REFACCIÓN - NO modifica repairCost
+// REFACCIÓN
 window.openAddPartModal = function() {
     selectedServiceForPart = null;
     document.getElementById('addPartStep1').classList.remove('hidden');
@@ -771,7 +806,6 @@ window.confirmAddPart = async function() {
         const newParts = [...currentParts, { description: desc, cost: cost }];
         const totalParts = newParts.reduce((sum, p) => sum + p.cost, 0);
         const repairCost = selectedServiceForPart.service.repairCost || 0;
-        // Solo actualizamos refacciones y ganancia neta. repairCost NO cambia.
         await updateDoc(doc(db, "services", selectedServiceForPart.id), {
             'service.parts': newParts,
             'service.totalParts': totalParts,
@@ -783,7 +817,7 @@ window.confirmAddPart = async function() {
     } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
 
-// COBRAR - Abre modal de checkout
+// COBRAR
 window.cobrarServicio = function(id) {
     checkoutServiceId = id;
     const s = allServices.find(x => x.id === id);
@@ -794,7 +828,6 @@ window.cobrarServicio = function(id) {
 
 function renderCheckout(s) {
     const parts = s.service.parts || [];
-    const tp = parts.reduce((sum,p) => sum + p.cost, 0);
     const warrantyOptions = ['30 días','60 días','90 días','180 días','1 año','Sin garantía'];
     const currentWarranty = s.service.warranty || '30 días';
     
@@ -812,7 +845,7 @@ function renderCheckout(s) {
                 ${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}
             </div>
             <div class="bg-slate-50 rounded-xl p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Problema</p>
+                <p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Problema</p>
                 <p class="text-sm text-slate-800">${s.device.problem || '—'}</p>
             </div>
         </div>
@@ -825,7 +858,6 @@ function renderCheckout(s) {
         <div class="bg-slate-50 rounded-xl p-4 mb-6">
             <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Refacciones (registro interno)</p>
             ${parts.length ? parts.map(p => `<div class="flex justify-between py-1 text-sm"><span>${p.description}</span><span class="font-medium">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>'}
-            <div class="flex justify-between pt-2 mt-2 border-t border-slate-200 text-sm"><span class="text-slate-600">Total refacciones (interno):</span><span class="font-semibold">$${tp.toFixed(2)}</span></div>
         </div>
 
         <div class="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-5 mb-6">
@@ -873,7 +905,6 @@ function renderCheckout(s) {
         </div>
     `;
 
-    // Toggle warranty custom
     document.getElementById('checkoutWarranty').addEventListener('change', function() {
         const custom = document.getElementById('checkoutWarrantyCustom');
         if (this.value === 'personalizada') { custom.classList.remove('hidden'); custom.focus(); }
@@ -908,60 +939,93 @@ window.confirmCheckout = async function() {
         hideLoading();
         closeModal('checkoutModal');
         showToast('✅ Cobro confirmado. Servicio marcado como Entregado.');
-        // Auto imprimir
         setTimeout(() => printTicket(checkoutServiceId), 500);
     } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
 
-// TICKET TÉRMICO
+// ===== SISTEMA DE IMPRESIÓN CORREGIDO =====
 window.printTicket = function(id) {
     const s = allServices.find(x => x.id === id);
     if (!s) return;
     const parts = s.service.parts || [];
-    const tp = parts.reduce((sum,p) => sum + p.cost, 0);
     const warranty = s.service.warranty || '30 días';
     const paymentMethod = s.service.paymentMethod || 'No especificado';
     const paidDate = s.service.paidDate ? new Date(s.service.paidDate).toLocaleString('es-MX') : new Date().toLocaleString('es-MX');
+    const isPaid = s.service.paymentStatus === 'Pagado';
     
-    document.getElementById('printArea').innerHTML = `
+    const ticketHTML = `
         <div class="ticket-thermal">
             <div class="t-header">
                 <h2>TALLER DE REPARACIONES</h2>
-                <p style="margin:2px 0">Ticket de Cobro</p>
+                <p>Ticket de ${isPaid ? 'Cobro' : 'Servicio'}</p>
             </div>
-            <div class="t-row"><span>Folio:</span><span><strong>${s.folio}</strong></span></div>
+            <div class="t-divider"></div>
+            <div class="t-row"><span><strong>Folio:</strong></span><span><strong>${s.folio}</strong></span></div>
             <div class="t-row"><span>Fecha:</span><span>${paidDate}</span></div>
             <div class="t-divider"></div>
-            <p style="font-weight:bold;margin:4px 0">CLIENTE</p>
+            <p class="t-section-title">CLIENTE</p>
             <div class="t-row"><span>Nombre:</span><span>${s.client.name}</span></div>
             <div class="t-row"><span>Teléfono:</span><span>${s.client.phone}</span></div>
             <div class="t-divider"></div>
-            <p style="font-weight:bold;margin:4px 0">EQUIPO</p>
+            <p class="t-section-title">EQUIPO</p>
             <div class="t-row"><span>Equipo:</span><span>${s.device.brand} ${s.device.model}</span></div>
             ${s.device.imei ? `<div class="t-row"><span>IMEI:</span><span>${s.device.imei}</span></div>` : ''}
-            <div class="t-row" style="flex-direction:column"><span style="margin-bottom:2px">Problema:</span><span style="text-align:right">${s.device.problem || '—'}</span></div>
-            ${s.service.diagnosis ? `<div class="t-row" style="flex-direction:column"><span style="margin-bottom:2px">Diagnóstico:</span><span style="text-align:right">${s.service.diagnosis}</span></div>` : ''}
+            <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
+            ${s.service.diagnosis ? `<div style="margin:4px 0"><span style="font-weight:bold">Diagnóstico:</span><br>${s.service.diagnosis}</div>` : ''}
             <div class="t-divider"></div>
-            <p style="font-weight:bold;margin:4px 0">DETALLE</p>
-            ${parts.length ? parts.map(p => `<div class="t-row"><span>${p.description}</span><span>$${p.cost.toFixed(2)}</span></div>`).join('') : ''}
+            <p class="t-section-title">DETALLE DEL SERVICIO</p>
+            ${parts.length ? parts.map(p => `<div class="t-row"><span>${p.description}</span><span>$${p.cost.toFixed(2)}</span></div>`).join('') : '<div class="t-row"><span>Sin refacciones</span><span></span></div>'}
             <div class="t-divider"></div>
-            <div class="t-row t-total"><span>TOTAL COBRADO:</span><span>$${s.service.repairCost.toFixed(2)}</span></div>
+            <div class="t-row t-total"><span>TOTAL:</span><span>$${s.service.repairCost.toFixed(2)}</span></div>
             <div class="t-row"><span>Método de pago:</span><span>${paymentMethod}</span></div>
-            <div class="t-row"><span>Estado:</span><span>PAGADO</span></div>
+            <div class="t-row"><span>Estado:</span><span><strong>${isPaid ? 'PAGADO' : 'PENDIENTE'}</strong></span></div>
             <div class="t-divider"></div>
-            <div class="t-row" style="background:#f0f0f0;padding:4px;border-radius:4px"><span><strong>GARANTÍA:</strong></span><span><strong>${warranty}</strong></span></div>
+            <div class="t-warranty">
+                <div class="t-row"><span><strong>GARANTÍA:</strong></span><span><strong>${warranty}</strong></span></div>
+            </div>
             <div class="t-footer">
-                <p>• Conserve este ticket</p>
-                <p>• Garantía no cubre daños físicos</p>
+                <div class="t-divider"></div>
+                <p>• Conserve este ticket para garantía</p>
+                <p>• Garantía no cubre daños físicos ni por líquido</p>
                 <p>• Equipo no reclamado en 60 días será considerado abandonado</p>
-                <p style="margin-top:8px">¡Gracias por su preferencia!</p>
+                <p style="margin-top:10px;font-weight:bold">¡Gracias por su preferencia!</p>
             </div>
         </div>
     `;
-    setTimeout(() => window.print(), 300);
+    
+    // Mostrar vista previa
+    const printContainer = document.getElementById('printContainer');
+    printContainer.innerHTML = `
+        <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
+            <div>
+                <strong>🖨️ Vista previa del ticket</strong>
+                <p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p>
+            </div>
+            <div style="display:flex;gap:10px">
+                <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
+                <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
+            </div>
+        </div>
+        <div style="padding-top:70px;background:#f1f5f9;min-height:100vh">
+            <div class="preview-wrapper">
+                ${ticketHTML}
+            </div>
+        </div>
+    `;
+    printContainer.classList.add('active');
 }
 
-// EDITAR (ampliado)
+window.doPrint = function() {
+    window.print();
+}
+
+window.closePrintPreview = function() {
+    const printContainer = document.getElementById('printContainer');
+    printContainer.classList.remove('active');
+    printContainer.innerHTML = '';
+}
+
+// EDITAR
 window.openEdit = function(id) {
     const s = allServices.find(x => x.id === id);
     if (!s) return;
@@ -1032,7 +1096,7 @@ window.openDetail = function(id) {
     const parts = s.service.parts || [];
     const tp = parts.reduce((sum,p) => sum + p.cost, 0);
     const isPaid = s.service.paymentStatus === 'Pagado';
-    const payBadge = isPaid ? '<span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">✅ PAGADO</span>' : '<span class="text-xs px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold">⏳ PENDIENTE</span>';
+    const payBadge = isPaid ? '<span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">✅ PAGADO</span>' : '<span class="text-xs px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold"> PENDIENTE</span>';
     const cobrarBtn = !isPaid ? `<button onclick="closeModal('detailModal');cobrarServicio('${s.id}')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition">💰 Cobrar ahora</button>` : '';
     
     document.getElementById('detailContent').innerHTML = `
@@ -1043,7 +1107,7 @@ window.openDetail = function(id) {
         </div>
         <div class="grid md:grid-cols-2 gap-4 mb-6">
             <div class="bg-slate-50 rounded-xl p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Cliente</p>
+                <p class="text-xs font-semibold text-slate-500 uppercase mb-2">👤 Cliente</p>
                 <p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p>
             </div>
             <div class="bg-slate-50 rounded-xl p-4">
@@ -1053,7 +1117,7 @@ window.openDetail = function(id) {
             </div>
         </div>
         <div class="bg-slate-50 rounded-xl p-4 mb-4">
-            <p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Problema reportado</p>
+            <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Problema reportado</p>
             <p class="text-slate-800">${s.device.problem}</p>
             ${s.device.accessories ? `<p class="text-sm mt-2"><span class="text-slate-500">Accesorios:</span> ${s.device.accessories}</p>` : ''}
         </div>
@@ -1066,7 +1130,7 @@ window.openDetail = function(id) {
             <p class="text-slate-800">${s.service.technicalNotes}</p>
         </div>` : ''}
         <div class="bg-slate-50 rounded-xl p-4 mb-4">
-            <p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Refacciones (${parts.length}) - Registro interno</p>
+            <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Refacciones (${parts.length}) - Registro interno</p>
             ${parts.length ? parts.map(p => `<div class="flex justify-between py-2 border-b border-slate-200 last:border-0"><span>${p.description}</span><span class="font-semibold">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>'}
             <div class="flex justify-between pt-3 mt-2 border-t-2 border-slate-300 font-bold"><span>Total refacciones (interno)</span><span>$${tp.toFixed(2)}</span></div>
         </div>
@@ -1086,7 +1150,7 @@ window.openDetail = function(id) {
         </div>` : ''}
         <div class="flex flex-wrap gap-2">
             ${cobrarBtn}
-            <button onclick="closeModal('detailModal');openEdit('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">️ Editar</button>
+            <button onclick="closeModal('detailModal');openEdit('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">✏️ Editar</button>
             <button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">🖨️ Ticket</button>
             <button onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition">️ Eliminar</button>
         </div>
@@ -1215,7 +1279,6 @@ function loadExpenses() {
     const te = me.reduce((s,e) => s + e.amount, 0);
     document.getElementById('cajaGastos').textContent = '$' + te.toFixed(2);
     
-    // Ingresos del mes = suma de repairCost de servicios pagados este mes
     const ms = allServices.filter(s => { 
         const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null;
         return s.service.paymentStatus === 'Pagado' && paidDate && paidDate.getMonth() === now.getMonth() && paidDate.getFullYear() === now.getFullYear();
