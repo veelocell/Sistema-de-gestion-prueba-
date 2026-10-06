@@ -616,6 +616,44 @@ const STATUS_COLORS = {
 };
 
 let currentUser = null;
+  // Verificar sesión guardada al cargar la página
+const savedSession = localStorage.getItem('tallerSession');
+if (savedSession) {
+    try {
+        const session = JSON.parse(savedSession);
+        // Verificar que la sesión no tenga más de 24 horas (opcional, por seguridad)
+        const hoursSinceLogin = (Date.now() - session.timestamp) / (1000 * 60 * 60);
+        if (hoursSinceLogin < 24) {
+            currentUser = { email: session.email, role: session.role };
+            // Mostrar app directamente sin login
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            const name = currentUser.email.split('@')[0];
+            const initial = name.charAt(0).toUpperCase();
+            document.getElementById('userAvatar').textContent = initial;
+            document.getElementById('navAvatar').textContent = initial;
+            document.getElementById('sidebarUserName').textContent = name;
+            document.getElementById('navUserName').textContent = name;
+            document.getElementById('sidebarUserEmail').textContent = currentUser.email;
+            document.getElementById('navUserEmail').textContent = currentUser.email;
+            const hour = new Date().getHours();
+            let greeting = 'Buenas noches';
+            if (hour < 12) greeting = 'Buenos días';
+            else if (hour < 19) greeting = 'Buenas tardes';
+            document.getElementById('greeting').textContent = `${greeting}, ${name} 👋`;
+            const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', options);
+            const dashBtn = document.querySelector('[data-section="dashboard"]');
+            dashBtn.classList.add('bg-brand-50','text-brand-600');
+            startRealtimeSync();
+        } else {
+            // Sesión expirada, limpiar
+            localStorage.removeItem('tallerSession');
+        }
+    } catch (e) {
+        localStorage.removeItem('tallerSession');
+    }
+}
 let allServices = [];
 let allExpenses = [];
 let editParts = [];
@@ -644,6 +682,13 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 });
 
 function showApp() {
+    // Guardar sesión en localStorage
+    localStorage.setItem('tallerSession', JSON.stringify({
+        email: currentUser.email,
+        role: currentUser.role,
+        timestamp: Date.now()
+    }));
+    
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('mainApp').classList.remove('hidden');
     const name = currentUser.email.split('@')[0];
@@ -667,12 +712,13 @@ function showApp() {
 }
 
 window.logout = function() {
+    // Limpiar sesión
+    localStorage.removeItem('tallerSession');
     if (unsubscribeServices) unsubscribeServices();
     if (unsubscribeExpenses) unsubscribeExpenses();
     currentUser = null;
     location.reload();
 }
-
 function startRealtimeSync() {
     const qServices = query(collection(db, "services"), orderBy("date", "desc"));
     unsubscribeServices = onSnapshot(qServices, (snapshot) => {
