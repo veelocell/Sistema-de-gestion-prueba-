@@ -3,293 +3,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Taller de Reparaciones - Nube</title>
+<title>Taller - Nube</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f3f4f6;color:#1f2937;line-height:1.6}
-.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea,#764ba2);padding:20px}
-.login-card{background:white;padding:40px;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.3);width:100%;max-width:400px}
-.login-card h1{text-align:center;margin-bottom:10px;font-size:28px}
-.login-card p{text-align:center;color:#6b7280;margin-bottom:30px}
-.form-group{margin-bottom:20px}
-.form-group label{display:block;margin-bottom:8px;font-weight:500}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:8px;font-size:16px}
-.form-group input:focus,.form-group select:focus{outline:none;border-color:#2563eb}
-.form-group textarea{resize:vertical;min-height:80px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-@media(max-width:768px){.form-row{grid-template-columns:1fr}}
-.btn{padding:12px 24px;border:none;border-radius:8px;font-size:16px;font-weight:500;cursor:pointer;display:inline-block;margin:5px}
-.btn-primary{background:#2563eb;color:white}
-.btn-secondary{background:#10b981;color:white}
-.btn-warning{background:#f59e0b;color:white}
-.btn-danger{background:#ef4444;color:white}
-.btn-success{background:#059669;color:white}
-.btn-block{width:100%}
-.btn-sm{padding:6px 12px;font-size:14px}
-.container{max-width:1200px;margin:0 auto;padding:20px}
-.header{background:white;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.1);margin-bottom:30px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
-.header h1{font-size:24px;color:#2563eb}
-.user-info{display:flex;align-items:center;gap:15px}
-.nav-tabs{display:flex;gap:10px;margin-bottom:30px;flex-wrap:wrap}
-.nav-tab{padding:12px 24px;background:white;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:500;color:#1f2937}
-.nav-tab.active{background:#2563eb;color:white}
-.card{background:white;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.card h2{font-size:20px;margin-bottom:20px}
-.card h3{font-size:18px;margin-bottom:15px;margin-top:15px}
-table{width:100%;border-collapse:collapse;margin-top:15px}
+body{font-family:Arial,sans-serif;background:#f3f4f6;margin:0;padding:20px}
+.login-box{max-width:400px;margin:100px auto;background:white;padding:40px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+h1{text-align:center;color:#2563eb}
+input,button{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:8px;font-size:16px}
+button{background:#2563eb;color:white;border:none;cursor:pointer}
+button:hover{background:#1e40af}
+.btn-emergency{background:#10b981;margin-top:10px}
+.btn-emergency:hover{background:#059669}
+.hidden{display:none}
+#mainApp{max-width:1200px;margin:0 auto}
+.header{background:white;padding:20px;border-radius:12px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.card{background:white;padding:20px;border-radius:12px;margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}
+.stat{background:white;padding:20px;border-radius:12px;text-align:center}
+.stat h3{color:#6b7280;font-size:14px;margin:0}
+.stat .val{font-size:32px;font-weight:bold;color:#2563eb;margin:10px 0}
+table{width:100%;border-collapse:collapse}
 th,td{padding:12px;text-align:left;border-bottom:1px solid #e5e7eb}
-th{background:#f3f4f6;font-weight:600}
-tbody tr{cursor:pointer}
-tbody tr:hover{background:#eef2ff}
-.status-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500;display:inline-block}
-.s-diag{background:#dbeafe;color:#1e40af}
-.s-rev{background:#fef3c7;color:#92400e}
-.s-revisado{background:#e0e7ff;color:#3730a3}
-.s-aut{background:#fed7aa;color:#9a3412}
-.s-rep{background:#d1fae5;color:#065f46}
-.s-ent{background:#e5e7eb;color:#374151}
-.pay-pending{background:#fee2e2;color:#991b1b;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600}
-.pay-paid{background:#d1fae5;color:#065f46;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px}
-.stat-card{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.05);text-align:center}
-.stat-card h3{font-size:13px;color:#6b7280;text-transform:uppercase;margin-bottom:5px}
-.stat-card .val{font-size:28px;font-weight:700;color:#2563eb}
-.stat-card.green .val{color:#059669}
-.stat-card.red .val{color:#dc2626}
-.stat-card.orange .val{color:#d97706}
-.status-panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px}
-.status-card{border-radius:12px;padding:14px;cursor:pointer;text-align:center;border:2px solid transparent;transition:all .3s}
-.status-card:hover{transform:translateY(-2px)}
-.status-card.active{border-color:#2563eb}
-.status-card .icon{font-size:24px}
-.status-card .name{font-size:12px;font-weight:600;margin:5px 0}
-.status-card .count{font-size:24px;font-weight:700}
-.sc-all{background:linear-gradient(135deg,#667eea,#764ba2);color:white}
-.sc-0{background:#dbeafe}.sc-0 .count{color:#1e40af}
-.sc-1{background:#fef3c7}.sc-1 .count{color:#92400e}
-.sc-2{background:#e0e7ff}.sc-2 .count{color:#3730a3}
-.sc-3{background:#fed7aa}.sc-3 .count{color:#9a3412}
-.sc-4{background:#d1fae5}.sc-4 .count{color:#065f46}
-.sc-5{background:#e5e7eb}.sc-5 .count{color:#374151}
-.action-box{background:linear-gradient(135deg,#10b981,#059669);border-radius:12px;padding:20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;color:white}
-.action-box h3{margin:0;color:white;font-size:18px}
-.action-box p{margin:5px 0 0;opacity:.9;font-size:14px}
-.action-buttons{display:flex;gap:10px;flex-wrap:wrap}
-.btn-action{background:white;color:#059669;padding:12px 20px;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}
-.btn-action.blue{color:#2563eb}
-.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:1000;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.active{display:flex}
-.modal-box{background:white;border-radius:16px;padding:30px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.close-modal{background:none;border:none;font-size:28px;cursor:pointer;color:#6b7280}
-.status-flow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-.status-flow-btn{padding:8px 14px;border:2px solid #e5e7eb;border-radius:20px;background:white;cursor:pointer;font-size:12px;font-weight:500}
-.status-flow-btn.selected{background:#2563eb;color:white;border-color:#2563eb}
-.refaccion-item{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#f3f4f6;border-radius:8px;margin-bottom:8px}
-.detail-header{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:20px;border-radius:12px;margin-bottom:20px}
-.detail-section{background:#f3f4f6;padding:16px;border-radius:10px;margin-bottom:15px}
-.detail-section-title{font-size:13px;text-transform:uppercase;color:#6b7280;font-weight:600;margin-bottom:10px}
-.detail-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e5e7eb;font-size:14px}
-.detail-row:last-child{border-bottom:none}
-.detail-row-label{color:#6b7280}
-.detail-row-value{font-weight:600;text-align:right;max-width:60%;word-break:break-word}
-.detail-highlight{background:linear-gradient(135deg,#10b981,#059669);color:white;padding:15px;border-radius:10px;text-align:center;margin-bottom:15px}
-.detail-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
-.detail-actions .btn{flex:1;min-width:100px}
-.search-filter{margin-bottom:15px}
-.search-filter input{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:8px;font-size:16px}
-.section{display:none}
-.section.active{display:block}
-.action-btns{display:flex;gap:5px;flex-wrap:wrap}
-.empty-state{text-align:center;padding:30px;color:#6b7280}
-.loading{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.95);z-index:2000;display:flex;align-items:center;justify-content:center;font-size:20px;color:#2563eb;font-weight:bold;flex-direction:column;gap:10px}
-.service-select-item{padding:12px;border:2px solid #e5e7eb;border-radius:8px;margin-bottom:8px;cursor:pointer;transition:all .2s}
-.service-select-item:hover{border-color:#2563eb;background:#eef2ff}
-@media print{body *{visibility:hidden}.print-area,.print-area *{visibility:visible}.print-area{position:absolute;left:0;top:0;width:100%}}
-.print-area{display:none}
-.receipt-page{width:8.5in;height:11in;padding:.5in;display:flex;flex-direction:column}
-.receipt-half{flex:1;border:2px solid #000;padding:15px;margin-bottom:10px}
-.receipt-header{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:10px}
-.receipt-section{margin-bottom:10px}
-.receipt-section h3{font-size:13px;border-bottom:1px solid #ccc;padding-bottom:4px;margin-bottom:6px}
-.receipt-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px}
-.receipt-footer{margin-top:auto;padding-top:10px;border-top:1px solid #ccc;font-size:10px}
-.signature-line{margin-top:25px;border-top:1px solid #000;width:180px;text-align:center;padding-top:4px;font-size:10px}
+th{background:#f3f4f6}
+.btn{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:14px;margin:2px}
+.btn-primary{background:#2563eb;color:white}
+.btn-success{background:#10b981;color:white}
+.btn-danger{background:#ef4444;color:white}
+.btn-warning{background:#f59e0b;color:white}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:white;padding:30px;border-radius:12px;max-width:600px;width:90%;max-height:90vh;overflow-y:auto}
+.form-group{margin-bottom:15px}
+.form-group label{display:block;margin-bottom:5px;font-weight:bold}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px}
 </style>
 </head>
 <body>
 
-<div id="loading" class="loading">
-  <div>⏳ Conectando con la nube...</div>
-  <div style="font-size:14px;color:#6b7280">Esto puede tomar unos segundos</div>
-</div>
-
-<div id="loginScreen" class="login-screen">
-<div class="login-card">
-<h1> Taller de Reparaciones</h1>
-<p>Inicia sesión para sincronizar en la nube</p>
+<div id="loginScreen" class="login-box">
+<h1>🔧 Taller de Reparaciones</h1>
+<p style="text-align:center;color:#6b7280">Sistema en la nube</p>
 <form id="loginForm">
-<div class="form-group"><label>Correo electrónico</label><input type="email" id="loginEmail" value="ismaelrh@velocell.com" required></div>
-<div class="form-group"><label>Contraseña</label><input type="password" id="loginPassword" value="ROHI981115HTSDNS07" required></div>
-<button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+<input type="email" id="loginEmail" placeholder="Correo" value="ismaelrh@velocell.com" required>
+<input type="password" id="loginPassword" placeholder="Contraseña" value="ROHI981115HTSDNS07" required>
+<button type="submit">Iniciar Sesión</button>
 </form>
-<button class="btn btn-secondary btn-block" onclick="emergencyLogin()" style="margin-top:10px">🚨 ENTRAR SIN CONTRASEÑA (emergencia)</button>
-<p style="margin-top:15px;text-align:center;font-size:12px;color:#6b7280">Si el botón de arriba funciona, Firebase está bien</p>
-</div>
+<button class="btn-emergency" onclick="emergencyLogin()"> ENTRAR SIN CONTRASEÑA (emergencia)</button>
+<p id="errorMsg" style="color:red;text-align:center;display:none"></p>
 </div>
 
-<div id="mainApp" style="display:none">
-<div class="container">
+<div id="mainApp" class="hidden">
 <div class="header">
-<h1> Sistema de Gestión (Nube)</h1>
-<div class="user-info">
-<span id="userEmail" style="color:#6b7280;font-size:14px"></span>
-<button class="btn btn-danger" onclick="window.logout()">Cerrar Sesión</button>
-</div>
-</div>
-<div class="nav-tabs">
-<button class="nav-tab active" onclick="window.showSection('dashboard',this)">📊 Dashboard</button>
-<button class="nav-tab" onclick="window.showSection('taller',this)">🔧 Taller</button>
-<button class="nav-tab" onclick="window.showSection('finanzas',this)">💰 Finanzas</button>
-</div>
-
-<div id="dashboard" class="section active">
-<div class="stats-grid">
-<div class="stat-card"><h3>Servicios Activos</h3><div class="val" id="statActive">0</div></div>
-<div class="stat-card red"><h3>Cobros Pendientes</h3><div class="val" id="statPending">$0</div></div>
-<div class="stat-card green"><h3>Ganancias Reales</h3><div class="val" id="statProfit">$0</div></div>
-<div class="stat-card orange"><h3>Equipos Listos</h3><div class="val" id="statReady">0</div></div>
-</div>
-<div class="card">
-<h2>💰 Servicios Pendientes de Cobro</h2>
-<div style="overflow-x:auto"><table><thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Monto</th><th>Acción</th></tr></thead><tbody id="pendingPayments"></tbody></table></div>
-</div>
-<div class="card"><h2>📋 Servicios Recientes</h2><div style="overflow-x:auto"><table><thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Estado</th><th>Fecha</th></tr></thead><tbody id="recentServices"></tbody></table></div></div>
-</div>
-
-<div id="taller" class="section">
-<div class="action-box">
-<div><h3>🛠️ Acciones Rápidas</h3><p>Registra órdenes, agrega refacciones o cobra servicios</p></div>
-<div class="action-buttons">
-<button class="btn-action" onclick="window.openModal('newOrderModal')">➕ Nueva Orden</button>
-<button class="btn-action blue" onclick="window.openAddPartModal()">🔧 Agregar Refacción</button>
-</div>
-</div>
-<div class="card"><h2> Servicios por Estado</h2><div class="status-panel" id="statusPanel"></div></div>
-<div class="card">
-<div id="currentViewLabel"></div>
-<h2>📋 <span id="servicesListTitle">Todos los Servicios</span></h2>
-<div class="search-filter"><input type="text" id="searchClient" placeholder=" Buscar..." oninput="window.loadServices()"></div>
-<div style="overflow-x:auto"><table><thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Estado</th><th>Pago</th><th>Costo</th><th>Acciones</th></tr></thead><tbody id="servicesList"></tbody></table></div>
+<h1>🔧 Sistema de Gestión</h1>
+<div>
+<span id="userEmail" style="color:#6b7280"></span>
+<button class="btn btn-danger" onclick="logout()">Salir</button>
 </div>
 </div>
 
-<div id="finanzas" class="section">
+<div class="stats">
+<div class="stat"><h3>Servicios Activos</h3><div class="val" id="statActive">0</div></div>
+<div class="stat"><h3>Pendientes de Cobro</h3><div class="val" id="statPending">$0</div></div>
+<div class="stat"><h3>Ganancias Reales</h3><div class="val" id="statProfit">$0</div></div>
+<div class="stat"><h3>Equipos Listos</h3><div class="val" id="statReady">0</div></div>
+</div>
+
 <div class="card">
-<h2>💸 Registrar Gasto Personal</h2>
+<h2>🛠️ Acciones Rápidas</h2>
+<button class="btn btn-primary" onclick="openModal('newOrderModal')">➕ Nueva Orden</button>
+<button class="btn btn-success" onclick="openModal('addPartModal')">🔧 Agregar Refacción</button>
+</div>
+
+<div class="card">
+<h2>📋 Servicios</h2>
+<input type="text" id="searchClient" placeholder="Buscar..." style="width:100%;padding:10px;margin-bottom:15px;border:1px solid #ddd;border-radius:6px" oninput="loadServices()">
+<div style="overflow-x:auto">
+<table>
+<thead><tr><th>Folio</th><th>Cliente</th><th>Equipo</th><th>Estado</th><th>Pago</th><th>Costo</th><th>Acciones</th></tr></thead>
+<tbody id="servicesList"></tbody>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h2>💰 Finanzas Personales</h2>
 <form id="expenseForm">
-<div class="form-row">
-<div class="form-group"><label>Fecha *</label><input type="date" id="expenseDate" required></div>
-<div class="form-group"><label>Monto *</label><input type="number" id="expenseAmount" step="0.01" required></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
+<div class="form-group"><label>Fecha</label><input type="date" id="expenseDate" required></div>
+<div class="form-group"><label>Monto</label><input type="number" id="expenseAmount" step="0.01" required></div>
 </div>
-<div class="form-group"><label>Categoría *</label><select id="expenseCategory" required><option value="">Seleccionar...</option><option>Comida</option><option>Transporte</option><option>Servicios</option><option>Entretenimiento</option><option>Salud</option><option>Educación</option><option>Otros</option></select></div>
-<div class="form-group"><label>Descripción *</label><textarea id="expenseDescription" required></textarea></div>
-<button type="submit" class="btn btn-primary btn-block">Registrar Gasto</button>
+<div class="form-group"><label>Categoría</label><select id="expenseCategory" required><option value="">Seleccionar...</option><option>Comida</option><option>Transporte</option><option>Servicios</option><option>Otros</option></select></div>
+<div class="form-group"><label>Descripción</label><textarea id="expenseDescription" required></textarea></div>
+<button type="submit" class="btn btn-primary">Registrar Gasto</button>
 </form>
 </div>
-<div class="card">
-<h2>💰 Resumen del Mes</h2>
-<div class="stats-grid">
-<div class="stat-card green"><h3>Ganancias Reales</h3><div class="val" id="workshopProfit">$0</div></div>
-<div class="stat-card red"><h3>Total Gastos</h3><div class="val" id="totalExpenses">$0</div></div>
-<div class="stat-card"><h3>Balance</h3><div class="val" id="balance">$0</div></div>
-</div>
-</div>
-<div class="card"><h2>📋 Historial de Gastos</h2><div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Monto</th><th>Acciones</th></tr></thead><tbody id="expensesList"></tbody></table></div></div>
-</div>
-</div>
 </div>
 
-<div class="modal-overlay" id="newOrderModal">
-<div class="modal-box">
-<div class="modal-header"><h2>📝 Nueva Orden</h2><button class="close-modal" onclick="window.closeModal('newOrderModal')">&times;</button></div>
+<!-- Modal Nueva Orden -->
+<div class="modal" id="newOrderModal">
+<div class="modal-content">
+<h2>📝 Nueva Orden</h2>
 <form id="serviceForm">
-<h3>Datos del Cliente</h3>
-<div class="form-row">
 <div class="form-group"><label>Nombre *</label><input type="text" id="clientName" required></div>
 <div class="form-group"><label>Teléfono *</label><input type="tel" id="clientPhone" required></div>
-</div>
-<h3>Datos del Equipo</h3>
-<div class="form-row">
 <div class="form-group"><label>Marca *</label><select id="deviceBrand" required><option value="">Seleccionar...</option><option>Samsung</option><option>iPhone</option><option>Xiaomi</option><option>Huawei</option><option>Motorola</option><option>LG</option><option>Otro</option></select></div>
 <div class="form-group"><label>Modelo *</label><input type="text" id="deviceModel" required></div>
-</div>
-<div class="form-row">
 <div class="form-group"><label>IMEI / Serie</label><input type="text" id="deviceIMEI"></div>
-<div class="form-group"><label>Entrega estimada</label><input type="date" id="estimatedDelivery"></div>
-</div>
 <div class="form-group"><label>Problema *</label><textarea id="problemDescription" required></textarea></div>
-<div class="form-group"><label>Accesorios</label><textarea id="accessories" placeholder="Cargador, funda, SIM..."></textarea></div>
-<h3>Servicio</h3>
-<div class="form-row">
+<div class="form-group"><label>Accesorios</label><textarea id="accessories"></textarea></div>
 <div class="form-group"><label>Estado *</label><select id="serviceStatus" required><option>En diagnóstico</option><option>Por revisar</option><option>Revisado</option><option>En espera de autorización</option><option>Reparado (en espera de que pasen por él)</option><option>Entregado</option></select></div>
 <div class="form-group"><label>Costo acordado *</label><input type="number" id="repairCost" step="0.01" required></div>
-</div>
 <div class="form-group"><label>Método de pago</label><select id="paymentMethod"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
-<button type="submit" class="btn btn-primary btn-block" style="margin-top:20px">💾 Guardar en la Nube</button>
+<button type="submit" class="btn btn-primary">💾 Guardar</button>
+<button type="button" class="btn btn-danger" onclick="closeModal('newOrderModal')">Cancelar</button>
 </form>
 </div>
 </div>
 
-<div class="modal-overlay" id="addPartModal">
-<div class="modal-box">
-<div class="modal-header"><h2>🔧 Agregar Refacción</h2><button class="close-modal" onclick="window.closeModal('addPartModal')">&times;</button></div>
-<div id="addPartStep1">
-<p style="margin-bottom:15px;color:#6b7280">Selecciona el servicio:</p>
-<div class="search-filter"><input type="text" id="searchServiceForPart" placeholder=" Buscar..." oninput="window.filterServicesForPart()"></div>
-<div id="servicesForPartList" style="max-height:400px;overflow-y:auto"></div>
+<!-- Modal Agregar Refacción -->
+<div class="modal" id="addPartModal">
+<div class="modal-content">
+<h2>🔧 Agregar Refacción</h2>
+<div id="step1">
+<p>Selecciona el servicio:</p>
+<div id="servicesForPartList"></div>
 </div>
-<div id="addPartStep2" style="display:none">
-<div style="background:#dbeafe;padding:12px;border-radius:8px;margin-bottom:20px">
-<strong>Servicio:</strong><br><span id="selectedServiceInfo"></span>
-<button class="btn btn-sm" style="background:#6b7280;color:white;margin-left:10px" onclick="window.backToServiceSelection()">← Cambiar</button>
+<div id="step2" style="display:none">
+<div style="background:#dbeafe;padding:15px;border-radius:8px;margin-bottom:15px">
+<strong>Servicio:</strong> <span id="selectedServiceInfo"></span>
+<button class="btn btn-warning" onclick="backToStep1()">← Cambiar</button>
 </div>
 <div class="form-group"><label>Descripción *</label><input type="text" id="newPartDesc"></div>
 <div class="form-group"><label>Costo *</label><input type="number" id="newPartCost" step="0.01"></div>
-<button class="btn btn-primary btn-block" onclick="window.confirmAddPart()">💾 Agregar</button>
+<button class="btn btn-primary" onclick="confirmAddPart()">💾 Agregar</button>
+<button class="btn btn-danger" onclick="closeModal('addPartModal')">Cancelar</button>
 </div>
 </div>
 </div>
 
-<div class="modal-overlay" id="detailModal">
-<div class="modal-box">
-<div class="modal-header"><h2>📄 Detalle</h2><button class="close-modal" onclick="window.closeModal('detailModal')">&times;</button></div>
+<!-- Modal Detalle -->
+<div class="modal" id="detailModal">
+<div class="modal-content">
+<h2>📄 Detalle</h2>
 <div id="detailContent"></div>
+<button class="btn btn-danger" onclick="closeModal('detailModal')">Cerrar</button>
 </div>
 </div>
 
-<div class="modal-overlay" id="editModal">
-<div class="modal-box">
-<div class="modal-header"><h2>✏️ Editar <span id="editFolio"></span></h2><button class="close-modal" onclick="window.closeModal('editModal')">&times;</button></div>
-<h3 style="margin-top:0">Estado</h3>
-<div class="status-flow" id="statusFlow"></div>
-<div class="form-row">
+<!-- Modal Editar -->
+<div class="modal" id="editModal">
+<div class="modal-content">
+<h2>✏️ Editar <span id="editFolio"></span></h2>
+<div class="form-group"><label>Estado</label><select id="editStatus"><option>En diagnóstico</option><option>Por revisar</option><option>Revisado</option><option>En espera de autorización</option><option>Reparado (en espera de que pasen por él)</option><option>Entregado</option></select></div>
 <div class="form-group"><label>Costo</label><input type="number" id="editRepairCost" step="0.01"></div>
 <div class="form-group"><label>Método de pago</label><select id="editPaymentMethod"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
-</div>
-<div class="form-group"><label>Entrega estimada</label><input type="date" id="editDelivery"></div>
 <h3>Refacciones</h3>
 <div id="editPartsList"></div>
-<div style="margin-top:15px;padding:12px;background:#f3f4f6;border-radius:8px">
-<strong>Refacciones: $<span id="editTotalParts">0.00</span></strong><br>
-<strong>Costo: $<span id="editRepairCostDisplay">0.00</span></strong><br>
-<strong>Ganancia: $<span id="editNetProfit">0.00</span></strong>
-</div>
-<button class="btn btn-primary btn-block" style="margin-top:20px" onclick="window.saveEdit()">💾 Guardar</button>
+<button class="btn btn-primary" onclick="saveEdit()"> Guardar</button>
+<button class="btn btn-danger" onclick="closeModal('editModal')">Cancelar</button>
 </div>
 </div>
-
-<div class="print-area" id="printArea"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -310,45 +182,40 @@ const db = getFirestore(app);
 const ADMIN_EMAIL = "ismaelrh@velocell.com";
 const ADMIN_PASS = "ROHI981115HTSDNS07";
 const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
-const STATUS_ICONS = ['🔍','🔧','✅','⏳','📦','🤝'];
-const STATUS_CLASSES = ['s-diag','s-rev','s-revisado','s-aut','s-rep','s-ent'];
 
 let currentUser = null;
 let allServices = [];
 let allExpenses = [];
 let editParts = [];
 let editId = null;
-let editStatus = '';
-let statusFilter = '';
 let selectedServiceForPart = null;
 let unsubscribeServices = null;
 let unsubscribeExpenses = null;
 
-// LOGIN NORMAL
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value.trim();
     const pass = document.getElementById('loginPassword').value;
-    console.log("Intentando login:", email, pass);
+    console.log("Login attempt:", email, pass);
     if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
         currentUser = { email: email };
-        window.showApp();
+        showApp();
     } else {
-        alert('❌ Credenciales incorrectas\n\nEmail: ' + email + '\nPass: ' + pass + '\n\nEsperado:\nEmail: ' + ADMIN_EMAIL + '\nPass: ' + ADMIN_PASS);
+        const errorMsg = document.getElementById('errorMsg');
+        errorMsg.textContent = '❌ Credenciales incorrectas';
+        errorMsg.style.display = 'block';
     }
 });
 
-// LOGIN DE EMERGENCIA (sin contraseña)
 window.emergencyLogin = function() {
     currentUser = { email: ADMIN_EMAIL + " (emergencia)" };
-    window.showApp();
+    showApp();
 }
 
-window.showApp = function() {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
+function showApp() {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('mainApp').classList.remove('hidden');
     document.getElementById('userEmail').textContent = currentUser.email;
-    document.getElementById('loading').style.display = 'none';
     startRealtimeSync();
 }
 
@@ -360,28 +227,22 @@ window.logout = function() {
 }
 
 function startRealtimeSync() {
+    console.log("Starting Firebase sync...");
     const qServices = query(collection(db, "services"), orderBy("date", "desc"));
     unsubscribeServices = onSnapshot(qServices, (snapshot) => {
         allServices = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        console.log("Servicios cargados:", allServices.length);
-        window.refreshAll();
+        console.log("Services loaded:", allServices.length);
+        refreshAll();
     }, (error) => {
-        console.error("Error Firebase:", error);
-        alert("❌ Error de Firebase: " + error.message + "\n\nRevisa las reglas en Firebase Console > Firestore > Reglas");
+        console.error("Firebase error:", error);
+        alert("❌ Error de Firebase: " + error.message + "\n\nRevisa las reglas en Firebase Console");
     });
 
     const qExpenses = query(collection(db, "expenses"), orderBy("date", "desc"));
     unsubscribeExpenses = onSnapshot(qExpenses, (snapshot) => {
         allExpenses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        window.loadExpenses();
+        loadExpenses();
     });
-}
-
-window.showSection = function(id, btn) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
 }
 
 window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
@@ -389,15 +250,12 @@ window.closeModal = function(id) { document.getElementById(id).classList.remove(
 
 document.getElementById('serviceForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div>⏳ Guardando...</div>';
-    
     const rc = parseFloat(document.getElementById('repairCost').value);
     const svc = {
         folio: 'SRV-' + Date.now().toString().slice(-6),
         client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
         device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value },
-        service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: 0, paidAmount: 0, paidDate: null },
+        service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, parts: [], totalParts: 0, netProfit: 0, paidAmount: 0, paidDate: null },
         date: new Date().toISOString(),
         userEmail: currentUser.email
     };
@@ -405,77 +263,54 @@ document.getElementById('serviceForm').addEventListener('submit', async function
     try {
         await addDoc(collection(db, "services"), svc);
         alert('✅ Orden creada');
-        window.closeModal('newOrderModal');
+        closeModal('newOrderModal');
         this.reset();
     } catch (error) {
         alert("❌ Error: " + error.message);
-    } finally {
-        document.getElementById('loading').style.display = 'none';
     }
 });
 
 window.openAddPartModal = function() {
     selectedServiceForPart = null;
-    document.getElementById('addPartStep1').style.display = 'block';
-    document.getElementById('addPartStep2').style.display = 'none';
-    document.getElementById('searchServiceForPart').value = '';
-    document.getElementById('newPartDesc').value = '';
-    document.getElementById('newPartCost').value = '';
-    window.renderServicesForPartList();
-    window.openModal('addPartModal');
+    document.getElementById('step1').style.display = 'block';
+    document.getElementById('step2').style.display = 'none';
+    renderServicesForPart();
+    openModal('addPartModal');
 }
 
-window.renderServicesForPartList = function(filter = '') {
+function renderServicesForPart() {
     const active = allServices.filter(s => s.service.status !== 'Entregado');
-    const filtered = filter ? active.filter(s => 
-        s.client.name.toLowerCase().includes(filter.toLowerCase()) ||
-        s.client.phone.includes(filter) ||
-        s.folio.toLowerCase().includes(filter.toLowerCase())
-    ) : active;
-    
     const container = document.getElementById('servicesForPartList');
-    if (filtered.length === 0) {
-        container.innerHTML = '<p class="empty-state">📭 No hay servicios activos</p>';
+    if (active.length === 0) {
+        container.innerHTML = '<p>No hay servicios activos</p>';
         return;
     }
-    
-    container.innerHTML = filtered.map(s => `
-        <div class="service-select-item" onclick="window.selectServiceForPart('${s.id}')">
+    container.innerHTML = active.map(s => `
+        <div style="padding:12px;border:2px solid #e5e7eb;border-radius:8px;margin-bottom:8px;cursor:pointer" onclick="selectService('${s.id}')">
             <strong>${s.folio}</strong> - ${s.client.name}<br>
-            <small style="color:#6b7280">${s.device.brand} ${s.device.model} • ${s.service.status}</small>
+            <small style="color:#6b7280">${s.device.brand} ${s.device.model}</small>
         </div>
     `).join('');
 }
 
-window.filterServicesForPart = function() {
-    window.renderServicesForPartList(document.getElementById('searchServiceForPart').value);
-}
-
-window.selectServiceForPart = function(id) {
+window.selectService = function(id) {
     selectedServiceForPart = allServices.find(s => s.id === id);
     if (!selectedServiceForPart) return;
-    document.getElementById('selectedServiceInfo').innerHTML = `
-        <strong>${selectedServiceForPart.folio}</strong> - ${selectedServiceForPart.client.name}<br>
-        ${selectedServiceForPart.device.brand} ${selectedServiceForPart.device.model}
-    `;
-    document.getElementById('addPartStep1').style.display = 'none';
-    document.getElementById('addPartStep2').style.display = 'block';
+    document.getElementById('selectedServiceInfo').textContent = `${selectedServiceForPart.folio} - ${selectedServiceForPart.client.name}`;
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'block';
 }
 
-window.backToServiceSelection = function() {
+window.backToStep1 = function() {
     selectedServiceForPart = null;
-    document.getElementById('addPartStep1').style.display = 'block';
-    document.getElementById('addPartStep2').style.display = 'none';
+    document.getElementById('step1').style.display = 'block';
+    document.getElementById('step2').style.display = 'none';
 }
 
 window.confirmAddPart = async function() {
     const desc = document.getElementById('newPartDesc').value.trim();
     const cost = parseFloat(document.getElementById('newPartCost').value);
     if (!desc || !cost) { alert('Completa descripción y costo'); return; }
-    if (!selectedServiceForPart) { alert('Selecciona un servicio'); return; }
-    
-    document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div>⏳ Agregando...</div>';
     
     try {
         const currentParts = selectedServiceForPart.service.parts || [];
@@ -489,19 +324,14 @@ window.confirmAddPart = async function() {
             'service.netProfit': repairCost - totalParts
         });
         alert('✅ Refacción agregada');
-        window.closeModal('addPartModal');
+        closeModal('addPartModal');
     } catch (error) {
         alert("Error: " + error.message);
-    } finally {
-        document.getElementById('loading').style.display = 'none';
     }
 }
 
 window.cobrarServicio = async function(id) {
     if (!confirm('¿Confirmar cobro?')) return;
-    document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div> Cobrando...</div>';
-    
     try {
         const svc = allServices.find(s => s.id === id);
         await updateDoc(doc(db, "services", id), {
@@ -512,83 +342,31 @@ window.cobrarServicio = async function(id) {
         alert('✅ Cobro registrado');
     } catch (error) {
         alert("Error: " + error.message);
-    } finally {
-        document.getElementById('loading').style.display = 'none';
     }
 }
 
-window.getStatusInfo = function(status) {
-    const i = STATUSES.indexOf(status);
-    return { icon: STATUS_ICONS[i] || '📋', cls: STATUS_CLASSES[i] || '' };
+function refreshAll() {
+    loadServices();
+    updateDashboard();
 }
 
-function getPaymentBadge(status) {
-    if (status === 'Pagado') return '<span class="pay-paid">✅ PAGADO</span>';
-    return '<span class="pay-pending">⏳ PENDIENTE</span>';
-}
-
-window.refreshAll = function() {
-    window.renderStatusPanel();
-    window.loadServices();
-    window.updateDashboard();
-}
-
-window.renderStatusPanel = function() {
-    const counts = {};
-    STATUSES.forEach(s => counts[s] = 0);
-    allServices.forEach(s => { if (counts[s.service.status] !== undefined) counts[s.service.status]++; });
-    let html = `<div class="status-card sc-all ${statusFilter===''?'active':''}" onclick="window.setStatusFilter('')"><div class="icon">📋</div><div class="name">Todos</div><div class="count">${allServices.length}</div></div>`;
-    STATUSES.forEach((s,i) => {
-        html += `<div class="status-card sc-${i} ${statusFilter===s?'active':''}" onclick="window.setStatusFilter('${s}')"><div class="icon">${STATUS_ICONS[i]}</div><div class="name">${s.length > 20 ? s.substring(0,18)+'...' : s}</div><div class="count">${counts[s]}</div></div>`;
-    });
-    document.getElementById('statusPanel').innerHTML = html;
-    const lbl = document.getElementById('currentViewLabel');
-    const ttl = document.getElementById('servicesListTitle');
-    if (!statusFilter) { lbl.innerHTML = ''; ttl.textContent = 'Todos los Servicios'; }
-    else { lbl.innerHTML = `<span style="background:#2563eb;color:white;padding:8px 14px;border-radius:8px;display:inline-block;margin-bottom:10px">${statusFilter} (${counts[statusFilter]})</span>`; ttl.textContent = statusFilter; }
-}
-
-window.setStatusFilter = function(s) { statusFilter = s; window.refreshAll(); }
-
-window.loadServices = function() {
+function loadServices() {
     const search = document.getElementById('searchClient').value.toLowerCase();
     const filtered = allServices.filter(s => {
         const ms = !search || s.client.name.toLowerCase().includes(search) || s.client.phone.includes(search) || s.folio.toLowerCase().includes(search);
-        const mst = !statusFilter || s.service.status === statusFilter;
-        return ms && mst;
+        return ms;
     });
+    
     const tbody = document.getElementById('servicesList');
-    if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-state">📭 No hay servicios</td></tr>'; }
-    else {
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px">📭 No hay servicios</td></tr>';
+    } else {
         tbody.innerHTML = filtered.map(s => {
-            const info = window.getStatusInfo(s.service.status);
-            const payBadge = getPaymentBadge(s.service.paymentStatus);
-            const cobrarBtn = s.service.paymentStatus !== 'Pagado' ? `<button class="btn btn-success btn-sm" onclick="event.stopPropagation();window.cobrarServicio('${s.id}')">💰</button>` : '';
-            return `<tr onclick="window.openDetail('${s.id}')"><td><strong>${s.folio}</strong></td><td>${s.client.name}<br><small style="color:#6b7280">${s.client.phone}</small></td><td>${s.device.brand} ${s.device.model}</td><td><span class="status-badge ${info.cls}">${s.service.status}</span></td><td>${payBadge}</td><td>$${s.service.repairCost.toFixed(2)}</td><td class="action-btns" onclick="event.stopPropagation()">${cobrarBtn}<button class="btn btn-warning btn-sm" onclick="window.openEdit('${s.id}')">✏️</button><button class="btn btn-primary btn-sm" onclick="window.printReceipt('${s.id}')">️</button><button class="btn btn-danger btn-sm" onclick="window.deleteSvc('${s.id}')">🗑️</button></td></tr>`;
+            const payBadge = s.service.paymentStatus === 'Pagado' ? '<span style="background:#d1fae5;color:#065f46;padding:4px 10px;border-radius:12px;font-size:11px">✅ PAGADO</span>' : '<span style="background:#fee2e2;color:#991b1b;padding:4px 10px;border-radius:12px;font-size:11px">⏳ PENDIENTE</span>';
+            const cobrarBtn = s.service.paymentStatus !== 'Pagado' ? `<button class="btn btn-success" onclick="event.stopPropagation();cobrarServicio('${s.id}')">💰</button>` : '';
+            return `<tr onclick="openDetail('${s.id}')" style="cursor:pointer"><td><strong>${s.folio}</strong></td><td>${s.client.name}<br><small style="color:#6b7280">${s.client.phone}</small></td><td>${s.device.brand} ${s.device.model}</td><td>${s.service.status}</td><td>${payBadge}</td><td>$${s.service.repairCost.toFixed(2)}</td><td>${cobrarBtn}<button class="btn btn-warning" onclick="event.stopPropagation();openEdit('${s.id}')">✏️</button><button class="btn btn-danger" onclick="event.stopPropagation();deleteSvc('${s.id}')">🗑️</button></td></tr>`;
         }).join('');
     }
-    
-    const pending = allServices.filter(s => s.service.paymentStatus !== 'Pagado');
-    const pendingTbody = document.getElementById('pendingPayments');
-    if (pending.length === 0) {
-        pendingTbody.innerHTML = '<tr><td colspan="5" class="empty-state">✅ No hay cobros pendientes</td></tr>';
-    } else {
-        pendingTbody.innerHTML = pending.map(s => `
-            <tr>
-                <td><strong>${s.folio}</strong></td>
-                <td>${s.client.name}</td>
-                <td>${s.device.brand} ${s.device.model}</td>
-                <td><strong style="color:#dc2626">$${s.service.repairCost.toFixed(2)}</strong></td>
-                <td><button class="btn btn-success btn-sm" onclick="window.cobrarServicio('${s.id}')">💰 Cobrar</button></td>
-            </tr>
-        `).join('');
-    }
-    
-    const recent = allServices.slice(0, 5);
-    document.getElementById('recentServices').innerHTML = recent.length ? recent.map(s => {
-        const info = window.getStatusInfo(s.service.status);
-        return `<tr onclick="window.openDetail('${s.id}')"><td>${s.folio}</td><td>${s.client.name}</td><td>${s.device.brand} ${s.device.model}</td><td><span class="status-badge ${info.cls}">${s.service.status}</span></td><td>${new Date(s.date).toLocaleDateString()}</td></tr>`;
-    }).join('') : '<tr><td colspan="5" class="empty-state">No hay servicios aún</td></tr>';
 }
 
 window.deleteSvc = async function(id) {
@@ -602,26 +380,41 @@ window.openDetail = function(id) {
     const parts = s.service.parts || [];
     const tp = parts.reduce((sum,p) => sum + p.cost, 0);
     const isPaid = s.service.paymentStatus === 'Pagado';
-    const payBadge = getPaymentBadge(s.service.paymentStatus);
-    const cobrarBtn = !isPaid ? `<button class="btn btn-success" onclick="window.closeModal('detailModal');window.cobrarServicio('${s.id}')">💰 Cobrar</button>` : `<button class="btn btn-secondary" disabled>✅ Cobrado</button>`;
+    const payBadge = isPaid ? '<span style="background:#d1fae5;color:#065f46;padding:4px 10px;border-radius:12px">✅ PAGADO</span>' : '<span style="background:#fee2e2;color:#991b1b;padding:4px 10px;border-radius:12px">⏳ PENDIENTE</span>';
+    const cobrarBtn = !isPaid ? `<button class="btn btn-success" onclick="closeModal('detailModal');cobrarServicio('${s.id}')">💰 Cobrar</button>` : '';
     
     document.getElementById('detailContent').innerHTML = `
-        <div class="detail-header"><div style="font-size:14px;opacity:.9">Folio: ${s.folio}</div><div style="font-size:22px;font-weight:700;margin:5px 0">${s.client.name}</div><div style="margin-top:8px">${payBadge}</div></div>
-        <div class="detail-section"><div class="detail-section-title"> Cliente</div><div class="detail-row"><span class="detail-row-label">Teléfono</span><span class="detail-row-value">${s.client.phone}</span></div></div>
-        <div class="detail-section"><div class="detail-section-title">📱 Equipo</div><div class="detail-row"><span class="detail-row-label">Marca/Modelo</span><span class="detail-row-value">${s.device.brand} ${s.device.model}</span></div>${s.device.imei?`<div class="detail-row"><span class="detail-row-label">IMEI</span><span class="detail-row-value">${s.device.imei}</span></div>`:''}<div class="detail-row"><span class="detail-row-label">Problema</span><span class="detail-row-value">${s.device.problem}</span></div></div>
-        <div class="detail-section"><div class="detail-section-title"> Refacciones</div>${parts.length?parts.map(p=>`<div class="detail-row"><span class="detail-row-label">${p.description}</span><span class="detail-row-value">$${p.cost.toFixed(2)}</span></div>`).join(''):'<p style="color:#6b7280">Sin refacciones</p>'}<div class="detail-row" style="border-top:2px solid #e5e7eb;margin-top:8px;padding-top:8px"><span class="detail-row-label"><strong>Total</strong></span><span class="detail-row-value"><strong>$${tp.toFixed(2)}</strong></span></div></div>
-        <div class="detail-section"><div class="detail-section-title">💰 Finanzas</div>
-            <div class="detail-row"><span class="detail-row-label">Costo</span><span class="detail-row-value">$${s.service.repairCost.toFixed(2)}</span></div>
-            <div class="detail-row"><span class="detail-row-label">Pago</span><span class="detail-row-value">${payBadge}</span></div>
+        <div style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:20px;border-radius:12px;margin-bottom:20px">
+            <div style="font-size:14px;opacity:.9">Folio: ${s.folio}</div>
+            <div style="font-size:22px;font-weight:bold;margin:5px 0">${s.client.name}</div>
+            <div style="margin-top:8px">${payBadge}</div>
         </div>
-        <div class="detail-highlight"><div style="font-size:12px;opacity:.9">${isPaid ? 'GANANCIA CONTABILIZADA' : 'PENDIENTE'}</div><div style="font-size:28px;font-weight:700">$${(s.service.repairCost - tp).toFixed(2)}</div></div>
-        <div class="detail-actions">
+        <div style="background:#f3f4f6;padding:16px;border-radius:10px;margin-bottom:15px">
+            <div style="font-size:13px;text-transform:uppercase;color:#6b7280;font-weight:bold;margin-bottom:10px">👤 Cliente</div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="color:#6b7280">Teléfono</span><span style="font-weight:bold">${s.client.phone}</span></div>
+        </div>
+        <div style="background:#f3f4f6;padding:16px;border-radius:10px;margin-bottom:15px">
+            <div style="font-size:13px;text-transform:uppercase;color:#6b7280;font-weight:bold;margin-bottom:10px">📱 Equipo</div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="color:#6b7280">Marca/Modelo</span><span style="font-weight:bold">${s.device.brand} ${s.device.model}</span></div>
+            ${s.device.imei?`<div style="display:flex;justify-content:space-between;padding:6px 0"><span style="color:#6b7280">IMEI</span><span style="font-weight:bold">${s.device.imei}</span></div>`:''}
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="color:#6b7280">Problema</span><span style="font-weight:bold;max-width:60%;text-align:right">${s.device.problem}</span></div>
+        </div>
+        <div style="background:#f3f4f6;padding:16px;border-radius:10px;margin-bottom:15px">
+            <div style="font-size:13px;text-transform:uppercase;color:#6b7280;font-weight:bold;margin-bottom:10px">🔧 Refacciones</div>
+            ${parts.length?parts.map(p=>`<div style="display:flex;justify-content:space-between;padding:6px 0"><span>${p.description}</span><span style="font-weight:bold">$${p.cost.toFixed(2)}</span></div>`).join(''):'<p style="color:#6b7280">Sin refacciones</p>'}
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-top:2px solid #e5e7eb;margin-top:8px"><span style="font-weight:bold">Total</span><span style="font-weight:bold">$${tp.toFixed(2)}</span></div>
+        </div>
+        <div style="background:linear-gradient(135deg,#10b981,#059669);color:white;padding:15px;border-radius:10px;text-align:center;margin-bottom:15px">
+            <div style="font-size:12px;opacity:.9">${isPaid ? 'GANANCIA CONTABILIZADA' : 'PENDIENTE'}</div>
+            <div style="font-size:28px;font-weight:bold">$${(s.service.repairCost - tp).toFixed(2)}</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
             ${cobrarBtn}
-            <button class="btn btn-warning" onclick="window.closeModal('detailModal');window.openEdit('${s.id}')">✏️ Editar</button>
-            <button class="btn btn-primary" onclick="window.printReceipt('${s.id}')">🖨️ Imprimir</button>
-            <button class="btn btn-danger" onclick="if(confirm('¿Eliminar?')){window.deleteSvc('${s.id}');window.closeModal('detailModal')}">🗑️</button>
-        </div>`;
-    window.openModal('detailModal');
+            <button class="btn btn-warning" onclick="closeModal('detailModal');openEdit('${s.id}')">✏️ Editar</button>
+            <button class="btn btn-danger" onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}">🗑️</button>
+        </div>
+    `;
+    openModal('detailModal');
 }
 
 window.openEdit = function(id) {
@@ -629,76 +422,42 @@ window.openEdit = function(id) {
     if (!s) return;
     editId = id;
     editParts = s.service.parts ? [...s.service.parts] : [];
-    editStatus = s.service.status;
     document.getElementById('editFolio').textContent = s.folio;
+    document.getElementById('editStatus').value = s.service.status;
     document.getElementById('editRepairCost').value = s.service.repairCost;
     document.getElementById('editPaymentMethod').value = s.service.paymentMethod || '';
-    document.getElementById('editDelivery').value = s.service.estimatedDelivery || '';
-    window.renderEditStatus();
-    window.renderEditParts();
-    window.openModal('editModal');
+    renderEditParts();
+    openModal('editModal');
 }
 
-window.renderEditStatus = function() {
-    document.getElementById('statusFlow').innerHTML = STATUSES.map((s,i) => `<button type="button" class="status-flow-btn ${editStatus===s?'selected':''}" onclick="window.setEditStatus('${s}')">${STATUS_ICONS[i]} ${s.length>20?s.substring(0,18)+'...':s}</button>`).join('');
+function renderEditParts() {
+    document.getElementById('editPartsList').innerHTML = editParts.length ? editParts.map((p,i) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#f3f4f6;border-radius:8px;margin-bottom:8px"><strong>${p.description}</strong><span style="color:#2563eb">$${p.cost.toFixed(2)}</span><button class="btn btn-danger" onclick="removeEditPart(${i})">X</button></div>`).join('') : '<p style="color:#6b7280">Sin refacciones</p>';
 }
 
-window.setEditStatus = function(s) { editStatus = s; window.renderEditStatus(); }
-
-window.renderEditParts = function() {
-    document.getElementById('editPartsList').innerHTML = editParts.length ? editParts.map((p,i) => `<div class="refaccion-item"><strong>${p.description}</strong><span style="color:#2563eb">$${p.cost.toFixed(2)}</span><button class="btn btn-danger btn-sm" onclick="window.removeEditPart(${i})">X</button></div>`).join('') : '<p style="color:#6b7280">Sin refacciones</p>';
-    const t = editParts.reduce((s,p) => s + p.cost, 0);
-    const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
-    document.getElementById('editTotalParts').textContent = t.toFixed(2);
-    document.getElementById('editRepairCostDisplay').textContent = rc.toFixed(2);
-    document.getElementById('editNetProfit').textContent = (rc - t).toFixed(2);
-}
-
-window.removeEditPart = function(i) { editParts.splice(i,1); window.renderEditParts(); }
-
-document.getElementById('editRepairCost').addEventListener('input', window.renderEditParts);
+window.removeEditPart = function(i) { editParts.splice(i,1); renderEditParts(); }
 
 window.saveEdit = async function() {
-    document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div>⏳ Guardando...</div>';
-    
     const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
     const tp = editParts.reduce((s,p) => s + p.cost, 0);
     
     try {
         await updateDoc(doc(db, "services", editId), {
-            'service.status': editStatus,
+            'service.status': document.getElementById('editStatus').value,
             'service.repairCost': rc,
             'service.paymentMethod': document.getElementById('editPaymentMethod').value,
-            'service.estimatedDelivery': document.getElementById('editDelivery').value,
             'service.parts': [...editParts],
             'service.totalParts': tp,
             'service.netProfit': rc - tp
         });
-        window.closeModal('editModal');
+        closeModal('editModal');
         alert('✅ Actualizado');
     } catch (error) {
         alert("Error: " + error.message);
-    } finally {
-        document.getElementById('loading').style.display = 'none';
     }
-}
-
-window.printReceipt = function(id) {
-    const s = allServices.find(x => x.id === id);
-    if (!s) return;
-    const parts = s.service.parts || [];
-    const partsHtml = parts.length ? parts.map(p => `<div class="receipt-row"><span>${p.description}</span><span>$${p.cost.toFixed(2)}</span></div>`).join('') : '';
-    
-    document.getElementById('printArea').innerHTML = `<div class="receipt-page"><div class="receipt-half"><div class="receipt-header"><h2>Taller de Reparaciones</h2><p>Copia Cliente</p><p><strong>Folio: ${s.folio}</strong></p></div><div class="receipt-section"><h3>Cliente</h3><div class="receipt-row"><span>Nombre:</span><span>${s.client.name}</span></div><div class="receipt-row"><span>Tel:</span><span>${s.client.phone}</span></div></div><div class="receipt-section"><h3>Equipo</h3><div class="receipt-row"><span>Marca/Modelo:</span><span>${s.device.brand} ${s.device.model}</span></div><div class="receipt-row"><span>Problema:</span><span>${s.device.problem}</span></div></div><div class="receipt-section"><h3>Servicio</h3><div class="receipt-row"><span>Fecha:</span><span>${new Date(s.date).toLocaleDateString()}</span></div><div class="receipt-row"><span>Costo:</span><span>$${s.service.repairCost.toFixed(2)}</span></div><div class="receipt-row"><span>Estado:</span><span>${s.service.status}</span></div></div><div class="receipt-footer"><p>• 30 días garantía</p><p>• Conserve esta nota</p><div class="signature-line">Firma Cliente</div></div></div><div class="receipt-half"><div class="receipt-header"><h2>Taller de Reparaciones</h2><p>Copia Taller</p><p><strong>Folio: ${s.folio}</strong></p></div><div class="receipt-section"><h3>Cliente</h3><div class="receipt-row"><span>Nombre:</span><span>${s.client.name}</span></div><div class="receipt-row"><span>Tel:</span><span>${s.client.phone}</span></div></div><div class="receipt-section"><h3>Equipo</h3><div class="receipt-row"><span>Marca/Modelo:</span><span>${s.device.brand} ${s.device.model}</span></div><div class="receipt-row"><span>Problema:</span><span>${s.device.problem}</span></div></div><div class="receipt-section"><h3>Refacciones</h3>${partsHtml}</div><div class="receipt-section"><h3>Servicio</h3><div class="receipt-row"><span>Costo:</span><span>$${s.service.repairCost.toFixed(2)}</span></div><div class="receipt-row"><span>Estado:</span><span>${s.service.status}</span></div><div class="receipt-row"><span>Pago:</span><span>${s.service.paymentStatus}</span></div></div><div class="receipt-footer"><div class="signature-line">Firma Técnico</div></div></div></div>`;
-    window.print();
 }
 
 document.getElementById('expenseForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = '<div>⏳ Guardando...</div>';
-    
     const exp = {
         date: document.getElementById('expenseDate').value,
         amount: parseFloat(document.getElementById('expenseAmount').value),
@@ -714,33 +473,22 @@ document.getElementById('expenseForm').addEventListener('submit', async function
         document.getElementById('expenseDate').valueAsDate = new Date();
     } catch (error) {
         alert("Error: " + error.message);
-    } finally {
-        document.getElementById('loading').style.display = 'none';
     }
 });
 
-window.loadExpenses = function() {
-    document.getElementById('expensesList').innerHTML = allExpenses.length ? allExpenses.map(e => `<tr><td>${new Date(e.date).toLocaleDateString()}</td><td>${e.category}</td><td>${e.description}</td><td>$${e.amount.toFixed(2)}</td><td><button class="btn btn-danger btn-sm" onclick="window.deleteExp('${e.id}')">X</button></td></tr>`).join('') : '<tr><td colspan="5" class="empty-state">No hay gastos</td></tr>';
+function loadExpenses() {
     const now = new Date();
     const me = allExpenses.filter(e => { const d = new Date(e.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
     const te = me.reduce((s,e) => s + e.amount, 0);
-    document.getElementById('totalExpenses').textContent = '$' + te.toFixed(2);
     
     const ms = allServices.filter(s => { 
         const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null;
         return s.service.paymentStatus === 'Pagado' && paidDate && paidDate.getMonth() === now.getMonth() && paidDate.getFullYear() === now.getFullYear();
     });
     const wp = ms.reduce((s,x) => s + (x.service.repairCost - (x.service.totalParts || 0)), 0);
-    document.getElementById('workshopProfit').textContent = '$' + wp.toFixed(2);
-    document.getElementById('balance').textContent = '$' + (wp - te).toFixed(2);
 }
 
-window.deleteExp = async function(id) {
-    if (!confirm('¿Eliminar?')) return;
-    try { await deleteDoc(doc(db, "expenses", id)); } catch (error) { console.error(error); }
-}
-
-window.updateDashboard = function() {
+function updateDashboard() {
     document.getElementById('statActive').textContent = allServices.filter(s => s.service.status !== 'Entregado').length;
     const pending = allServices.filter(s => s.service.paymentStatus !== 'Pagado');
     document.getElementById('statPending').textContent = '$' + pending.reduce((s,x) => s + x.service.repairCost, 0).toFixed(2);
