@@ -491,7 +491,7 @@ tailwind.config = {
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Descripción *</label><input type="text" id="newPartDesc" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: Pantalla, batería..."></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Costo interno de la refacción *</label><input type="number" id="newPartCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"></div>
           <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">
-            ⚠️ Este es un <strong>registro interno</strong> para control de inventario y cálculo de ganancias. <strong>NO modifica</strong> el precio final al cliente.
+            ⚠️ Este es un <strong>registro interno</strong> para control de inventario. <strong>NO modifica</strong> el precio final al cliente.
           </div>
           <button onclick="confirmAddPart()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Agregar Refacción</button>
         </div>
@@ -552,11 +552,11 @@ tailwind.config = {
         <input type="date" id="editDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
       </div>
       <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-2">Refacciones (registro interno)</label>
+        <label class="block text-sm font-semibold text-slate-700 mb-2">Refacciones </label>
         <div id="editPartsList" class="space-y-2"></div>
       </div>
       <div class="bg-slate-50 rounded-xl p-4 space-y-1 text-sm">
-        <div class="flex justify-between"><span class="text-slate-600">Costo refacciones (interno):</span><span class="font-semibold">$<span id="editTotalParts">0.00</span></span></div>
+        <div class="flex justify-between"><span class="text-slate-600">Costo refacciones:</span><span class="font-semibold">$<span id="editTotalParts">0.00</span></span></div>
         <div class="flex justify-between"><span class="text-slate-600">Precio al cliente:</span><span class="font-semibold">$<span id="editRepairCostDisplay">0.00</span></span></div>
         <div class="flex justify-between pt-2 border-t border-slate-200"><span class="font-semibold text-slate-800">Ganancia neta estimada:</span><span class="font-bold text-emerald-600">$<span id="editNetProfit">0.00</span></span></div>
       </div>
