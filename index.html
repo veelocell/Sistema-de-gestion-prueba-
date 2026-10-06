@@ -947,7 +947,6 @@ window.confirmCheckout = async function() {
 window.printTicket = function(id) {
     const s = allServices.find(x => x.id === id);
     if (!s) return;
-    const parts = s.service.parts || [];
     const warranty = s.service.warranty || '30 días';
     const paymentMethod = s.service.paymentMethod || 'No especificado';
     const paidDate = s.service.paidDate ? new Date(s.service.paidDate).toLocaleString('es-MX') : new Date().toLocaleString('es-MX');
@@ -973,10 +972,7 @@ window.printTicket = function(id) {
             <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
             ${s.service.diagnosis ? `<div style="margin:4px 0"><span style="font-weight:bold">Diagnóstico:</span><br>${s.service.diagnosis}</div>` : ''}
             <div class="t-divider"></div>
-            <p class="t-section-title">DETALLE DEL SERVICIO</p>
-            ${parts.length ? parts.map(p => `<div class="t-row"><span>${p.description}</span><span>$${p.cost.toFixed(2)}</span></div>`).join('') : '<div class="t-row"><span>Sin refacciones</span><span></span></div>'}
-            <div class="t-divider"></div>
-            <div class="t-row t-total"><span>TOTAL:</span><span>$${s.service.repairCost.toFixed(2)}</span></div>
+            <div class="t-row t-total"><span>TOTAL A PAGAR:</span><span>$${s.service.repairCost.toFixed(2)}</span></div>
             <div class="t-row"><span>Método de pago:</span><span>${paymentMethod}</span></div>
             <div class="t-row"><span>Estado:</span><span><strong>${isPaid ? 'PAGADO' : 'PENDIENTE'}</strong></span></div>
             <div class="t-divider"></div>
