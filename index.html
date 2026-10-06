@@ -679,14 +679,15 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const email = document.getElementById('loginEmail').value.trim();
     const pass = document.getElementById('loginPassword').value;
     const errorDiv = document.getElementById('loginError');
-    if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-        currentUser = { email: email, role: 'admin' };
-        errorDiv.classList.add('hidden');
-        showApp();
-    } else {
-        errorDiv.textContent = '❌ Correo o contraseña incorrectos';
-        errorDiv.classList.remove('hidden');
-    }
+    iconst validUser = USERS.find(u => u.email === email && u.password === pass);
+if (validUser) {
+    currentUser = { email: validUser.email, role: 'admin' };
+    errorDiv.classList.add('hidden');
+    showApp();
+} else {
+    errorDiv.textContent = '❌ Correo o contraseña incorrectos';
+    errorDiv.classList.remove('hidden');
+}
 });
 
 function showApp() {
