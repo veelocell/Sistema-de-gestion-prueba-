@@ -603,6 +603,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+  // Sistema de usuarios (agrega o quita usuarios aquí)
+const USERS = [
+    { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07" },
+    { email: "demo@demo.com", password: "demo2024" }
+];
+
+const ADMIN_EMAIL = "ismaelrh@velocell.com";
+const ADMIN_PASS = "ROHI981115HTSDNS07";
 const ADMIN_EMAIL = "ismaelrh@velocell.com";
 const ADMIN_PASS = "ROHI981115HTSDNS07";
 const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
