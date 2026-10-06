@@ -611,8 +611,6 @@ const USERS = [
 
 const ADMIN_EMAIL = "ismaelrh@velocell.com";
 const ADMIN_PASS = "ROHI981115HTSDNS07";
-const ADMIN_EMAIL = "ismaelrh@velocell.com";
-const ADMIN_PASS = "ROHI981115HTSDNS07";
 const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
 const STATUS_COLORS = {
   'En diagnóstico': 'bg-blue-100 text-blue-700',
@@ -679,7 +677,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const email = document.getElementById('loginEmail').value.trim();
     const pass = document.getElementById('loginPassword').value;
     const errorDiv = document.getElementById('loginError');
-    iconst validUser = USERS.find(u => u.email === email && u.password === pass);
+    const validUser = USERS.find(u => u.email === email && u.password === pass);
 if (validUser) {
     currentUser = { email: validUser.email, role: 'admin' };
     errorDiv.classList.add('hidden');
