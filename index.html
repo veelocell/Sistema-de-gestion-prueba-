@@ -29,13 +29,16 @@ body { font-family: 'Inter', sans-serif; }
 ::-webkit-scrollbar-track { background:#f1f5f9; }
 ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:4px; }
 ::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
+
 #evidencePortal { display: none; }
 #evidencePortal.active { display: block; }
+
 #printContainer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; overflow-y: auto; padding: 20px; }
 #printContainer.active { display: block; }
 .preview-wrapper { max-width: 900px; margin: 20px auto; background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow-x: auto; }
 .preview-wrapper.ticket-mode { max-width: 380px; }
 .preview-wrapper.letter-mode { max-width: 850px; }
+
 .ticket-thermal { width: 80mm; margin: 0 auto; padding: 3mm; font-family: 'Courier New', monospace; font-size: 11px; color: #000; line-height: 1.4; }
 .ticket-thermal .t-header { text-align:center; border-bottom: 1px dashed #000; padding-bottom: 6px; margin-bottom: 6px; }
 .ticket-thermal .t-header h2 { font-size: 15px; margin: 0; font-weight: bold; }
@@ -48,6 +51,7 @@ body { font-family: 'Inter', sans-serif; }
 .ticket-thermal .t-warranty { background: #f0f0f0; padding: 5px; border-radius: 3px; margin: 6px 0; }
 .ticket-thermal .t-qr { text-align: center; margin-top: 10px; }
 .ticket-thermal .t-qr img { width: 100px; height: 100px; }
+
 .letter-double {
 width: 190mm;
 max-width: 190mm;
@@ -80,9 +84,7 @@ content: "";
 .letter-footer { margin-top: 15px; padding-top: 10px; border-top: 1px solid #000; font-size: 10px; text-align: center; white-space: pre-line; }
 .letter-sign { margin-top: 30px; display: flex; justify-content: space-between; }
 .letter-sign div { width: 40%; border-top: 1px solid #000; text-align: center; padding-top: 5px; font-size: 11px; }
-.pattern-grid { display: grid; grid-template-columns: repeat(3, 40px); grid-template-rows: repeat(3, 40px); gap: 15px; margin: 10px auto; width: fit-content; }
-.pattern-dot { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
-.pattern-dot-inner { width: 12px; height: 12px; background: #000; border-radius: 50%; }
+
 @media print {
 body * { visibility: hidden !important; }
 #printContainer, #printContainer * { visibility: visible !important; }
@@ -103,6 +105,8 @@ padding: 0;
 max-width: 100%;
 }
 #printContainer .no-print { display: none !important; }
+
+/* Formato Ticket 80mm */
 #printContainer.print-ticket @page {
 size: 80mm auto;
 margin: 0;
@@ -113,32 +117,46 @@ width: 80mm;
 #printContainer.print-ticket .preview-wrapper {
 max-width: 80mm;
 }
+
+/* Formato Carta Doble */
 #printContainer.print-letter @page {
-size: letter;
+size: letter portrait;
 margin: 5mm;
 }
 #printContainer.print-letter {
-width: 210mm;
+width: 200mm;
+max-width: 200mm;
 }
 #printContainer.print-letter .preview-wrapper {
-max-width: 210mm;
+max-width: 200mm;
+padding: 0;
 }
 #printContainer.print-letter .letter-double {
 width: 100%;
+max-width: 190mm;
 padding: 0;
-margin: 0;
+margin: 0 auto;
+display: block;
 }
 #printContainer.print-letter .letter-half {
+display: block;
+width: 100%;
+max-width: 190mm;
 border: 1px solid #000;
 padding: 8px;
 margin-bottom: 8px;
+box-sizing: border-box;
 page-break-inside: avoid;
+min-height: 110mm;
 }
 #printContainer.print-letter .letter-half::after {
 content: "";
 }
 #printContainer.print-letter .letter-header h2 {
-font-size: 16px;
+font-size: 14px;
+}
+#printContainer.print-letter .letter-header p {
+font-size: 11px;
 }
 #printContainer.print-letter .letter-section h3 {
 font-size: 10px;
@@ -154,14 +172,17 @@ font-size: 9px;
 font-size: 8px;
 }
 }
+
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.active { display: flex; }
+
 .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 200px; padding: 10px 0; }
 .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .bar { width: 100%; max-width: 50px; background: linear-gradient(to top, #6366f1, #8b5cf6); border-radius: 6px 6px 0 0; transition: all 0.3s; position: relative; min-height: 4px; }
 .bar:hover { opacity: 0.8; }
 .bar-label { font-size: 10px; color: #64748b; text-align: center; }
 .bar-value { font-size: 11px; font-weight: 600; color: #1e293b; }
+
 .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 .photo-item { position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .photo-item img { width: 100%; height: 150px; object-fit: cover; cursor: pointer; }
@@ -170,6 +191,7 @@ font-size: 8px;
 </style>
 </head>
 <body class="bg-surface-50 text-slate-800">
+
 <!-- PORTAL DE EVIDENCIA -->
 <div id="evidencePortal" class="min-h-screen bg-gradient-to-br from-brand-600 to-purple-700 p-4">
 <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-6 mt-8">
@@ -204,6 +226,7 @@ Tomar/Subir Fotos
 </div>
 </div>
 </div>
+
 <!-- LOGIN -->
 <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-brand-600 via-indigo-600 to-purple-700">
 <div class="w-full max-w-md fade-in">
@@ -227,10 +250,11 @@ Tomar/Subir Fotos
 </div>
 </div>
 </div>
+
 <!-- MODAL ABRIR CAJA -->
 <div class="modal-overlay" id="openCashModal">
 <div class="bg-white rounded-2xl w-full max-w-md p-6">
-<h2 class="text-xl font-bold text-slate-800 mb-4"> Abrir Caja del Día</h2>
+<h2 class="text-xl font-bold text-slate-800 mb-4">🔓 Abrir Caja del Día</h2>
 <p class="text-sm text-slate-600 mb-4">Ingresa el saldo inicial en efectivo con el que inicia la caja hoy.</p>
 <div class="mb-4">
 <label class="block text-sm font-medium text-slate-700 mb-1">Saldo Inicial ($)</label>
@@ -239,6 +263,7 @@ Tomar/Subir Fotos
 <button onclick="confirmOpenCash()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition">Confirmar y Entrar</button>
 </div>
 </div>
+
 <!-- MAIN APP -->
 <div id="mainApp" class="hidden">
 <div class="flex h-screen overflow-hidden">
@@ -300,7 +325,7 @@ Tomar/Subir Fotos
 <div class="flex items-center gap-3">
 <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
 <div>
-<h2 class="text-lg lg:text-xl font-bold text-slate-800" id="greeting">Hola 👋</h2>
+<h2 class="text-lg lg:text-xl font-bold text-slate-800" id="greeting">Hola </h2>
 <p class="text-xs text-slate-500 hidden sm:block" id="currentDate">Cargando fecha...</p>
 </div>
 </div>
@@ -437,7 +462,7 @@ Tomar/Subir Fotos
 </div>
 </section>
 <section id="cortes" class="section-content hidden fade-in">
-<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800"> Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
+<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📋 Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
 <div class="grid md:grid-cols-3 gap-4 mb-6">
 <button onclick="generarCorteDiario()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-6 rounded-2xl shadow-lg shadow-emerald-500/30 transition text-left">
 <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><h3 class="text-lg font-bold">Corte del Día</h3></div>
@@ -543,6 +568,7 @@ Tomar/Subir Fotos
 </div>
 </div>
 </div>
+
 <!-- MODALES -->
 <div class="modal-overlay" id="newOrderModal">
 <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -563,22 +589,6 @@ Tomar/Subir Fotos
 <div><label class="block text-sm font-medium text-slate-700 mb-1">Modelo *</label><input type="text" id="deviceModel" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
 <div><label class="block text-sm font-medium text-slate-700 mb-1">IMEI / Serie</label><input type="text" id="deviceIMEI" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
 <div><label class="block text-sm font-medium text-slate-700 mb-1">Entrega estimada</label><input type="date" id="estimatedDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-</div>
-<!-- NUEVO: Contraseña/Patrón -->
-<div class="mt-4">
-<label class="block text-sm font-medium text-slate-700 mb-2"> Contraseña / Patrón del equipo</label>
-<div class="flex gap-2 mb-2">
-<label class="flex-1 cursor-pointer">
-<input type="radio" name="passwordType" value="contrasena" checked class="peer hidden">
-<div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-2 text-center text-sm font-medium transition">🔑 Contraseña</div>
-</label>
-<label class="flex-1 cursor-pointer">
-<input type="radio" name="passwordType" value="patron" class="peer hidden">
-<div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-2 text-center text-sm font-medium transition">⭕ Patrón</div>
-</label>
-</div>
-<input type="text" id="devicePassword" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 1234, abc123, o dejar vacío si no tiene">
-<p class="text-xs text-slate-500 mt-1">Si es patrón, se imprimirá una cuadrícula en la nota para que el cliente lo dibuje</p>
 </div>
 <div class="mt-4">
 <label class="block text-sm font-medium text-slate-700 mb-2">Estado físico del equipo al recibir:</label>
@@ -608,10 +618,11 @@ Tomar/Subir Fotos
 </form>
 </div>
 </div>
+
 <div class="modal-overlay" id="addPartModal">
 <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-<h2 class="text-xl font-bold text-slate-800"> Agregar Refacción</h2>
+<h2 class="text-xl font-bold text-slate-800">🔧 Agregar Refacción</h2>
 <button onclick="closeModal('addPartModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
 </div>
 <div class="p-6">
@@ -638,6 +649,7 @@ Tomar/Subir Fotos
 </div>
 </div>
 </div>
+
 <div class="modal-overlay" id="detailModal">
 <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
@@ -647,10 +659,11 @@ Tomar/Subir Fotos
 <div id="detailContent" class="p-6"></div>
 </div>
 </div>
+
 <div class="modal-overlay" id="editModal">
 <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-<h2 class="text-xl font-bold text-slate-800">️ Editar <span id="editFolio"></span></h2>
+<h2 class="text-xl font-bold text-slate-800">✏️ Editar <span id="editFolio"></span></h2>
 <button onclick="closeModal('editModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
 </div>
 <div class="p-6 space-y-5">
@@ -678,6 +691,7 @@ Tomar/Subir Fotos
 </div>
 </div>
 </div>
+
 <div class="modal-overlay" id="checkoutModal">
 <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
@@ -687,6 +701,7 @@ Tomar/Subir Fotos
 <div class="p-6" id="checkoutContent"></div>
 </div>
 </div>
+
 <div class="modal-overlay" id="corteDetailModal">
 <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
@@ -696,15 +711,19 @@ Tomar/Subir Fotos
 <div id="corteDetailContent" class="p-6"></div>
 </div>
 </div>
+
 <div id="printContainer"></div>
+
 <div id="loading" class="hidden fixed inset-0 bg-white/95 z-[100] flex items-center justify-center flex-col gap-3">
 <div class="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
 <p class="text-slate-600 font-medium" id="loadingText">Procesando...</p>
 </div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy, setDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
 const firebaseConfig = {
 apiKey: "AIzaSyAkvNPt0K_OheECcYVFnH_IHeQlEBdTrCg",
 authDomain: "tallerreparaciones.firebaseapp.com",
@@ -713,9 +732,11 @@ storageBucket: "tallerreparaciones.firebasestorage.app",
 messagingSenderId: "510483960568",
 appId: "1:510483960568:web:3e87fa3819a7d2bdf2210d"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
+
 const USERS = [
 { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez", role: "admin" },
 { email: "demo@demo.com", password: "demo2024", fullName: "DEMO", role: "recepcion" }
@@ -731,6 +752,7 @@ const STATUS_COLORS = {
 };
 const DIAS_SEMANA = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
 let currentUser = null;
 let allServices = [];
 let allExpenses = [];
@@ -745,12 +767,14 @@ let checkoutServiceId = null;
 let corteFilter = 'todos';
 let unsubscribeServices = null, unsubscribeExpenses = null, unsubscribeCortes = null, unsubscribeSettings = null, unsubscribePhotos = null;
 let currentEvidenceFolio = null;
+
 let workshopSettings = {
 workshopName: "VELOCELL REPARACIONES",
 phone: "8681596881",
 printFormat: "letter_double",
 policies: "• Ticket obligatorio: La garantía aplica únicamente con la presentación de este ticket. Su pérdida la invalida.\n• Abandono (90 días): Equipos no retirados en 90 días naturales se consideran abandonados, perdiendo el cliente sus derechos sobre el mismo.\n• Equipos mojados: Los equipos con antecedentes o daño por líquidos no cuentan con garantía.\n• Manipulación externa: Cualquier apertura, alteración o intervención por terceros anula automáticamente la garantía.\n• Pantallas económicas: En pantallas de calidad baja y media no hay garantía."
 };
+
 // Detectar modo evidencia
 function checkEvidenceMode() {
 const urlParams = new URLSearchParams(window.location.search);
@@ -765,6 +789,7 @@ return true;
 }
 return false;
 }
+
 async function loadEvidenceService(folio) {
 document.getElementById('evidenceFolio').textContent = folio;
 try {
@@ -790,6 +815,7 @@ console.error('Error:', error);
 document.getElementById('evidenceServiceInfo').innerHTML = '<p class="text-red-600">❌ Error al cargar: ' + error.message + '</p>';
 }
 }
+
 function loadEvidencePhotos(folio) {
 const photosRef = collection(db, "servicePhotos");
 const q = query(photosRef, where("folio", "==", folio), orderBy("uploadedAt", "desc"));
@@ -801,6 +827,7 @@ renderEvidencePhotos(photos);
 console.error('Error loading photos:', error);
 });
 }
+
 function renderEvidencePhotos(photos) {
 const container = document.getElementById('evidencePhotos');
 if (photos.length === 0) {
@@ -814,27 +841,35 @@ container.innerHTML = photos.map(photo => `
 </div>
 `).join('');
 }
+
 window.handlePhotoUpload = async function(event) {
 const files = event.target.files;
 if (!files || files.length === 0) return;
+
 console.log('Files:', files);
 console.log('Folio:', currentEvidenceFolio);
 console.log('Storage bucket:', storage.app.options.storageBucket);
+
 const progressDiv = document.getElementById('uploadProgress');
 const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressText');
+
 progressDiv.classList.remove('hidden');
+
 let uploaded = 0;
 const totalFiles = files.length;
+
 for (let i = 0; i < files.length; i++) {
 const file = files[i];
 const timestamp = Date.now();
 const randomId = Math.random().toString(36).substring(7);
 const fileName = `${timestamp}_${randomId}_${file.name}`;
 const storagePath = `evidence/${currentEvidenceFolio}/${fileName}`;
+
 try {
 const storageRef = ref(storage, storagePath);
 const uploadTask = uploadBytesResumable(storageRef, file);
+
 uploadTask.on('state_changed',
 (snapshot) => {
 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -857,10 +892,12 @@ uploadedAt: new Date().toISOString(),
 uploadedBy: 'Evidencia Portal',
 fileName: file.name
 });
+
 uploaded++;
 const totalProgress = (uploaded / totalFiles) * 100;
 progressBar.style.width = totalProgress + '%';
 progressText.textContent = `Subidas ${uploaded} de ${totalFiles}`;
+
 if (uploaded === totalFiles) {
 setTimeout(() => {
 progressDiv.classList.add('hidden');
@@ -874,19 +911,22 @@ console.error('Error:', error);
 alert('Error al procesar la foto: ' + error.message);
 }
 }
+
 event.target.value = '';
 }
+
 window.deleteEvidencePhoto = async function(photoId, storagePath) {
 if (!confirm('¿Eliminar esta foto de evidencia?')) return;
 try {
 const photoRef = ref(storage, storagePath);
 await deleteObject(photoRef);
 await deleteDoc(doc(db, "servicePhotos", photoId));
-showToast('️ Foto eliminada');
+showToast('🗑️ Foto eliminada');
 } catch (error) {
 alert('Error: ' + error.message);
 }
 }
+
 async function loadSettings() {
 const docRef = doc(db, "settings", "general");
 unsubscribeSettings = onSnapshot(docRef, (docSnap) => {
@@ -895,6 +935,7 @@ workshopSettings = { ...workshopSettings, ...docSnap.data() };
 }
 });
 }
+
 function enterApp(user) {
 currentUser = { email: user.email, fullName: user.fullName, role: user.role };
 document.getElementById('loginScreen').classList.add('hidden');
@@ -916,6 +957,7 @@ loadSettings();
 startRealtimeSync();
 checkOpenCash();
 }
+
 // Recuperar sesión al cargar
 const savedSession = localStorage.getItem('tallerSession');
 if (!checkEvidenceMode() && savedSession) {
@@ -930,6 +972,7 @@ enterApp(user);
 } else { localStorage.removeItem('tallerSession'); }
 } catch (e) { localStorage.removeItem('tallerSession'); }
 }
+
 document.getElementById('loginForm').addEventListener('submit', function(e) {
 e.preventDefault();
 const email = document.getElementById('loginEmail').value.trim();
@@ -945,6 +988,7 @@ errorDiv.textContent = '❌ Correo o contraseña incorrectos';
 errorDiv.classList.remove('hidden');
 }
 });
+
 function checkOpenCash() {
 const hoyStr = new Date().toDateString();
 const cashOpenedToday = localStorage.getItem('cashOpened_' + hoyStr);
@@ -952,6 +996,7 @@ if (!cashOpenedToday && currentUser.role === 'admin') {
 setTimeout(() => openModal('openCashModal'), 1000);
 }
 }
+
 window.confirmOpenCash = function() {
 const initialCash = parseFloat(document.getElementById('initialCash').value) || 0;
 const hoyStr = new Date().toDateString();
@@ -964,6 +1009,7 @@ closeModal('openCashModal');
 showToast('✅ Caja abierta exitosamente');
 loadCajaHoy();
 }
+
 window.logout = function() {
 localStorage.removeItem('tallerSession');
 if (unsubscribeServices) unsubscribeServices();
@@ -974,6 +1020,7 @@ if (unsubscribePhotos) unsubscribePhotos();
 currentUser = null;
 location.reload();
 }
+
 function startRealtimeSync() {
 const qServices = query(collection(db, "services"), orderBy("date", "desc"));
 unsubscribeServices = onSnapshot(qServices, (snapshot) => {
@@ -993,6 +1040,7 @@ renderCortes();
 updateCorteCount();
 });
 }
+
 window.showSection = function(id, btn) {
 document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
 document.getElementById(id).classList.remove('hidden');
@@ -1005,6 +1053,7 @@ if (window.innerWidth < 1024) toggleSidebar(false);
 if (id === 'ceo') updateCEOStats();
 if (id === 'config') loadConfigForm();
 }
+
 window.toggleSidebar = function(forceState) {
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('sidebarOverlay');
@@ -1013,20 +1062,20 @@ const shouldOpen = forceState !== undefined ? forceState : !isOpen;
 if (shouldOpen) { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); }
 else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
 }
+
 window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
 window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
+
 document.getElementById('serviceForm').addEventListener('submit', async function(e) {
 e.preventDefault();
 showLoading('Guardando orden...');
 const rc = parseFloat(document.getElementById('repairCost').value);
 const advance = parseFloat(document.getElementById('advancePayment').value) || 0;
 const physConditions = Array.from(document.querySelectorAll('input[name="physCondition"]:checked')).map(cb => cb.value);
-const passwordType = document.querySelector('input[name="passwordType"]:checked').value;
-const devicePassword = document.getElementById('devicePassword').value || '';
 const svc = {
 folio: 'SRV-' + Date.now().toString().slice(-6),
 client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
-device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value, physCondition: physConditions, password: devicePassword, passwordType: passwordType },
+device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value, physCondition: physConditions },
 service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: rc, paidAmount: 0, paidDate: null, diagnosis: '', technicalNotes: '', warranty: '', advancePayment: advance, remainingAmount: rc - advance },
 date: new Date().toISOString(),
 userEmail: currentUser.email,
@@ -1042,6 +1091,7 @@ showToast('✅ Orden creada exitosamente');
 setTimeout(() => printReceptionTicket(docRef.id), 500);
 } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
+
 window.openAddPartModal = function() {
 selectedServiceForPart = null;
 document.getElementById('addPartStep1').classList.remove('hidden');
@@ -1052,6 +1102,7 @@ document.getElementById('newPartCost').value = '';
 renderServicesForPartList();
 openModal('addPartModal');
 }
+
 function renderServicesForPartList(filter = '') {
 const active = allServices.filter(s => s.service.status !== 'Entregado');
 const filtered = filter ? active.filter(s => s.client.name.toLowerCase().includes(filter.toLowerCase()) || s.client.phone.includes(filter) || s.folio.toLowerCase().includes(filter.toLowerCase())) : active;
@@ -1070,6 +1121,7 @@ container.innerHTML = filtered.map(s => `
 </div>
 `).join('');
 }
+
 window.filterServicesForPart = function() { renderServicesForPartList(document.getElementById('searchServiceForPart').value); }
 window.selectServiceForPart = function(id) {
 selectedServiceForPart = allServices.find(s => s.id === id);
@@ -1083,6 +1135,7 @@ selectedServiceForPart = null;
 document.getElementById('addPartStep1').classList.remove('hidden');
 document.getElementById('addPartStep2').classList.add('hidden');
 }
+
 window.confirmAddPart = async function() {
 const desc = document.getElementById('newPartDesc').value.trim();
 const cost = parseFloat(document.getElementById('newPartCost').value);
@@ -1100,6 +1153,7 @@ closeModal('addPartModal');
 showToast('✅ Refacción agregada (registro interno)');
 } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
+
 window.cobrarServicio = function(id) {
 checkoutServiceId = id;
 const s = allServices.find(x => x.id === id);
@@ -1107,6 +1161,7 @@ if (!s) return;
 renderCheckout(s);
 openModal('checkoutModal');
 }
+
 function renderCheckout(s) {
 const parts = s.service.parts || [];
 const warrantyOptions = ['30 días','60 días','90 días','180 días','1 año','Sin garantía'];
@@ -1164,6 +1219,7 @@ if (this.value === 'personalizada') { custom.classList.remove('hidden'); custom.
 else { custom.classList.add('hidden'); }
 });
 }
+
 window.confirmCheckout = async function() {
 if (!checkoutServiceId) return;
 const paymentMethod = document.querySelector('input[name="checkoutPayment"]:checked')?.value;
@@ -1174,8 +1230,7 @@ if (warranty === 'personalizada') {
 warranty = document.getElementById('checkoutWarrantyCustom').value.trim();
 if (!warranty) { alert('Escribe la garantía personalizada'); return; }
 }
-if (!confirm(`¿Confirmar cobro?
-Se marcará como PAGADO y ENTREGADO.`)) return;
+if (!confirm(`¿Confirmar cobro?\n\nSe marcará como PAGADO y ENTREGADO.`)) return;
 showLoading('Procesando cobro...');
 try {
 const svc = allServices.find(s => s.id === checkoutServiceId);
@@ -1186,6 +1241,7 @@ showToast('✅ Cobro confirmado. Servicio marcado como Entregado.');
 setTimeout(() => printTicket(checkoutServiceId), 500);
 } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
+
 window.printTicket = function(id) {
 const s = allServices.find(x => x.id === id);
 if (!s) return;
@@ -1232,13 +1288,14 @@ printContainer.innerHTML = `
 <div><strong>🖨️ Vista previa del ticket</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
 <div style="display:flex;gap:10px">
 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
-<button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px"> Cerrar</button>
+<button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
 </div>
 </div>
 <div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper ticket-mode">${ticketHTML}</div></div>
 `;
 printContainer.classList.add('active');
 }
+
 window.printReceptionTicket = function(id) {
 const s = allServices.find(x => x.id === id);
 if (!s) return;
@@ -1246,8 +1303,6 @@ const isDouble = workshopSettings.printFormat === 'letter_double';
 const fecha = new Date(s.date).toLocaleString('es-MX');
 const tech = s.technician || 'No especificado';
 const conditions = s.device.physCondition && s.device.physCondition.length > 0 ? s.device.physCondition.join(', ') : 'Ninguno especificado';
-const passwordType = s.device.passwordType || 'contrasena';
-const devicePassword = s.device.password || '';
 
 let html = '';
 if (isDouble) {
@@ -1267,7 +1322,6 @@ const half = `
 <h3>Equipo Recibido</h3>
 <div class="letter-row"><span><strong>Equipo:</strong></span><strong>${s.device.brand} ${s.device.model}</strong></div>
 ${s.device.imei ? `<div class="letter-row"><span><strong>IMEI/Serie:</strong></span><span>${s.device.imei}</span></div>` : ''}
-${devicePassword ? (passwordType === 'contrasena' ? `<div class="letter-row"><span><strong>Contraseña:</strong></span><span class="font-bold text-amber-700">${devicePassword}</span></div>` : `<div style="margin:8px 0; padding:8px; border:1px dashed #666; border-radius:4px;"><strong style="font-size:11px;">🔐 Patrón de desbloqueo (dibujar abajo):</strong><div class="pattern-grid"><div class="pattern-dot"><div class="pattern-dot-inner"></div></div><div class="pattern-dot"><div class="pattern-dot-inner"></div></div><div class="pattern-dot"><div class="pattern-dot-inner"></div></div><div class="pattern-dot"><div class="pattern-dot-inner"></div></div><div class="pattern-dot"><div class="pattern-dot-inner"></div></div><div class="pattern-dot"><div class="pattern-dot-inner"></div></div><div class="pattern-dot"><div class="pattern-dot-inner"></div></div><div class="pattern-dot"><div class="pattern-dot-inner"></div></div><div class="pattern-dot"><div class="pattern-dot-inner"></div></div></div></div>`) : ''}
 <div style="margin:6px 0"><strong>Problema:</strong> ${s.device.problem || '—'}</div>
 <div style="margin:6px 0"><strong>Estado físico:</strong> ${conditions}</div>
 ${s.device.accessories ? `<div style="margin:6px 0"><strong>Trabajo a realizar:</strong> ${s.device.accessories}</div>` : ''}
@@ -1300,7 +1354,6 @@ html = `
 <p class="t-section-title">EQUIPO RECIBIDO</p>
 <div class="t-row"><span>Equipo:</span><span>${s.device.brand} ${s.device.model}</span></div>
 ${s.device.imei ? `<div class="t-row"><span>IMEI:</span><span>${s.device.imei}</span></div>` : ''}
-${devicePassword ? (passwordType === 'contrasena' ? `<div class="t-row"><span><strong>Contraseña:</strong></span><span class="font-bold">${devicePassword}</span></div>` : `<div style="margin:6px 0; padding:4px; border:1px dashed #000;"><strong style="font-size:10px;">🔐 Patrón (dibujar):</strong><div class="pattern-grid" style="grid-template-columns:repeat(3,30px);grid-template-rows:repeat(3,30px);gap:10px;margin:8px auto;"><div class="pattern-dot" style="width:30px;height:30px;"><div class="pattern-dot-inner" style="width:10px;height:10px;"></div></div><div class="pattern-dot" style="width:30px;height:30px;"><div class="pattern-dot-inner" style="width:10px;height:10px;"></div></div><div class="pattern-dot" style="width:30px;height:30px;"><div class="pattern-dot-inner" style="width:10px;height:10px;"></div></div><div class="pattern-dot" style="width:30px;height:30px;"><div class="pattern-dot-inner" style="width:10px;height:10px;"></div></div><div class="pattern-dot" style="width:30px;height:30px;"><div class="pattern-dot-inner" style="width:10px;height:10px;"></div></div><div class="pattern-dot" style="width:30px;height:30px;"><div class="pattern-dot-inner" style="width:10px;height:10px;"></div></div><div class="pattern-dot" style="width:30px;height:30px;"><div class="pattern-dot-inner" style="width:10px;height:10px;"></div></div><div class="pattern-dot" style="width:30px;height:30px;"><div class="pattern-dot-inner" style="width:10px;height:10px;"></div></div><div class="pattern-dot" style="width:30px;height:30px;"><div class="pattern-dot-inner" style="width:10px;height:10px;"></div></div></div></div>`) : ''}
 <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
 <div style="margin:4px 0"><span style="font-weight:bold">Estado físico:</span><br>${conditions}</div>
 ${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bold">Trabajo a realizar:</span><br>${s.device.accessories}</div>` : ''}
@@ -1332,6 +1385,7 @@ printContainer.innerHTML = `
 `;
 printContainer.classList.add('active');
 }
+
 window.doPrint = function() { window.print(); }
 window.closePrintPreview = function() {
 const printContainer = document.getElementById('printContainer');
@@ -1339,6 +1393,7 @@ printContainer.classList.remove('active', 'print-ticket', 'print-letter');
 printContainer.className = '';
 printContainer.innerHTML = '';
 }
+
 window.openEdit = function(id) {
 const s = allServices.find(x => x.id === id);
 if (!s) return;
@@ -1356,10 +1411,12 @@ renderEditStatus();
 renderEditParts();
 openModal('editModal');
 }
+
 function renderEditStatus() {
 document.getElementById('statusFlow').innerHTML = STATUSES.map(s => `<button type="button" onclick="setEditStatus('${s}')" class="px-3 py-2 rounded-lg text-xs font-medium transition ${editStatus === s ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">${s}</button>`).join('');
 }
 window.setEditStatus = function(s) { editStatus = s; renderEditStatus(); }
+
 function renderEditParts() {
 document.getElementById('editPartsList').innerHTML = editParts.length ? editParts.map((p,i) => `<div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg"><div><p class="font-medium text-sm">${p.description}</p><p class="text-xs text-slate-500">$${p.cost.toFixed(2)}</p></div><button onclick="removeEditPart(${i})" class="text-red-500 hover:text-red-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>';
 const t = editParts.reduce((s,p) => s + p.cost, 0);
@@ -1370,6 +1427,7 @@ document.getElementById('editNetProfit').textContent = (rc - t).toFixed(2);
 }
 window.removeEditPart = function(i) { editParts.splice(i,1); renderEditParts(); }
 document.getElementById('editRepairCost').addEventListener('input', renderEditParts);
+
 window.saveEdit = async function() {
 showLoading('Guardando cambios...');
 const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
@@ -1394,10 +1452,12 @@ closeModal('editModal');
 showToast('✅ Servicio actualizado');
 } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
+
 window.deleteSvc = async function(id) {
 if (!confirm('¿Eliminar este servicio?')) return;
-try { await deleteDoc(doc(db, "services", id)); showToast('️ Servicio eliminado'); } catch (error) { alert("Error: " + error.message); }
+try { await deleteDoc(doc(db, "services", id)); showToast('🗑️ Servicio eliminado'); } catch (error) { alert("Error: " + error.message); }
 }
+
 window.openDetail = function(id) {
 const s = allServices.find(x => x.id === id);
 if (!s) return;
@@ -1425,20 +1485,6 @@ ${photos.map(photo => `
 const currentUrl = window.location.origin + window.location.pathname;
 const evidenceUrl = currentUrl + '?folio=' + s.folio;
 const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(evidenceUrl)}`;
-
-// Mostrar contraseña solo si es tipo "contrasena"
-const passwordDisplay = s.device.password && s.device.passwordType === 'contrasena' ? `
-<div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-<p class="text-xs font-semibold text-amber-700 uppercase mb-1">🔐 Contraseña del equipo</p>
-<p class="text-sm text-slate-800 font-bold">${s.device.password}</p>
-</div>
-` : (s.device.password && s.device.passwordType === 'patron' ? `
-<div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-<p class="text-xs font-semibold text-amber-700 uppercase mb-1">🔐 Patrón del equipo</p>
-<p class="text-sm text-slate-700">Ver en nota física impresa</p>
-</div>
-` : '');
-
 document.getElementById('detailContent').innerHTML = `
 <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
 <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
@@ -1455,7 +1501,6 @@ document.getElementById('detailContent').innerHTML = `
 ${s.device.accessories ? `<p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Trabajo a realizar</p><p class="text-sm text-slate-700">${s.device.accessories}</p>` : ''}
 <p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Estado físico al recibir</p>
 <p class="text-sm text-slate-700">${conditions}</p>
-${passwordDisplay}
 </div>
 ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-slate-800">${s.service.diagnosis}</p></div>` : ''}
 ${s.service.technicalNotes ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-amber-700 uppercase mb-1">Notas técnicas</p><p class="text-slate-800">${s.service.technicalNotes}</p></div>` : ''}
@@ -1480,20 +1525,20 @@ ${s.service.warranty ? `<div class="bg-purple-50 border border-purple-200 rounde
 ${cobrarBtn}
 <button onclick="printReceptionTicket('${s.id}')" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition">📄 Nota de Recepción</button>
 <button onclick="closeModal('detailModal');openEdit('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">✏️ Editar</button>
-<button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">️ Ticket de Cobro</button>
-<button onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition">️ Eliminar</button>
+<button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">🖨️ Ticket de Cobro</button>
+<button onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition">🗑️ Eliminar</button>
 </div>
 `;
 openModal('detailModal');
 }
+
 // ===== CORTES DE CAJA =====
 window.generarCorteDiario = async function() {
 const hoy = new Date();
 const hoyStr = hoy.toDateString();
 const corteHoy = allCortes.find(c => c.type === 'dia' && new Date(c.date).toDateString() === hoyStr);
 if (corteHoy) { if (!confirm('Ya existe un corte del día de hoy. ¿Deseas generar uno nuevo (se creará un duplicado)?')) return; }
-if (!confirm('¿Generar corte de caja del día de hoy?
-Se calcularán todos los ingresos, gastos y servicios del día.')) return;
+if (!confirm('¿Generar corte de caja del día de hoy?\n\nSe calcularán todos los ingresos, gastos y servicios del día.')) return;
 showLoading('Generando corte del día...');
 const hoyInicio = new Date(hoy); hoyInicio.setHours(0,0,0,0);
 const hoyFin = new Date(hoy); hoyFin.setHours(23,59,59,999);
@@ -1523,12 +1568,12 @@ hideLoading();
 showToast('✅ Corte del día generado exitosamente');
 } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
+
 window.generarCorteMensual = async function() {
 const ahora = new Date();
 const mesActual = ahora.getMonth();
 const añoActual = ahora.getFullYear();
-if (!confirm(`¿Generar corte del mes de ${MESES[mesActual]} ${añoActual}?
-Se calcularán todos los ingresos, gastos y servicios del mes.`)) return;
+if (!confirm(`¿Generar corte del mes de ${MESES[mesActual]} ${añoActual}?\n\nSe calcularán todos los ingresos, gastos y servicios del mes.`)) return;
 showLoading('Generando corte mensual...');
 const mesInicio = new Date(añoActual, mesActual, 1, 0, 0, 0, 0);
 const mesFin = new Date(añoActual, mesActual + 1, 0, 23, 59, 59, 999);
@@ -1551,6 +1596,7 @@ createdBy: currentUser.fullName, createdAt: new Date().toISOString()
 };
 try { await addDoc(collection(db, "dailyCuts"), corte); hideLoading(); showToast('✅ Corte mensual generado exitosamente'); } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
+
 function renderCortes() {
 const tbody = document.getElementById('cortesList');
 const empty = document.getElementById('cortesEmpty');
@@ -1576,6 +1622,7 @@ return `<tr class="hover:bg-slate-50 cursor-pointer" onclick="verDetalleCorte('$
 </tr>`;
 }).join('');
 }
+
 window.filtrarCortes = function(filter) {
 corteFilter = filter;
 document.querySelectorAll('.corte-filter-btn').forEach(btn => {
@@ -1584,6 +1631,7 @@ else { btn.classList.remove('bg-brand-600','text-white'); btn.classList.add('bg-
 });
 renderCortes();
 }
+
 window.verDetalleCorte = function(id) {
 const c = allCortes.find(x => x.id === id);
 if (!c) return;
@@ -1598,7 +1646,7 @@ document.getElementById('corteDetailContent').innerHTML = `
 </div>
 <div class="grid grid-cols-3 gap-3 mb-6">
 <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💵 Efectivo</p><p class="font-bold text-slate-800">$${(c.pagosEfectivo||0).toFixed(2)}</p></div>
-<div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1"> Transferencia</p><p class="font-bold text-slate-800">$${(c.pagosTransferencia||0).toFixed(2)}</p></div>
+<div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">🏦 Transferencia</p><p class="font-bold text-slate-800">$${(c.pagosTransferencia||0).toFixed(2)}</p></div>
 <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💳 Tarjeta</p><p class="font-bold text-slate-800">$${(c.pagosTarjeta||0).toFixed(2)}</p></div>
 </div>
 <div class="bg-slate-50 rounded-xl p-4 mb-6">
@@ -1625,9 +1673,9 @@ Eliminar Corte
 `;
 openModal('corteDetailModal');
 }
+
 window.deleteCorte = async function(id) {
-if (!confirm('⚠️ ¿Estás seguro de eliminar este corte de caja?
-Esta acción no se puede deshacer y afectará tu historial de reportes.')) return;
+if (!confirm('⚠️ ¿Estás seguro de eliminar este corte de caja?\n\nEsta acción no se puede deshacer y afectará tu historial de reportes.')) return;
 showLoading('Eliminando corte...');
 try {
 await deleteDoc(doc(db, "dailyCuts", id));
@@ -1639,6 +1687,7 @@ hideLoading();
 alert("Error al eliminar: " + error.message);
 }
 }
+
 window.printCorte = function(id) {
 const c = allCortes.find(x => x.id === id);
 if (!c) return;
@@ -1687,14 +1736,16 @@ printContainer.innerHTML = `
 <div><strong>️ Vista previa del corte</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
 <div style="display:flex;gap:10px">
 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
-<button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px"> Cerrar</button>
+<button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
 </div>
 </div>
 <div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper ticket-mode">${ticketHTML}</div></div>
 `;
 printContainer.classList.add('active');
 }
+
 function updateCorteCount() { document.getElementById('totalCortesCount').textContent = allCortes.length; }
+
 // ===== CEO / ESTADÍSTICAS =====
 function updateCEOStats() {
 const ahora = new Date();
@@ -1727,6 +1778,7 @@ renderTopMarcas(serviciosMes);
 renderMetodosPago(serviciosMes);
 renderDiaProductivo(serviciosMes);
 }
+
 function renderBarChart() {
 const ahora = new Date();
 const meses = [];
@@ -1744,6 +1796,7 @@ const height = (m.value / max) * 100;
 return `<div class="bar-item"><div class="bar-value">$${m.value > 0 ? (m.value/1000).toFixed(1) + 'k' : '0'}</div><div class="bar" style="height:${Math.max(height, 2)}%"></div><div class="bar-label">${m.label}</div></div>`;
 }).join('');
 }
+
 function renderTopServicios(servicios) {
 const container = document.getElementById('topServiciosList');
 if (servicios.length === 0) { container.innerHTML = '<p class="text-slate-400 text-center py-4">Sin datos este mes</p>'; return; }
@@ -1764,6 +1817,7 @@ container.innerHTML = top.map(([nombre, data], i) => `
 </div>
 `).join('');
 }
+
 function renderTopMarcas(servicios) {
 const container = document.getElementById('topMarcasList');
 if (servicios.length === 0) { container.innerHTML = '<p class="text-slate-400 text-center py-4">Sin datos este mes</p>'; return; }
@@ -1782,6 +1836,7 @@ container.innerHTML = top.map(([marca, count], i) => `
 </div>
 `).join('');
 }
+
 function renderMetodosPago(servicios) {
 const container = document.getElementById('metodosPagoList');
 if (servicios.length === 0) { container.innerHTML = '<p class="text-slate-400 text-center py-4">Sin datos este mes</p>'; return; }
@@ -1798,6 +1853,7 @@ return `<div>
 </div>`;
 }).join('');
 }
+
 function renderDiaProductivo(servicios) {
 if (servicios.length === 0) { document.getElementById('diaProductivoNombre').textContent = '—'; document.getElementById('diaProductivoDetalle').textContent = 'Sin datos este mes'; return; }
 const dias = {};
@@ -1813,6 +1869,7 @@ const top = Object.entries(dias).sort((a,b) => b[1].total - a[1].total)[0];
 document.getElementById('diaProductivoNombre').textContent = top[0];
 document.getElementById('diaProductivoDetalle').textContent = `${top[1].count} servicios • $${top[1].total.toFixed(2)} en ingresos`;
 }
+
 // ===== CAJA =====
 function loadCajaHoy() {
 const hoy = new Date();
@@ -1833,6 +1890,7 @@ document.getElementById('cajaHoyRefacciones').textContent = '$' + refacciones.to
 document.getElementById('cajaHoyGastos').textContent = '$' + gastos.toFixed(2);
 document.getElementById('cajaHoyGanancia').textContent = '$' + ganancia.toFixed(2);
 }
+
 document.getElementById('expenseForm').addEventListener('submit', async function(e) {
 e.preventDefault();
 showLoading('Registrando gasto...');
@@ -1845,6 +1903,7 @@ document.getElementById('expenseDate').valueAsDate = new Date();
 showToast('✅ Gasto registrado');
 } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
+
 function loadExpenses() {
 const tbody = document.getElementById('expensesList');
 tbody.innerHTML = allExpenses.length ? allExpenses.map(e => `<tr class="hover:bg-slate-50">
@@ -1865,16 +1924,19 @@ document.getElementById('cajaIngresos').textContent = '$' + ingresos.toFixed(2);
 document.getElementById('cajaRefacciones').textContent = '$' + gastoRefacciones.toFixed(2);
 document.getElementById('cajaBalance').textContent = '$' + (ingresos - gastoRefacciones - te).toFixed(2);
 }
+
 window.deleteExp = async function(id) {
 if (!confirm('¿Eliminar este gasto?')) return;
 try { await deleteDoc(doc(db, "expenses", id)); showToast('️ Gasto eliminado'); } catch (error) { console.error(error); }
 }
+
 function refreshAll() {
 updateDashboard();
 loadServices();
 renderStatusFilters();
 loadCajaHoy();
 }
+
 function updateDashboard() {
 const activas = allServices.filter(s => s.service.status !== 'Entregado').length;
 document.getElementById('kpiActivas').textContent = activas;
@@ -1899,6 +1961,7 @@ tbody.innerHTML = recent.map(s => `
 `).join('');
 }
 }
+
 function renderStatusFilters() {
 const counts = {};
 STATUSES.forEach(s => counts[s] = 0);
@@ -1909,7 +1972,9 @@ container.innerHTML = `
 ${STATUSES.map(s => `<button onclick="setStatusFilter('${s}')" class="whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium transition ${statusFilter === s ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">${s} (${counts[s]})</button>`).join('')}
 `;
 }
+
 window.setStatusFilter = function(s) { statusFilter = s; renderStatusFilters(); loadServices(); }
+
 function loadServices() {
 const search = document.getElementById('searchClient')?.value.toLowerCase() || '';
 const filtered = allServices.filter(s => {
@@ -1940,12 +2005,14 @@ ${cobrarBtn}
 </tr>`;
 }).join('');
 }
+
 function loadConfigForm() {
 document.getElementById('cfgWorkshopName').value = workshopSettings.workshopName;
 document.getElementById('cfgPhone').value = workshopSettings.phone;
 document.getElementById('cfgPrintFormat').value = workshopSettings.printFormat;
 document.getElementById('cfgPolicies').value = workshopSettings.policies;
 }
+
 document.getElementById('configForm').addEventListener('submit', async function(e) {
 e.preventDefault();
 showLoading('Guardando configuración...');
@@ -1960,6 +2027,7 @@ hideLoading();
 showToast('✅ Configuración guardada');
 } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
+
 function showLoading(text) { document.getElementById('loadingText').textContent = text; document.getElementById('loading').classList.remove('hidden'); }
 function hideLoading() { document.getElementById('loading').classList.add('hidden'); }
 function showToast(msg) {
@@ -1969,6 +2037,7 @@ toast.textContent = msg;
 document.body.appendChild(toast);
 setTimeout(() => toast.remove(), 3000);
 }
+
 document.getElementById('expenseDate').valueAsDate = new Date();
 </script>
 </body>
