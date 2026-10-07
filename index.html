@@ -1012,7 +1012,8 @@ document.getElementById('serviceForm').addEventListener('submit', async function
       problem: document.getElementById('problemDescription').value, 
       accessories: document.getElementById('accessories').value, 
       physCondition: physConditions,
-      password: document.getElementById('devicePassword').value || ''
+      password: document.getElementById('devicePassword').value || '',
+      physCondition: physConditions, password: document.getElementById('devicePassword').value || '', accessType: document.querySelector('input[name="accessType"]:checked').value
     },
     service: { 
       status: document.getElementById('serviceStatus').value, 
