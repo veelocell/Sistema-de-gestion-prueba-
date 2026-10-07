@@ -504,37 +504,7 @@ body { font-family: 'Inter', sans-serif; }
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Modelo *</label><input type="text" id="deviceModel" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">IMEI / Serie</label><input type="text" id="deviceIMEI" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Entrega estimada</label><input type="date" id="estimatedDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-          <div class="md:col-span-2">
-  <label class="block text-sm font-medium text-slate-700 mb-2">🔐 Contraseña / Patrón del equipo</label>
-  <div class="flex gap-3 mb-3">
-    <label class="flex-1 cursor-pointer">
-      <input type="radio" name="accessType" value="codigo" checked class="peer hidden" onchange="toggleAccessType()">
-      <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-3 text-center text-sm font-medium transition hover:bg-slate-50">
-        🔑 Código / Contraseña
-      </div>
-    </label>
-    <label class="flex-1 cursor-pointer">
-      <input type="radio" name="accessType" value="patron" class="peer hidden" onchange="toggleAccessType()">
-      <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-3 text-center text-sm font-medium transition hover:bg-slate-50">
-        ⭕ Patrón
-      </div>
-    </label>
-  </div>
-  
-  <!-- Campo para código/contraseña -->
-  <div id="codigoField">
-    <input type="text" id="devicePassword" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 1234, abc123, o dejar vacío si no tiene">
-    <p class="text-xs text-slate-500 mt-1">Necesario para probar el equipo después de reparar</p>
-  </div>
-  
-  <!-- Aviso para patrón -->
-  <div id="patronField" class="hidden">
-    <div class="bg-amber-50 border-2 border-amber-200 rounded-lg p-4 text-center">
-      <p class="text-amber-800 font-semibold">️ El patrón se anotará en la nota física</p>
-      <p class="text-sm text-amber-700 mt-1">El cliente dibujará su patrón en la hoja impresa al momento de la recepción</p>
-    </div>
-  </div>
-</div>
+          <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">🔐 Contraseña / Patrón</label><input type="text" id="devicePassword" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 1234, patrón o sin contraseña"></div>
         </div>
         <div class="mt-4">
           <label class="block text-sm font-medium text-slate-700 mb-2">Estado físico del equipo al recibir:</label>
@@ -1011,8 +981,8 @@ document.getElementById('serviceForm').addEventListener('submit', async function
       imei: document.getElementById('deviceIMEI').value, 
       problem: document.getElementById('problemDescription').value, 
       accessories: document.getElementById('accessories').value, 
-      password: document.getElementById('devicePassword').value || '',
-      physCondition: physConditions, password: document.getElementById('devicePassword').value || '' },
+      physCondition: physConditions,
+      password: document.getElementById('devicePassword').value || ''
     },
     service: { 
       status: document.getElementById('serviceStatus').value, 
@@ -1046,24 +1016,6 @@ document.getElementById('serviceForm').addEventListener('submit', async function
   } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
 
-// Función para alternar entre Código y Patrón
-window.toggleAccessType = function() {
-  const accessType = document.querySelector('input[name="accessType"]:checked').value;
-  const codigoField = document.getElementById('codigoField');
-  const patronField = document.getElementById('patronField');
-  const passwordInput = document.getElementById('devicePassword');
-  
-  if (accessType === 'codigo') {
-    codigoField.classList.remove('hidden');
-    patronField.classList.add('hidden');
-    passwordInput.removeAttribute('required');
-  } else {
-    codigoField.classList.add('hidden');
-    patronField.classList.remove('hidden');
-    passwordInput.value = '';
-  }
-};
-  
 window.openAddPartModal = function() {
   selectedServiceForPart = null;
   document.getElementById('addPartStep1').classList.remove('hidden');
@@ -1292,23 +1244,7 @@ window.printReceptionTicket = function(id) {
         <div class="letter-section">
           <h3>Equipo Recibido</h3>
           <div class="letter-row"><span><strong>Equipo:</strong></span><strong>${s.device.brand} ${s.device.model}</strong></div>
-          ${s.device.imei ? `<div class="letter-row"><span><strong>IMEI/Serie:</strong></span><span>${s.device.imei}</span></div>` : 
-            ${s.device.accessType === 'patron' ? `
-  <div style="margin:10px 0; padding:10px; border:1px dashed #000; border-radius:6px; background:#fafafa;">
-    <strong style="font-size:11px; display:block; margin-bottom:8px;"> Patrón de desbloqueo (dibujar abajo):</strong>
-    <div style="display:grid; grid-template-columns:repeat(3, 45px); grid-template-rows:repeat(3, 45px); gap:12px; margin:0 auto; width:fit-content;">
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-    </div>
-  </div>
-` : (s.device.password ? `<div class="letter-row"><span><strong>Contraseña:</strong></span><span class="font-bold text-amber-700">${s.device.password}</span></div>` : '')}
+          ${s.device.imei ? `<div class="letter-row"><span><strong>IMEI/Serie:</strong></span><span>${s.device.imei}</span></div>` : ''}
           ${s.device.password ? `<div class="letter-row"><span><strong>Contraseña/Patrón:</strong></span><span class="font-bold text-amber-700">${s.device.password}</span></div>` : ''}
           <div style="margin:6px 0"><strong>Problema:</strong> ${s.device.problem || '—'}</div>
           <div style="margin:6px 0"><strong>Estado físico:</strong> ${conditions}</div>
@@ -1490,17 +1426,8 @@ window.openDetail = function(id) {
       ${s.device.accessories ? `<p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Trabajo a realizar</p><p class="text-sm text-slate-700">${s.device.accessories}</p>` : ''}
       <p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Estado físico al recibir</p>
       <p class="text-sm text-slate-700">${conditions}</p>
-    ${s.device.accessType === 'patron' ? `
-  <div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-    <p class="text-xs font-semibold text-amber-700 uppercase mb-1">🔐 Patrón de desbloqueo</p>
-    <p class="text-sm text-slate-700">Ver en nota física impresa</p>
-  </div>
-` : (s.device.password ? `
-  <div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-    <p class="text-xs font-semibold text-amber-700 uppercase mb-1">🔐 Contraseña del equipo</p>
-    <p class="text-sm text-slate-800 font-bold">${s.device.password}</p>
-  </div>
-` : '')}
+      ${s.device.password ? `<p class="text-xs font-semibold text-amber-600 uppercase mb-1 mt-3">🔐 Contraseña/Patrón</p><p class="text-sm text-amber-700 font-bold">${s.device.password}</p>` : ''}
+    </div>
     ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-slate-800">${s.service.diagnosis}</p></div>` : ''}
     ${s.service.technicalNotes ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-amber-700 uppercase mb-1">Notas técnicas</p><p class="text-slate-800">${s.service.technicalNotes}</p></div>` : ''}
     ${photosHTML}
