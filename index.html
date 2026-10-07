@@ -1005,7 +1005,7 @@ document.getElementById('serviceForm').addEventListener('submit', async function
   const svc = {
     folio: 'SRV-' + Date.now().toString().slice(-6),
     client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
-    device: { 
+    device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value, physCondition: physConditions, password: document.getElementById('devicePassword').value || '', accessType: document.querySelector('input[name="accessType"]:checked').value },
       brand: document.getElementById('deviceBrand').value, 
       model: document.getElementById('deviceModel').value, 
       imei: document.getElementById('deviceIMEI').value, 
