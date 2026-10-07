@@ -1046,6 +1046,24 @@ document.getElementById('serviceForm').addEventListener('submit', async function
   } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
 
+  // Función para alternar entre Código y Patrón
+window.toggleAccessType = function() {
+  const accessType = document.querySelector('input[name="accessType"]:checked').value;
+  const codigoField = document.getElementById('codigoField');
+  const patronField = document.getElementById('patronField');
+  const passwordInput = document.getElementById('devicePassword');
+  
+  if (accessType === 'codigo') {
+    codigoField.classList.remove('hidden');
+    patronField.classList.add('hidden');
+    passwordInput.removeAttribute('required');
+  } else {
+    codigoField.classList.add('hidden');
+    patronField.classList.remove('hidden');
+    passwordInput.value = '';
+  }
+};
+  
 window.openAddPartModal = function() {
   selectedServiceForPart = null;
   document.getElementById('addPartStep1').classList.remove('hidden');
