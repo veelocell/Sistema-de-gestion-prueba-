@@ -1294,6 +1294,22 @@ window.printReceptionTicket = function(id) {
           <h3>Equipo Recibido</h3>
           <div class="letter-row"><span><strong>Equipo:</strong></span><strong>${s.device.brand} ${s.device.model}</strong></div>
           ${s.device.imei ? `<div class="letter-row"><span><strong>IMEI/Serie:</strong></span><span>${s.device.imei}</span></div>` : ''}
+          ${s.device.accessType === 'patron' ? `
+  <div style="margin:10px 0; padding:10px; border:1px dashed #000; border-radius:6px; background:#fafafa;">
+    <strong style="font-size:11px; display:block; margin-bottom:8px;"> Patrón de desbloqueo (dibujar abajo):</strong>
+    <div style="display:grid; grid-template-columns:repeat(3, 45px); grid-template-rows:repeat(3, 45px); gap:12px; margin:0 auto; width:fit-content;">
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+    </div>
+  </div>
+` : (s.device.password ? `<div class="letter-row"><span><strong>Contraseña:</strong></span><span class="font-bold text-amber-700">${s.device.password}</span></div>` : '')}
           ${s.device.password ? `<div class="letter-row"><span><strong>Contraseña/Patrón:</strong></span><span class="font-bold text-amber-700">${s.device.password}</span></div>` : ''}
           <div style="margin:6px 0"><strong>Problema:</strong> ${s.device.problem || '—'}</div>
           <div style="margin:6px 0"><strong>Estado físico:</strong> ${conditions}</div>
