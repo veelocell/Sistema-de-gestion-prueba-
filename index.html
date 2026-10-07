@@ -372,7 +372,7 @@ Tomar/Subir Fotos
 <h3 class="text-xl font-bold mb-2">Nueva Orden</h3>
 <p class="text-indigo-100 text-sm">Registra un nuevo servicio de reparación</p>
 </div>
-<button onclick="openModal('')" class="mt-6 w-full bg-white text-brand-600 font-semibold py-3 rounded-xl hover:bg-indigo-50 transition shadow-lg">Crear orden</button>
+<button onclick="openModal('newOrderModal')" class="mt-6 w-full bg-white text-brand-600 font-semibold py-3 rounded-xl hover:bg-indigo-50 transition shadow-lg">Crear orden</button>
 </div>
 </div>
 <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
@@ -392,7 +392,7 @@ Tomar/Subir Fotos
 <section id="ordenes" class="section-content hidden fade-in">
 <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">Órdenes de Servicio</h2><p class="text-slate-500 text-sm">Gestiona todas las órdenes de reparación</p></div>
 <div class="flex flex-wrap gap-3 mb-6">
-<button onclick="openModal('')" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Nueva Orden</button>
+<button onclick="openModal('newOrderModal')" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Nueva Orden</button>
 <button onclick="openAddPartModal()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Agregar Refacción</button>
 </div>
 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-6"><div class="flex items-center gap-2 overflow-x-auto pb-2" id="statusFilters"></div></div>
@@ -570,7 +570,7 @@ Tomar/Subir Fotos
 </div>
 
 <!-- MODALES -->
-<div class="modal-overlay" id="">
+<div class="modal-overlay" id="newOrderModal">
 <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
 <h2 class="text-xl font-bold text-slate-800">📝 Nueva Orden de Servicio</h2>
@@ -589,7 +589,6 @@ Tomar/Subir Fotos
 <div><label class="block text-sm font-medium text-slate-700 mb-1">Modelo *</label><input type="text" id="deviceModel" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
 <div><label class="block text-sm font-medium text-slate-700 mb-1">IMEI / Serie</label><input type="text" id="deviceIMEI" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
 <div><label class="block text-sm font-medium text-slate-700 mb-1">Entrega estimada</label><input type="date" id="estimatedDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-<div><label class="block text-sm font-medium text-slate-700 mb-1">🔐 Contraseña / Patrón de desbloqueo</label><input type="text" id="devicePassword" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 1234, patrón, sin contraseña..."><p class="text-xs text-slate-500 mt-1">Necesario para probar el equipo después de reparar</p></div>
 </div>
 <div class="mt-4">
 <label class="block text-sm font-medium text-slate-700 mb-2">Estado físico del equipo al recibir:</label>
@@ -1076,7 +1075,7 @@ const physConditions = Array.from(document.querySelectorAll('input[name="physCon
 const svc = {
 folio: 'SRV-' + Date.now().toString().slice(-6),
 client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
-device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value, device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value, physCondition: physConditions, password: document.getElementById('devicePassword').value || '' }, },
+device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value, physCondition: physConditions },
 service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: rc, paidAmount: 0, paidDate: null, diagnosis: '', technicalNotes: '', warranty: '', advancePayment: advance, remainingAmount: rc - advance },
 date: new Date().toISOString(),
 userEmail: currentUser.email,
@@ -1323,7 +1322,6 @@ const half = `
 <h3>Equipo Recibido</h3>
 <div class="letter-row"><span><strong>Equipo:</strong></span><strong>${s.device.brand} ${s.device.model}</strong></div>
 ${s.device.imei ? `<div class="letter-row"><span><strong>IMEI/Serie:</strong></span><span>${s.device.imei}</span></div>` : ''}
-${s.device.password ? `<div class="letter-row"><span><strong>Contraseña:</strong></span><span class="font-bold text-amber-700">${s.device.password}</span></div>` : ''}
 <div style="margin:6px 0"><strong>Problema:</strong> ${s.device.problem || '—'}</div>
 <div style="margin:6px 0"><strong>Estado físico:</strong> ${conditions}</div>
 ${s.device.accessories ? `<div style="margin:6px 0"><strong>Trabajo a realizar:</strong> ${s.device.accessories}</div>` : ''}
@@ -1496,7 +1494,6 @@ document.getElementById('detailContent').innerHTML = `
 <div class="grid md:grid-cols-2 gap-4 mb-6">
 <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Cliente</p><p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p></div>
 <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="text-sm font-semibold">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
-${s.device.password ? `<p class="text-xs text-amber-600 mt-1 font-semibold">🔐 Contraseña: ${s.device.password}</p>` : ''}
 </div>
 <div class="bg-slate-50 rounded-xl p-4 mb-4">
 <p class="text-xs font-semibold text-slate-500 uppercase mb-1">Problema reportado</p>
