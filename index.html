@@ -734,24 +734,38 @@ container.innerHTML = photos.map(photo => `
 window.handlePhotoUpload = async function(event) {
 const files = event.target.files;
 if (!files || files.length === 0) return;
+
 const progressDiv = document.getElementById('uploadProgress');
 const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressText');
+
 progressDiv.classList.remove('hidden');
+
 let uploaded = 0;
+const totalFiles = files.length;
+
 for (let i = 0; i < files.length; i++) {
 const file = files[i];
-const storagePath = `evidence/${currentEvidenceFolio}/${Date.now()}_${file.name}`;
+const timestamp = Date.now();
+const randomId = Math.random().toString(36).substring(7);
+const fileName = `${timestamp}_${randomId}_${file.name}`;
+const storagePath = `evidence/${currentEvidenceFolio}/${fileName}`;
+
+try {
 const storageRef = ref(storage, storagePath);
 const uploadTask = uploadBytesResumable(storageRef, file);
+
 uploadTask.on('state_changed',
 (snapshot) => {
 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-progressBar.style.width = progress + '%';
-progressText.textContent = `Subiendo ${Math.round(progress)}%`;
+const totalProgress = ((uploaded + (i * (progress/100))) / totalFiles) * 100;
+progressBar.style.width = totalProgress + '%';
+progressText.textContent = `Subiendo ${Math.round(totalProgress)}%`;
 },
 (error) => {
-alert('Error al subir: ' + error.message);
+console.error('Error en upload:', error);
+alert('Error al subir la foto: ' + error.message);
+progressDiv.classList.add('hidden');
 },
 async () => {
 const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
@@ -760,19 +774,29 @@ folio: currentEvidenceFolio,
 url: downloadURL,
 storagePath: storagePath,
 uploadedAt: new Date().toISOString(),
-uploadedBy: 'Evidencia Portal'
+uploadedBy: 'Evidencia Portal',
+fileName: file.name
 });
+
 uploaded++;
-progressText.textContent = `Subidas ${uploaded} de ${files.length}`;
-if (uploaded === files.length) {
+const totalProgress = (uploaded / totalFiles) * 100;
+progressBar.style.width = totalProgress + '%';
+progressText.textContent = `Subidas ${uploaded} de ${totalFiles}`;
+
+if (uploaded === totalFiles) {
 setTimeout(() => {
 progressDiv.classList.add('hidden');
 progressBar.style.width = '0%';
-}, 1000);
+}, 1500);
 }
 }
 );
+} catch (error) {
+console.error('Error:', error);
+alert('Error al procesar la foto: ' + error.message);
 }
+}
+
 event.target.value = '';
 }
 
