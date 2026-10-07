@@ -1179,38 +1179,31 @@ const isDouble = workshopSettings.printFormat === 'letter_double';
 const fecha = new Date(s.date).toLocaleString('es-MX');
 const tech = s.technician || 'No especificado';
 const conditions = s.device.physCondition && s.device.physCondition.length > 0 ? s.device.physCondition.join(', ') : 'Ninguno especificado';
-// QR personalizado que apunta a la URL actual con el folio
-const currentUrl = window.location.origin + window.location.pathname;
-const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(currentUrl + '?folio=' + s.folio)}`;
+
 let html = '';
 if (isDouble) {
 const half = `
 <div class="letter-half">
 <div class="letter-header">
 <h2>${workshopSettings.workshopName}</h2>
-<p style="font-size:14px;font-weight:bold;margin-top:5px">NOTA DE RECEPCIÓN ${s.folio}</p>
+<p>NOTA DE RECEPCION ${s.folio}</p>
 </div>
 <div class="letter-section">
 <h3>Datos del Cliente</h3>
-<div class="letter-row"><span><strong>Nombre:</strong></span><strong>${s.client.name}</strong></div>
-<div class="letter-row"><span><strong>Teléfono:</strong></span><strong>${s.client.phone}</strong></div>
-<div class="letter-row"><span><strong>Fecha:</strong></span><span>${fecha}</span></div>
+<div class="letter-row"><span>Nombre:</span><strong>${s.client.name}</strong></div>
+<div class="letter-row"><span>Teléfono:</span><strong>${s.client.phone}</strong></div>
 </div>
 <div class="letter-section">
 <h3>Equipo Recibido</h3>
-<div class="letter-row"><span><strong>Equipo:</strong></span><strong>${s.device.brand} ${s.device.model}</strong></div>
-${s.device.imei ? `<div class="letter-row"><span><strong>IMEI/Serie:</strong></span><span>${s.device.imei}</span></div>` : ''}
-<div style="margin:6px 0"><strong>Problema reportado:</strong> ${s.device.problem || '—'}</div>
+<div class="letter-row"><span>Equipo:</span><strong>${s.device.brand} ${s.device.model}</strong></div>
+${s.device.imei ? `<div class="letter-row"><span>IMEI/Serie:</span><span>${s.device.imei}</span></div>` : ''}
+<div style="margin:6px 0"><strong>Problema:</strong> ${s.device.problem || '—'}</div>
 <div style="margin:6px 0"><strong>Estado físico:</strong> ${conditions}</div>
 ${s.device.accessories ? `<div style="margin:6px 0"><strong>Trabajo a realizar:</strong> ${s.device.accessories}</div>` : ''}
 </div>
 <div class="letter-section">
-<h3>Condiciones del Servicio</h3>
-<p style="font-size:11px;white-space:pre-line;line-height:1.5">${workshopSettings.policies}</p>
-</div>
-<div style="text-align:center;margin:10px 0">
-<img src="${qrUrl}" alt="QR Evidencia" style="width:100px;height:100px">
-<p style="font-size:9px;margin-top:4px">Escanea para agregar fotos de evidencia</p>
+<h3>Condiciones</h3>
+<p style="font-size:10px;white-space:pre-line">${workshopSettings.policies}</p>
 </div>
 <div class="letter-sign">
 <div>Firma del Cliente</div>
@@ -1221,13 +1214,14 @@ Contacto: ${workshopSettings.phone} | ${workshopSettings.workshopName}
 </div>
 </div>
 `;
-html = `<div class="letter-double">${half}<div style="height:30px"></div>${half}</div>`;
+html = `<div class="letter-double">${half}<div style="height:20px"></div>${half}</div>`;
 } else {
 html = `
 <div class="ticket-thermal">
-<div class="t-header"><h2>${workshopSettings.workshopName}</h2><p>NOTA DE RECEPCIÓN</p><p style="font-size:10px">${s.folio}</p></div>
+<div class="t-header"><h2>${workshopSettings.workshopName}</h2><p>RESGUARDO DE EQUIPO</p></div>
 <div class="t-divider"></div>
-<div class="t-row"><span><strong>Fecha:</strong></span><span>${fecha}</span></div>
+<div class="t-row"><span><strong>Folio:</strong></span><span><strong>${s.folio}</strong></span></div>
+<div class="t-row"><span>Fecha:</span><span>${fecha}</span></div>
 <div class="t-divider"></div>
 <p class="t-section-title">CLIENTE</p>
 <div class="t-row"><span>Nombre:</span><span>${s.client.name}</span></div>
@@ -1238,12 +1232,11 @@ html = `
 ${s.device.imei ? `<div class="t-row"><span>IMEI:</span><span>${s.device.imei}</span></div>` : ''}
 <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
 <div style="margin:4px 0"><span style="font-weight:bold">Estado físico:</span><br>${conditions}</div>
-${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bold">Trabajo a realizar:</span><br>${s.device.accessories}</div>` : ''}
+${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bold">Accesorios:</span><br>${s.device.accessories}</div>` : ''}
 <div class="t-divider"></div>
 <p class="t-section-title">CONDICIONES</p>
-<p style="font-size:9px;white-space:pre-line">${workshopSettings.policies}</p>
+<p style="font-size:10px;white-space:pre-line">${workshopSettings.policies}</p>
 <div class="t-divider"></div>
-<div class="t-qr"><img src="${qrUrl}" alt="QR Evidencia"><p style="font-size:9px;margin-top:4px">Escanea para agregar fotos</p></div>
 <div style="display:flex;justify-content:space-between;margin-top:15px;font-size:9px">
 <div style="width:45%;border-top:1px solid #000;padding-top:3px;text-align:center">Firma Cliente</div>
 <div style="width:45%;border-top:1px solid #000;padding-top:3px;text-align:center">Recibido: ${tech}</div>
@@ -1253,21 +1246,18 @@ ${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bol
 `;
 }
 const printContainer = document.getElementById('printContainer');
-printContainer.className = isDouble ? 'print-letter' : 'print-ticket';
 printContainer.innerHTML = `
 <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-<div><strong>️ Vista previa de Nota de Recepción</strong><p style="margin:0;font-size:12px;opacity:0.8">Formato: ${isDouble ? 'Hoja Carta (Doble copia)' : 'Ticket 80mm'}</p></div>
+<div><strong>🖨️ Vista previa de Nota de Recepción</strong><p style="margin:0;font-size:12px;opacity:0.8">Se abrió automáticamente al guardar</p></div>
 <div style="display:flex;gap:10px">
 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
 <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
 </div>
 </div>
-<div style="padding-top:70px;background:#f1f5f9;min-height:100vh">
-<div class="preview-wrapper ${isDouble ? 'letter-mode' : 'ticket-mode'}">${html}</div>
-</div>
+<div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper">${html}</div></div>
 `;
 printContainer.classList.add('active');
-}
+  }
 
 window.doPrint = function() { window.print(); }
 window.closePrintPreview = function() {
