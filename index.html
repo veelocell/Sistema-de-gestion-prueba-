@@ -43,7 +43,6 @@ tailwind.config = {
   .ticket-thermal .t-footer { text-align:center; margin-top: 8px; font-size: 10px; }
   .ticket-thermal .t-section-title { font-weight: bold; margin: 6px 0 3px 0; font-size: 11px; text-transform: uppercase; }
   .ticket-thermal .t-warranty { background: #f0f0f0; padding: 5px; border-radius: 3px; margin: 6px 0; }
-  .ticket-thermal .t-signature { margin-top: 30px; border-top: 1px solid #000; width: 60%; margin-left: auto; margin-right: auto; text-align: center; padding-top: 4px; font-size: 10px; }
 
   @media print {
     @page { size: 80mm auto; margin: 0; }
@@ -539,8 +538,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const USERS = [
-    { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez", role: "admin" },
-    { email: "demo@demo.com", password: "demo2024", fullName: "DEMO", role: "recepcion" }
+    { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez Hernández", role: "admin" },
+    { email: "demo@demo.com", password: "demo2024", fullName: "Juan Pérez López", role: "recepcion" }
 ];
 const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
 const STATUS_COLORS = {
@@ -785,7 +784,8 @@ window.cobrarServicio = function(id) {
 function renderCheckout(s) {
     const parts = s.service.parts || [];
     const warrantyOptions = ['30 días','60 días','90 días','180 días','1 año','Sin garantía'];
-    const currentWarranty = s.service.warranty || '30 días';
+    // Aquí se quita el default de 30 días para que se elija al cobrar
+    const currentWarranty = s.service.warranty || ''; 
     const advance = s.service.advancePayment || 0;
     const remaining = s.service.remainingAmount !== undefined ? s.service.remainingAmount : (s.service.repairCost - advance);
     
@@ -820,8 +820,9 @@ function renderCheckout(s) {
                 </div>
             </div>
             <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Garantía</label>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Garantía a otorgar</label>
                 <select id="checkoutWarranty" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
+                    <option value="">-- Seleccionar garantía --</option>
                     ${warrantyOptions.map(w => `<option value="${w}" ${currentWarranty === w ? 'selected' : ''}>${w}</option>`).join('')}
                     <option value="personalizada">Personalizada...</option>
                 </select>
@@ -845,6 +846,7 @@ window.confirmCheckout = async function() {
     const paymentMethod = document.querySelector('input[name="checkoutPayment"]:checked')?.value;
     if (!paymentMethod) { alert('Selecciona un método de pago'); return; }
     let warranty = document.getElementById('checkoutWarranty').value;
+    if (!warranty) { alert('Debes seleccionar o escribir una garantía'); return; }
     if (warranty === 'personalizada') {
         warranty = document.getElementById('checkoutWarrantyCustom').value.trim();
         if (!warranty) { alert('Escribe la garantía personalizada'); return; }
@@ -864,7 +866,7 @@ window.confirmCheckout = async function() {
 window.printTicket = function(id) {
     const s = allServices.find(x => x.id === id);
     if (!s) return;
-    const warranty = s.service.warranty || '30 días';
+    const warranty = s.service.warranty || 'No especificada';
     const paymentMethod = s.service.paymentMethod || 'No especificado';
     const paidDate = s.service.paidDate ? new Date(s.service.paidDate).toLocaleString('es-MX') : new Date().toLocaleString('es-MX');
     const isPaid = s.service.paymentStatus === 'Pagado';
@@ -1161,7 +1163,10 @@ function renderCortes() {
             <td class="p-4 text-right text-red-600">$${(c.refacciones + c.gastosPersonales).toFixed(2)}</td>
             <td class="p-4 text-right font-bold ${c.gananciaNeta >= 0 ? 'text-emerald-600' : 'text-red-600'}">$${c.gananciaNeta.toFixed(2)}</td>
             <td class="p-4 text-right">${c.serviciosCobrados}</td>
-            <td class="p-4 text-right"><button onclick="event.stopPropagation();verDetalleCorte('${c.id}')" class="text-brand-600 hover:text-brand-700 font-medium text-sm">Ver detalle</button></td>
+            <td class="p-4 text-right">
+                <button onclick="event.stopPropagation();verDetalleCorte('${c.id}')" class="text-brand-600 hover:text-brand-700 font-medium text-sm mr-2">Ver detalle</button>
+                <button onclick="event.stopPropagation();deleteCorte('${c.id}')" class="text-red-600 hover:text-red-700 font-medium text-sm" title="Eliminar corte">🗑️</button>
+            </td>
         </tr>`;
     }).join('');
 }
@@ -1206,10 +1211,82 @@ window.verDetalleCorte = function(id) {
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                 Imprimir Corte
             </button>
+            <button onclick="deleteCorte('${c.id}')" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                Eliminar Corte
+            </button>
             <button onclick="closeModal('corteDetailModal')" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 rounded-xl transition">Cerrar</button>
         </div>
     `;
     openModal('corteDetailModal');
+}
+
+window.deleteCorte = async function(id) {
+    if (!confirm('⚠️ ¿Estás seguro de eliminar este corte de caja?\n\nEsta acción no se puede deshacer y afectará tu historial de reportes.')) return;
+    showLoading('Eliminando corte...');
+    try {
+        await deleteDoc(doc(db, "dailyCuts", id));
+        hideLoading();
+        showToast('🗑️ Corte eliminado correctamente');
+        closeModal('corteDetailModal');
+    } catch (error) {
+        hideLoading();
+        alert("Error al eliminar: " + error.message);
+    }
+}
+
+window.printCorte = function(id) {
+    const c = allCortes.find(x => x.id === id);
+    if (!c) return;
+    const fecha = new Date(c.date).toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    const tipoCorte = c.type === 'dia' ? 'CORTE DIARIO' : 'CORTE MENSUAL';
+    const serviciosHTML = c.serviciosDetalle && c.serviciosDetalle.length > 0
+        ? c.serviciosDetalle.map(s => `<div class="t-row"><span>${s.folio}</span><span>$${s.monto.toFixed(2)}</span></div>`).join('')
+        : '<div class="t-row"><span>Sin servicios</span><span></span></div>';
+    const ticketHTML = `
+        <div class="ticket-thermal">
+            <div class="t-header"><h2>TALLER DE REPARACIONES</h2><p>${tipoCorte}</p></div>
+            <div class="t-divider"></div>
+            <div class="t-row"><span><strong>Fecha:</strong></span><span><strong>${fecha}</strong></span></div>
+            <div class="t-divider"></div>
+            <p class="t-section-title">RESUMEN FINANCIERO</p>
+            <div class="t-row"><span>Ingresos:</span><span>$${c.ingresos.toFixed(2)}</span></div>
+            <div class="t-row"><span>Costo refacciones:</span><span>-$${c.refacciones.toFixed(2)}</span></div>
+            <div class="t-row"><span>Gastos personales:</span><span>-$${c.gastosPersonales.toFixed(2)}</span></div>
+            <div class="t-divider"></div>
+            <div class="t-row t-total"><span>GANANCIA NETA:</span><span>$${c.gananciaNeta.toFixed(2)}</span></div>
+            <div class="t-divider"></div>
+            <p class="t-section-title">MÉTODOS DE PAGO</p>
+            <div class="t-row"><span>💵 Efectivo:</span><span>$${c.pagosEfectivo.toFixed(2)}</span></div>
+            <div class="t-row"><span>🏦 Transferencia:</span><span>$${c.pagosTransferencia.toFixed(2)}</span></div>
+            <div class="t-row"><span>💳 Tarjeta:</span><span>$${c.pagosTarjeta.toFixed(2)}</span></div>
+            <div class="t-divider"></div>
+            <p class="t-section-title">ESTADÍSTICAS</p>
+            <div class="t-row"><span>Servicios cobrados:</span><span>${c.serviciosCobrados}</span></div>
+            <div class="t-row"><span>Servicios nuevos:</span><span>${c.serviciosNuevos}</span></div>
+            <div class="t-divider"></div>
+            <p class="t-section-title">SERVICIOS INCLUIDOS</p>
+            ${serviciosHTML}
+            <div class="t-divider"></div>
+            <div class="t-footer">
+                <p>Generado por: ${c.createdBy}</p>
+                <p>${new Date(c.createdAt).toLocaleString('es-MX')}</p>
+                <p style="margin-top:10px;font-weight:bold">*** Fin del reporte ***</p>
+            </div>
+        </div>
+    `;
+    const printContainer = document.getElementById('printContainer');
+    printContainer.innerHTML = `
+        <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
+            <div><strong>🖨️ Vista previa del corte</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
+            <div style="display:flex;gap:10px">
+                <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
+                <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
+            </div>
+        </div>
+        <div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper">${ticketHTML}</div></div>
+    `;
+    printContainer.classList.add('active');
 }
 
 function updateCorteCount() { document.getElementById('totalCortesCount').textContent = allCortes.length; }
