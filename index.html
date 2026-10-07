@@ -471,7 +471,7 @@ tailwind.config = {
           </div>
         </div>
         <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Problema reportado por el cliente *</label><textarea id="problemDescription" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
-        <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Accesorios que deja</label><textarea id="accessories" placeholder="Cargador, funda, SIM..." class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
+        <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Trabajo a realizar</label><textarea id="accessories" placeholder="Revision, Cambio de pantalla..." class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
       </div>
       <div><h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Servicio</h3>
         <div class="grid md:grid-cols-2 gap-4">
@@ -512,7 +512,7 @@ tailwind.config = {
         </div>
         <div class="space-y-4">
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Descripción *</label><input type="text" id="newPartDesc" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: Pantalla, batería..."></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Costo interno de la refacción *</label><input type="number" id="newPartCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Costo de la refacción *</label><input type="number" id="newPartCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"></div>
           <button onclick="confirmAddPart()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Agregar Refacción</button>
         </div>
       </div>
@@ -541,21 +541,21 @@ tailwind.config = {
       <div>
         <label class="block text-sm font-semibold text-slate-700 mb-1">Diagnóstico técnico</label>
         <textarea id="editDiagnosis" rows="3" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Descripción del diagnóstico realizado..."></textarea>
+        <p class="text-xs text-slate-500 mt-1">Diagnóstico técnico (✅Se incluye en el ticket impreso del cliente)</p>
       </div>
       <div><label class="block text-sm font-semibold text-slate-700 mb-1">Notas técnicas</label><textarea id="editTechnicalNotes" rows="2" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Observaciones, detalles técnicos..."></textarea></div>
       <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Precio total al cliente</label><input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Precio total al cliente</label><input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><p class="text-xs text-slate-500 mt-1">Lo que se cobra al cliente</p></div>
         <div><label class="block text-sm font-semibold text-slate-700 mb-1">Método de pago</label><select id="editPaymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div><label class="block text-sm font-semibold text-slate-700 mb-1">Entrega estimada</label><input type="date" id="editDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Anticipo recibido</label><input type="number" id="editAdvancePayment" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Anticipo recibido</label><input type="number" id="editAdvancePayment" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><p class="text-xs text-slate-500 mt-1">Lo que el cliente dejó al inicio</p></div>
       </div>
       <div><label class="block text-sm font-semibold text-slate-700 mb-2">Refacciones</label><div id="editPartsList" class="space-y-2"></div></div>
       <div class="bg-slate-50 rounded-xl p-4 space-y-1 text-sm">
         <div class="flex justify-between"><span class="text-slate-600">Costo refacciones:</span><span class="font-semibold">$<span id="editTotalParts">0.00</span></span></div>
         <div class="flex justify-between"><span class="text-slate-600">Precio al cliente:</span><span class="font-semibold">$<span id="editRepairCostDisplay">0.00</span></span></div>
-        <div class="flex justify-between pt-2 border-t border-slate-200"><span class="font-semibold text-slate-800">Ganancia neta estimada:</span><span class="font-bold text-emerald-600">$<span id="editNetProfit">0.00</span></span></div>
       </div>
       <button onclick="saveEdit()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar Cambios</button>
     </div>
@@ -641,38 +641,6 @@ let workshopSettings = {
   policies: "• 30 días de garantía.\n• No nos hacemos responsables por datos.\n• Equipo no reclamado en 60 días se considera abandonado."
 };
 
-// ========== NUEVAS FUNCIONES PARA MANEJO DE CAJA CON LOCALSTORAGE ==========
-// La "apertura de caja" se guarda en localStorage con la fecha del día.
-// Esto evita que al refrescar o cerrar la página se vuelva a pedir abrir caja.
-// El "corte de caja" sigue siendo un documento en Firebase que se genera manualmente al final del día.
-
-function getTodayKey() {
-  const hoy = new Date();
-  return `cashSession_${hoy.getFullYear()}-${hoy.getMonth()+1}-${hoy.getDate()}`;
-}
-
-function getCashSessionToday() {
-  const key = getTodayKey();
-  const data = localStorage.getItem(key);
-  if (!data) return null;
-  try { return JSON.parse(data); } catch { return null; }
-}
-
-function saveCashSessionToday(initialCash) {
-  const key = getTodayKey();
-  const session = {
-    date: new Date().toISOString(),
-    initialCash: initialCash,
-    openedBy: currentUser ? currentUser.fullName : 'Desconocido'
-  };
-  localStorage.setItem(key, JSON.stringify(session));
-}
-
-function isCashOpenToday() {
-  return getCashSessionToday() !== null;
-}
-// ========== FIN NUEVAS FUNCIONES ==========
-
 async function loadSettings() {
   const docRef = doc(db, "settings", "general");
   unsubscribeSettings = onSnapshot(docRef, (docSnap) => {
@@ -747,24 +715,27 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     }
 });
 
-// MODIFICADO: Solo pide abrir caja si NO hay sesión de caja abierta HOY en localStorage
 function checkOpenCash() {
-  if (currentUser.role !== 'admin') return;
-  // Espera un poco para que carguen los datos iniciales
-  setTimeout(() => {
-    if (!isCashOpenToday()) {
-      openModal('openCashModal');
-    }
-  }, 800);
+  const hoyStr = new Date().toDateString();
+  const cashOpenedToday = localStorage.getItem('cashOpened_' + hoyStr);
+  if (!cashOpenedToday && currentUser.role === 'admin') {
+    setTimeout(() => openModal('openCashModal'), 1000);
+  }
 }
 
-// MODIFICADO: Ya NO crea un corte en Firebase. Solo guarda en localStorage.
-window.confirmOpenCash = function() {
+window.confirmOpenCash = async function() {
   const initialCash = parseFloat(document.getElementById('initialCash').value) || 0;
-  saveCashSessionToday(initialCash);
+  const hoyStr = new Date().toDateString();
+  
+  localStorage.setItem('cashOpened_' + hoyStr, JSON.stringify({
+    initialCash: initialCash,
+    openedAt: new Date().toISOString(),
+    openedBy: currentUser.fullName
+  }));
+  
   closeModal('openCashModal');
+  showToast('✅ Caja abierta exitosamente');
   loadCajaHoy();
-  showToast('✅ Caja abierta exitosamente con $' + initialCash.toFixed(2));
 }
 
 function showApp() {
@@ -1269,7 +1240,6 @@ window.openDetail = function(id) {
 }
 
 // ===== CORTES DE CAJA =====
-// MODIFICADO: El corte diario ahora lee el saldo inicial de localStorage (si existe)
 window.generarCorteDiario = async function() {
     const hoy = new Date();
     const hoyStr = hoy.toDateString();
@@ -1290,9 +1260,8 @@ window.generarCorteDiario = async function() {
     const pagosTransferencia = serviciosHoy.filter(s => s.service.paymentMethod === 'Transferencia').reduce((sum, s) => sum + s.service.repairCost, 0);
     const pagosTarjeta = serviciosHoy.filter(s => s.service.paymentMethod === 'Tarjeta').reduce((sum, s) => sum + s.service.repairCost, 0);
     
-    // MODIFICADO: Lee el saldo inicial de localStorage, no de Firebase
-    const cashSession = getCashSessionToday();
-    const initialCash = cashSession ? (cashSession.initialCash || 0) : 0;
+    const cashOpenedData = localStorage.getItem('cashOpened_' + hoyStr);
+    const initialCash = cashOpenedData ? JSON.parse(cashOpenedData).initialCash : 0;
     
     const corte = {
         type: 'dia', date: hoy.toISOString(), dateLabel: hoy.toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' }),
@@ -1303,6 +1272,7 @@ window.generarCorteDiario = async function() {
     };
     try { 
         await addDoc(collection(db, "dailyCuts"), corte); 
+        localStorage.removeItem('cashOpened_' + hoyStr);
         hideLoading(); 
         showToast('✅ Corte del día generado exitosamente'); 
     } catch (error) { hideLoading(); alert("Error: " + error.message); }
@@ -1389,7 +1359,6 @@ window.verDetalleCorte = function(id) {
             <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💳 Tarjeta</p><p class="font-bold text-slate-800">$${(c.pagosTarjeta||0).toFixed(2)}</p></div>
         </div>
         <div class="bg-slate-50 rounded-xl p-4 mb-6">
-            <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Saldo inicial</span><span class="font-semibold">$${(c.initialCash||0).toFixed(2)}</span></div>
             <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Servicios cobrados</span><span class="font-semibold">${c.serviciosCobrados||0}</span></div>
             <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Servicios nuevos</span><span class="font-semibold">${c.serviciosNuevos||0}</span></div>
             <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Costo refacciones</span><span class="font-semibold text-amber-600">$${(c.refacciones||0).toFixed(2)}</span></div>
@@ -1442,7 +1411,6 @@ window.printCorte = function(id) {
             <div class="t-row"><span><strong>Fecha:</strong></span><span><strong>${fecha}</strong></span></div>
             <div class="t-divider"></div>
             <p class="t-section-title">RESUMEN FINANCIERO</p>
-            <div class="t-row"><span>Saldo inicial:</span><span>$${(c.initialCash||0).toFixed(2)}</span></div>
             <div class="t-row"><span>Ingresos:</span><span>$${(c.ingresos||0).toFixed(2)}</span></div>
             <div class="t-row"><span>Costo refacciones:</span><span>-$${(c.refacciones||0).toFixed(2)}</span></div>
             <div class="t-row"><span>Gastos personales:</span><span>-$${(c.gastosPersonales||0).toFixed(2)}</span></div>
@@ -1609,9 +1577,12 @@ function renderDiaProductivo(servicios) {
 }
 
 // ===== CAJA =====
-// MODIFICADO: Lee el saldo inicial de localStorage
 function loadCajaHoy() {
     const hoy = new Date();
+    const hoyStr = hoy.toDateString();
+    const cashOpenedData = localStorage.getItem('cashOpened_' + hoyStr);
+    const initialCash = cashOpenedData ? JSON.parse(cashOpenedData).initialCash : 0;
+    
     const hoyInicio = new Date(hoy); hoyInicio.setHours(0,0,0,0);
     const hoyFin = new Date(hoy); hoyFin.setHours(23,59,59,999);
     const serviciosHoy = allServices.filter(s => { const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= hoyInicio && paidDate <= hoyFin; });
@@ -1620,10 +1591,6 @@ function loadCajaHoy() {
     const refacciones = serviciosHoy.reduce((sum, s) => sum + (s.service.totalParts || 0), 0);
     const gastos = gastosHoy.reduce((sum, e) => sum + e.amount, 0);
     const ganancia = ingresos - refacciones - gastos;
-    
-    // MODIFICADO: Lee de localStorage
-    const cashSession = getCashSessionToday();
-    const initialCash = cashSession ? (cashSession.initialCash || 0) : 0;
     
     document.getElementById('cajaHoyInicial').textContent = '$' + initialCash.toFixed(2);
     document.getElementById('cajaHoyIngresos').textContent = '$' + ingresos.toFixed(2);
