@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Taller de Reparaciones</title>
+<title>MiTallerPro</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
@@ -30,7 +30,6 @@ tailwind.config = {
   ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:4px; }
   ::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
 
-  /* ===== SISTEMA DE IMPRESIÓN ===== */
   #printContainer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; overflow-y: auto; padding: 20px; }
   #printContainer.active { display: block; }
   .preview-wrapper { max-width: 380px; margin: 20px auto; background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
@@ -44,6 +43,7 @@ tailwind.config = {
   .ticket-thermal .t-footer { text-align:center; margin-top: 8px; font-size: 10px; }
   .ticket-thermal .t-section-title { font-weight: bold; margin: 6px 0 3px 0; font-size: 11px; text-transform: uppercase; }
   .ticket-thermal .t-warranty { background: #f0f0f0; padding: 5px; border-radius: 3px; margin: 6px 0; }
+  .ticket-thermal .t-signature { margin-top: 30px; border-top: 1px solid #000; width: 60%; margin-left: auto; margin-right: auto; text-align: center; padding-top: 4px; font-size: 10px; }
 
   @media print {
     @page { size: 80mm auto; margin: 0; }
@@ -57,7 +57,6 @@ tailwind.config = {
   .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
   .modal-overlay.active { display: flex; }
 
-  /* Gráficas CEO */
   .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 200px; padding: 10px 0; }
   .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
   .bar { width: 100%; max-width: 50px; background: linear-gradient(to top, #6366f1, #8b5cf6); border-radius: 6px 6px 0 0; transition: all 0.3s; position: relative; min-height: 4px; }
@@ -95,7 +94,6 @@ tailwind.config = {
 <!-- MAIN APP -->
 <div id="mainApp" class="hidden">
   <div class="flex h-screen overflow-hidden">
-    <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar-transition fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 flex flex-col -translate-x-full lg:translate-x-0">
       <div class="p-6 border-b border-slate-100">
         <div class="flex items-center gap-3">
@@ -108,39 +106,28 @@ tailwind.config = {
       <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-3">Operación</p>
         <button onclick="showSection('dashboard', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition" data-section="dashboard">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-          Dashboard
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg> Dashboard
         </button>
         <button onclick="showSection('ordenes', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="ordenes">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-          Órdenes
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg> Órdenes
         </button>
         <button onclick="showSection('inventario', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="inventario">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-          Inventario
-          <span class="ml-auto text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Pronto</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg> Inventario <span class="ml-auto text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Pronto</span>
         </button>
-
         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-4 px-3">Finanzas</p>
         <button onclick="showSection('caja', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="caja">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Caja
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Caja
         </button>
         <button onclick="showSection('cortes', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="cortes">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
-          Cortes de Caja
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg> Cortes de Caja
         </button>
-
         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-4 px-3">Dirección</p>
         <button onclick="showSection('ceo', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="ceo">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-          CEO / Estadísticas
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> CEO / Estadísticas
         </button>
-
         <div class="pt-4 mt-4 border-t border-slate-100">
           <button onclick="logout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-            Cerrar Sesión
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg> Cerrar Sesión
           </button>
         </div>
       </nav>
@@ -157,14 +144,11 @@ tailwind.config = {
 
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
 
-    <!-- MAIN CONTENT -->
     <div class="flex-1 flex flex-col overflow-hidden">
       <header class="bg-white border-b border-slate-200 px-4 lg:px-8 py-4">
         <div class="flex items-center justify-between gap-4">
           <div class="flex items-center gap-3">
-            <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
+            <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
             <div>
               <h2 class="text-lg lg:text-xl font-bold text-slate-800" id="greeting">Hola 👋</h2>
               <p class="text-xs text-slate-500 hidden sm:block" id="currentDate">Cargando fecha...</p>
@@ -187,7 +171,6 @@ tailwind.config = {
       </header>
 
       <main class="flex-1 overflow-y-auto p-4 lg:p-8">
-
         <!-- DASHBOARD -->
         <section id="dashboard" class="section-content fade-in">
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -208,7 +191,6 @@ tailwind.config = {
               <p class="text-2xl font-bold text-slate-800" id="kpiEntregados">0</p><p class="text-xs text-slate-500 mt-1">Entregados</p>
             </div>
           </div>
-
           <div class="grid lg:grid-cols-3 gap-6">
             <div class="lg:col-span-1">
               <div class="bg-gradient-to-br from-brand-600 to-purple-700 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30 h-full flex flex-col justify-between">
@@ -274,12 +256,9 @@ tailwind.config = {
           <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
             <div><h2 class="text-2xl font-bold text-slate-800">Caja / Finanzas</h2><p class="text-slate-500 text-sm">Resumen financiero y cortes de caja</p></div>
             <button onclick="generarCorteDiario()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition shadow-lg shadow-emerald-500/30 flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-              Generar Corte del Día
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> Generar Corte del Día
             </button>
           </div>
-
-          <!-- Resumen del día -->
           <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl p-6 text-white mb-6 shadow-lg">
             <h3 class="text-lg font-bold mb-4">📊 Resumen de hoy</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -289,16 +268,12 @@ tailwind.config = {
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Ganancia neta</p><p class="text-2xl font-bold" id="cajaHoyGanancia">$0</p></div>
             </div>
           </div>
-
-          <!-- Resumen del mes -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg shadow-emerald-500/30"><p class="text-emerald-100 text-sm mb-1">Ingresos del mes</p><p class="text-3xl font-bold" id="cajaIngresos">$0</p><p class="text-xs text-emerald-100 mt-1">(cobrado a clientes)</p></div>
             <div class="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg shadow-amber-500/30"><p class="text-amber-100 text-sm mb-1">Gasto en refacciones</p><p class="text-3xl font-bold" id="cajaRefacciones">$0</p><p class="text-xs text-amber-100 mt-1">(costo interno)</p></div>
             <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6 text-white shadow-lg shadow-red-500/30"><p class="text-red-100 text-sm mb-1">Gastos personales</p><p class="text-3xl font-bold" id="cajaGastos">$0</p></div>
             <div class="bg-gradient-to-br from-brand-500 to-brand-600 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30"><p class="text-indigo-100 text-sm mb-1">Ganancia neta</p><p class="text-3xl font-bold" id="cajaBalance">$0</p><p class="text-xs text-indigo-100 mt-1">(ingresos - gastos)</p></div>
           </div>
-
-          <!-- Formulario gasto -->
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
             <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Registrar gasto personal</h3>
             <form id="expenseForm" class="grid md:grid-cols-2 gap-4">
@@ -309,8 +284,6 @@ tailwind.config = {
               <div class="md:col-span-2"><button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2.5 rounded-lg font-medium transition">Registrar gasto</button></div>
             </form>
           </div>
-
-          <!-- Historial gastos -->
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div class="p-6 border-b border-slate-100"><h3 class="font-bold text-slate-800">Historial de gastos personales</h3></div>
             <div class="overflow-x-auto">
@@ -340,7 +313,6 @@ tailwind.config = {
               <p class="text-sm text-slate-500 mt-1">Cortes registrados</p>
             </div>
           </div>
-
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div class="p-6 border-b border-slate-100 flex items-center justify-between flex-wrap gap-2">
               <h3 class="font-bold text-slate-800">Historial de cortes</h3>
@@ -367,19 +339,16 @@ tailwind.config = {
         <!-- CEO / ESTADÍSTICAS -->
         <section id="ceo" class="section-content hidden fade-in">
           <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📊 CEO Dashboard</h2><p class="text-slate-500 text-sm">Estadísticas y métricas clave del negocio</p></div>
-
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ingresos este mes</p><p class="text-2xl font-bold text-slate-800" id="ceoIngresosMes">$0</p><p class="text-xs mt-2" id="ceoIngresosTrend"></p></div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Servicios este mes</p><p class="text-2xl font-bold text-slate-800" id="ceoServiciosMes">0</p><p class="text-xs mt-2" id="ceoServiciosTrend"></p></div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ticket promedio</p><p class="text-2xl font-bold text-slate-800" id="ceoTicketPromedio">$0</p><p class="text-xs text-slate-500 mt-2">Por servicio</p></div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ganancia neta mes</p><p class="text-2xl font-bold text-emerald-600" id="ceoGananciaMes">$0</p><p class="text-xs text-slate-500 mt-2">Después de gastos</p></div>
           </div>
-
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
             <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-800">📈 Ingresos últimos 6 meses</h3><span class="text-xs text-slate-500">Cobros realizados</span></div>
             <div class="bar-chart" id="barChartIngresos"></div>
           </div>
-
           <div class="grid lg:grid-cols-2 gap-6 mb-6">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
               <h3 class="font-bold text-slate-800 mb-4">🔧 Top servicios del mes</h3>
@@ -390,7 +359,6 @@ tailwind.config = {
               <div id="topMarcasList" class="space-y-3"></div>
             </div>
           </div>
-
           <div class="grid lg:grid-cols-2 gap-6">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
               <h3 class="font-bold text-slate-800 mb-4">💳 Métodos de pago</h3>
@@ -406,13 +374,12 @@ tailwind.config = {
             </div>
           </div>
         </section>
-
       </main>
     </div>
   </div>
 </div>
 
-<!-- MODALES (Nueva Orden, Refacción, Detalle, Editar, Cobro, Detalle Corte) -->
+<!-- MODALES -->
 <div class="modal-overlay" id="newOrderModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
@@ -440,7 +407,7 @@ tailwind.config = {
         <div class="grid md:grid-cols-2 gap-4">
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Estado *</label><select id="serviceStatus" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option>En diagnóstico</option><option>Por revisar</option><option>Revisado</option><option>En espera de autorización</option><option>Reparado (en espera de que pasen por él)</option><option>Entregado</option></select></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Precio total al cliente *</label><input type="number" id="repairCost" step="0.01" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">💰 Anticipo (opcional)</label><input type="number" id="advancePayment" step="0.01" value="0" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"><p class="text-xs text-slate-500 mt-1"></p></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">💰 Anticipo (opcional)</label><input type="number" id="advancePayment" step="0.01" value="0" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"><p class="text-xs text-slate-500 mt-1">Lo que el cliente deja al entregar el equipo</p></div>
           <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">Método de pago esperado</label><select id="paymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
         </div>
         <p class="text-xs text-slate-500 mt-3 bg-slate-50 p-3 rounded-lg">💡 Las refacciones se agregan después desde el botón "Agregar Refacción".</p>
@@ -513,7 +480,10 @@ tailwind.config = {
         <div><label class="block text-sm font-semibold text-slate-700 mb-1">Precio total al cliente</label><input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><p class="text-xs text-slate-500 mt-1">Lo que se cobra al cliente</p></div>
         <div><label class="block text-sm font-semibold text-slate-700 mb-1">Método de pago</label><select id="editPaymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
       </div>
-      <div><label class="block text-sm font-semibold text-slate-700 mb-1">Entrega estimada</label><input type="date" id="editDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Entrega estimada</label><input type="date" id="editDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Anticipo recibido</label><input type="number" id="editAdvancePayment" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><p class="text-xs text-slate-500 mt-1">Lo que el cliente dejó al inicio</p></div>
+      </div>
       <div><label class="block text-sm font-semibold text-slate-700 mb-2">Refacciones</label><div id="editPartsList" class="space-y-2"></div></div>
       <div class="bg-slate-50 rounded-xl p-4 space-y-1 text-sm">
         <div class="flex justify-between"><span class="text-slate-600">Costo refacciones:</span><span class="font-semibold">$<span id="editTotalParts">0.00</span></span></div>
@@ -569,11 +539,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const USERS = [
-    { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07" },
-    { email: "demo@demo.com", password: "demo2024" }
+    { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez Hernández", role: "admin" },
+    { email: "demo@demo.com", password: "demo2024", fullName: "Juan Pérez López", role: "recepcion" }
 ];
-const ADMIN_EMAIL = "ismaelrh@velocell.com";
-const ADMIN_PASS = "ROHI981115HTSDNS07";
 const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
 const STATUS_COLORS = {
   'En diagnóstico': 'bg-blue-100 text-blue-700',
@@ -601,7 +569,6 @@ let unsubscribeServices = null;
 let unsubscribeExpenses = null;
 let unsubscribeCortes = null;
 
-// Verificar sesión guardada
 const savedSession = localStorage.getItem('tallerSession');
 if (savedSession) {
     try {
@@ -610,26 +577,22 @@ if (savedSession) {
         if (hoursSinceLogin < 24) {
             const user = USERS.find(u => u.email === session.email);
             if (user) {
-                currentUser = { email: user.email, role: 'admin' };
+                currentUser = { email: user.email, fullName: user.fullName, role: user.role };
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('mainApp').classList.remove('hidden');
-                const name = currentUser.email.split('@')[0];
-                const initial = name.charAt(0).toUpperCase();
+                const initial = currentUser.fullName.charAt(0).toUpperCase();
                 document.getElementById('userAvatar').textContent = initial;
                 document.getElementById('navAvatar').textContent = initial;
-                document.getElementById('sidebarUserName').textContent = name;
-                document.getElementById('navUserName').textContent = name;
-                document.getElementById('sidebarUserEmail').textContent = currentUser.email;
+                document.getElementById('sidebarUserName').textContent = currentUser.fullName;
+                document.getElementById('navUserName').textContent = currentUser.fullName;
+                document.getElementById('sidebarUserEmail').textContent = currentUser.email + (currentUser.role === 'recepcion' ? ' (Recepción)' : '');
                 document.getElementById('navUserEmail').textContent = currentUser.email;
                 const hour = new Date().getHours();
-                let greeting = 'Buenas noches';
-                if (hour < 12) greeting = 'Buenos días';
-                else if (hour < 19) greeting = 'Buenas tardes';
-                document.getElementById('greeting').textContent = `${greeting}, ${name} 👋`;
+                let greeting = hour < 12 ? 'Buenos días' : (hour < 19 ? 'Buenas tardes' : 'Buenas noches');
+                document.getElementById('greeting').textContent = `${greeting}, ${currentUser.fullName.split(' ')[0]} 👋`;
                 const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
                 document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', options);
-                const dashBtn = document.querySelector('[data-section="dashboard"]');
-                dashBtn.classList.add('bg-brand-50','text-brand-600');
+                document.querySelector('[data-section="dashboard"]').classList.add('bg-brand-50','text-brand-600');
                 startRealtimeSync();
             } else { localStorage.removeItem('tallerSession'); }
         } else { localStorage.removeItem('tallerSession'); }
@@ -643,7 +606,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const errorDiv = document.getElementById('loginError');
     const validUser = USERS.find(u => u.email === email && u.password === pass);
     if (validUser) {
-        currentUser = { email: validUser.email, role: 'admin' };
+        currentUser = { email: validUser.email, fullName: validUser.fullName, role: validUser.role };
         errorDiv.classList.add('hidden');
         showApp();
     } else {
@@ -653,26 +616,22 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 });
 
 function showApp() {
-    localStorage.setItem('tallerSession', JSON.stringify({ email: currentUser.email, role: currentUser.role, timestamp: Date.now() }));
+    localStorage.setItem('tallerSession', JSON.stringify({ email: currentUser.email, fullName: currentUser.fullName, role: currentUser.role, timestamp: Date.now() }));
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('mainApp').classList.remove('hidden');
-    const name = currentUser.email.split('@')[0];
-    const initial = name.charAt(0).toUpperCase();
+    const initial = currentUser.fullName.charAt(0).toUpperCase();
     document.getElementById('userAvatar').textContent = initial;
     document.getElementById('navAvatar').textContent = initial;
-    document.getElementById('sidebarUserName').textContent = name;
-    document.getElementById('navUserName').textContent = name;
-    document.getElementById('sidebarUserEmail').textContent = currentUser.email;
+    document.getElementById('sidebarUserName').textContent = currentUser.fullName;
+    document.getElementById('navUserName').textContent = currentUser.fullName;
+    document.getElementById('sidebarUserEmail').textContent = currentUser.email + (currentUser.role === 'recepcion' ? ' (Recepción)' : '');
     document.getElementById('navUserEmail').textContent = currentUser.email;
     const hour = new Date().getHours();
-    let greeting = 'Buenas noches';
-    if (hour < 12) greeting = 'Buenos días';
-    else if (hour < 19) greeting = 'Buenas tardes';
-    document.getElementById('greeting').textContent = `${greeting}, ${name} 👋`;
+    let greeting = hour < 12 ? 'Buenos días' : (hour < 19 ? 'Buenas tardes' : 'Buenas noches');
+    document.getElementById('greeting').textContent = `${greeting}, ${currentUser.fullName.split(' ')[0]} 👋`;
     const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
     document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', options);
-    const dashBtn = document.querySelector('[data-section="dashboard"]');
-    dashBtn.classList.add('bg-brand-50','text-brand-600');
+    document.querySelector('[data-section="dashboard"]').classList.add('bg-brand-50','text-brand-600');
     startRealtimeSync();
 }
 
@@ -733,19 +692,22 @@ document.getElementById('serviceForm').addEventListener('submit', async function
     e.preventDefault();
     showLoading('Guardando orden...');
     const rc = parseFloat(document.getElementById('repairCost').value);
+    const advance = parseFloat(document.getElementById('advancePayment').value) || 0;
     const svc = {
         folio: 'SRV-' + Date.now().toString().slice(-6),
         client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
         device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value },
-        service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: rc, paidAmount: 0, paidDate: null, diagnosis: '', technicalNotes: '', warranty: '' },
+        service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: rc, paidAmount: 0, paidDate: null, diagnosis: '', technicalNotes: '', warranty: '', advancePayment: advance, remainingAmount: rc - advance },
         date: new Date().toISOString(),
-        userEmail: currentUser.email
+        userEmail: currentUser.email,
+        technician: currentUser.fullName
     };
     try {
         await addDoc(collection(db, "services"), svc);
         hideLoading();
         closeModal('newOrderModal');
-        this.reset();service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: rc, paidAmount: 0, paidDate: null, diagnosis: '', technicalNotes: '', warranty: '', advancePayment: parseFloat(document.getElementById('advancePayment').value) || 0, remainingAmount: rc - (parseFloat(document.getElementById('advancePayment').value) || 0) },
+        this.reset();
+        document.getElementById('advancePayment').value = '0';
         showToast('✅ Orden creada exitosamente');
     } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
@@ -824,6 +786,9 @@ function renderCheckout(s) {
     const parts = s.service.parts || [];
     const warrantyOptions = ['30 días','60 días','90 días','180 días','1 año','Sin garantía'];
     const currentWarranty = s.service.warranty || '30 días';
+    const advance = s.service.advancePayment || 0;
+    const remaining = s.service.remainingAmount !== undefined ? s.service.remainingAmount : (s.service.repairCost - advance);
+    
     document.getElementById('checkoutContent').innerHTML = `
         <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
             <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
@@ -840,10 +805,12 @@ function renderCheckout(s) {
             ${parts.length ? parts.map(p => `<div class="flex justify-between py-1 text-sm"><span>${p.description}</span><span class="font-medium">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>'}
         </div>
         <div class="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-5 mb-6">
-            <div class="flex justify-between items-center">
-                <div><p class="text-xs text-emerald-700 font-semibold uppercase">Total a cobrar al cliente</p><p class="text-xs text-slate-500 mt-1">Precio acordado (no incluye refacciones internas)</p></div>
-                <p class="text-4xl font-bold text-emerald-700">$${s.service.repairCost.toFixed(2)}</p>
+            <div class="flex justify-between items-center mb-2">
+                <div><p class="text-xs text-emerald-700 font-semibold uppercase">Total acordado</p></div>
+                <p class="text-3xl font-bold text-emerald-700">$${s.service.repairCost.toFixed(2)}</p>
             </div>
+            ${advance > 0 ? `<div class="flex justify-between items-center text-sm text-emerald-600 border-t border-emerald-200 pt-2 mt-2"><span>Menos anticipo ya pagado:</span><span>-$${advance.toFixed(2)}</span></div>
+            <div class="flex justify-between items-center font-bold text-emerald-800 border-t border-emerald-300 pt-2 mt-2"><span>RESTANTE POR COBRAR:</span><span>$${remaining.toFixed(2)}</span></div>` : ''}
         </div>
         <div class="space-y-4 mb-6">
             <div>
@@ -882,7 +849,7 @@ window.confirmCheckout = async function() {
         warranty = document.getElementById('checkoutWarrantyCustom').value.trim();
         if (!warranty) { alert('Escribe la garantía personalizada'); return; }
     }
-    if (!confirm(`¿Confirmar cobro de $${allServices.find(s=>s.id===checkoutServiceId).service.repairCost.toFixed(2)}?\n\nSe marcará como PAGADO y ENTREGADO.`)) return;
+    if (!confirm(`¿Confirmar cobro?\n\nSe marcará como PAGADO y ENTREGADO.`)) return;
     showLoading('Procesando cobro...');
     try {
         const svc = allServices.find(s => s.id === checkoutServiceId);
@@ -901,6 +868,7 @@ window.printTicket = function(id) {
     const paymentMethod = s.service.paymentMethod || 'No especificado';
     const paidDate = s.service.paidDate ? new Date(s.service.paidDate).toLocaleString('es-MX') : new Date().toLocaleString('es-MX');
     const isPaid = s.service.paymentStatus === 'Pagado';
+    const tech = s.technician || 'No especificado';
     const ticketHTML = `
         <div class="ticket-thermal">
             <div class="t-header"><h2>TALLER DE REPARACIONES</h2><p>Ticket de ${isPaid ? 'Cobro' : 'Servicio'}</p></div>
@@ -919,11 +887,13 @@ window.printTicket = function(id) {
             ${s.service.diagnosis ? `<div style="margin:4px 0"><span style="font-weight:bold">Diagnóstico:</span><br>${s.service.diagnosis}</div>` : ''}
             <div class="t-divider"></div>
             <div class="t-row t-total"><span>TOTAL A PAGAR:</span><span>$${s.service.repairCost.toFixed(2)}</span></div>
+            ${s.service.advancePayment > 0 ? `<div class="t-row"><span>Anticipo:</span><span>-$${s.service.advancePayment.toFixed(2)}</span></div><div class="t-row t-total"><span>RESTANTE:</span><span>$${(s.service.remainingAmount !== undefined ? s.service.remainingAmount : s.service.repairCost - s.service.advancePayment).toFixed(2)}</span></div>` : ''}
             <div class="t-row"><span>Método de pago:</span><span>${paymentMethod}</span></div>
             <div class="t-row"><span>Estado:</span><span><strong>${isPaid ? 'PAGADO' : 'PENDIENTE'}</strong></span></div>
             <div class="t-divider"></div>
             <div class="t-warranty"><div class="t-row"><span><strong>GARANTÍA:</strong></span><span><strong>${warranty}</strong></span></div></div>
             <div class="t-footer">
+                <p>Atendido por: ${tech}</p>
                 <div class="t-divider"></div>
                 <p>• Conserve este ticket para garantía</p>
                 <p>• Garantía no cubre daños físicos ni por líquido</p>
@@ -945,58 +915,47 @@ window.printTicket = function(id) {
     `;
     printContainer.classList.add('active');
 }
-window.doPrint = function() { window.print(); }
-  window.printCorte = function(id) {
-    const c = allCortes.find(x => x.id === id);
-    if (!c) return;
-    
-    const fecha = new Date(c.date).toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-    const tipoCorte = c.type === 'dia' ? 'CORTE DIARIO' : 'CORTE MENSUAL';
-    
-    const serviciosHTML = c.serviciosDetalle && c.serviciosDetalle.length > 0
-        ? c.serviciosDetalle.map(s => `<div class="t-row"><span>${s.folio}</span><span>$${s.monto.toFixed(2)}</span></div>`).join('')
-        : '<div class="t-row"><span>Sin servicios</span><span></span></div>';
-    
+
+window.printReceptionTicket = function(id) {
+    const s = allServices.find(x => x.id === id);
+    if (!s) return;
+    const fecha = new Date(s.date).toLocaleString('es-MX');
+    const tech = s.technician || 'No especificado';
     const ticketHTML = `
         <div class="ticket-thermal">
-            <div class="t-header">
-                <h2>TALLER DE REPARACIONES</h2>
-                <p>${tipoCorte}</p>
+            <div class="t-header"><h2>TALLER DE REPARACIONES</h2><p>RESGUARDO DE EQUIPO</p></div>
+            <div class="t-divider"></div>
+            <div class="t-row"><span><strong>Folio:</strong></span><span><strong>${s.folio}</strong></span></div>
+            <div class="t-row"><span>Fecha de recepción:</span><span>${fecha}</span></div>
+            <div class="t-divider"></div>
+            <p class="t-section-title">DATOS DEL CLIENTE</p>
+            <div class="t-row"><span>Nombre:</span><span>${s.client.name}</span></div>
+            <div class="t-row"><span>Teléfono:</span><span>${s.client.phone}</span></div>
+            <div class="t-divider"></div>
+            <p class="t-section-title">EQUIPO RECIBIDO</p>
+            <div class="t-row"><span>Equipo:</span><span>${s.device.brand} ${s.device.model}</span></div>
+            ${s.device.imei ? `<div class="t-row"><span>IMEI/Serie:</span><span>${s.device.imei}</span></div>` : ''}
+            <div style="margin:4px 0"><span style="font-weight:bold">Problema reportado:</span><br>${s.device.problem || '—'}</div>
+            ${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bold">Accesorios que deja:</span><br>${s.device.accessories}</div>` : ''}
+            <div class="t-divider"></div>
+            <p class="t-section-title">CONDICIONES</p>
+            <p style="font-size:10px;margin:4px 0">• El equipo se recibe en las condiciones descritas.</p>
+            <p style="font-size:10px;margin:4px 0">• Diagnóstico sujeto a revisión técnica.</p>
+            <p style="font-size:10px;margin:4px 0">• Equipo no reclamado en 60 días será considerado abandonado.</p>
+            <div class="t-divider"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:20px">
+                <div style="width:45%;text-align:center;border-top:1px solid #000;padding-top:4px;font-size:10px">Firma del Cliente</div>
+                <div style="width:45%;text-align:center;border-top:1px solid #000;padding-top:4px;font-size:10px">Recibido por: ${tech}</div>
             </div>
-            <div class="t-divider"></div>
-            <div class="t-row"><span><strong>Fecha:</strong></span><span><strong>${fecha}</strong></span></div>
-            <div class="t-divider"></div>
-            <p class="t-section-title">RESUMEN FINANCIERO</p>
-            <div class="t-row"><span>Ingresos:</span><span>$${c.ingresos.toFixed(2)}</span></div>
-            <div class="t-row"><span>Costo refacciones:</span><span>-$${c.refacciones.toFixed(2)}</span></div>
-            <div class="t-row"><span>Gastos personales:</span><span>-$${c.gastosPersonales.toFixed(2)}</span></div>
-            <div class="t-divider"></div>
-            <div class="t-row t-total"><span>GANANCIA NETA:</span><span>$${c.gananciaNeta.toFixed(2)}</span></div>
-            <div class="t-divider"></div>
-            <p class="t-section-title">MÉTODOS DE PAGO</p>
-            <div class="t-row"><span>💵 Efectivo:</span><span>$${c.pagosEfectivo.toFixed(2)}</span></div>
-            <div class="t-row"><span>🏦 Transferencia:</span><span>$${c.pagosTransferencia.toFixed(2)}</span></div>
-            <div class="t-row"><span>💳 Tarjeta:</span><span>$${c.pagosTarjeta.toFixed(2)}</span></div>
-            <div class="t-divider"></div>
-            <p class="t-section-title">ESTADÍSTICAS</p>
-            <div class="t-row"><span>Servicios cobrados:</span><span>${c.serviciosCobrados}</span></div>
-            <div class="t-row"><span>Servicios nuevos:</span><span>${c.serviciosNuevos}</span></div>
-            <div class="t-divider"></div>
-            <p class="t-section-title">SERVICIOS INCLUIDOS</p>
-            ${serviciosHTML}
-            <div class="t-divider"></div>
-            <div class="t-footer">
-                <p>Generado por: ${c.createdBy}</p>
-                <p>${new Date(c.createdAt).toLocaleString('es-MX')}</p>
-                <p style="margin-top:10px;font-weight:bold">*** Fin del reporte ***</p>
+            <div class="t-footer" style="margin-top:15px">
+                <p>¡Gracias por su confianza!</p>
             </div>
         </div>
     `;
-    
     const printContainer = document.getElementById('printContainer');
     printContainer.innerHTML = `
         <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-            <div><strong>🖨️ Vista previa del corte</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
+            <div><strong>🖨️ Vista previa del Resguardo</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
             <div style="display:flex;gap:10px">
                 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
                 <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
@@ -1006,6 +965,8 @@ window.doPrint = function() { window.print(); }
     `;
     printContainer.classList.add('active');
 }
+
+window.doPrint = function() { window.print(); }
 window.closePrintPreview = function() {
     const printContainer = document.getElementById('printContainer');
     printContainer.classList.remove('active');
@@ -1024,6 +985,7 @@ window.openEdit = function(id) {
     document.getElementById('editDelivery').value = s.service.estimatedDelivery || '';
     document.getElementById('editDiagnosis').value = s.service.diagnosis || '';
     document.getElementById('editTechnicalNotes').value = s.service.technicalNotes || '';
+    document.getElementById('editAdvancePayment').value = s.service.advancePayment || 0;
     renderEditStatus();
     renderEditParts();
     openModal('editModal');
@@ -1048,9 +1010,22 @@ document.getElementById('editRepairCost').addEventListener('input', renderEditPa
 window.saveEdit = async function() {
     showLoading('Guardando cambios...');
     const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
+    const advance = parseFloat(document.getElementById('editAdvancePayment').value) || 0;
     const tp = editParts.reduce((s,p) => s + p.cost, 0);
     try {
-        await updateDoc(doc(db, "services", editId), { 'service.status': editStatus, 'service.repairCost': rc, 'service.paymentMethod': document.getElementById('editPaymentMethod').value, 'service.estimatedDelivery': document.getElementById('editDelivery').value, 'service.diagnosis': document.getElementById('editDiagnosis').value, 'service.technicalNotes': document.getElementById('editTechnicalNotes').value, 'service.parts': [...editParts], 'service.totalParts': tp, 'service.netProfit': rc - tp });
+        await updateDoc(doc(db, "services", editId), { 
+            'service.status': editStatus, 
+            'service.repairCost': rc, 
+            'service.paymentMethod': document.getElementById('editPaymentMethod').value, 
+            'service.estimatedDelivery': document.getElementById('editDelivery').value, 
+            'service.diagnosis': document.getElementById('editDiagnosis').value, 
+            'service.technicalNotes': document.getElementById('editTechnicalNotes').value, 
+            'service.advancePayment': advance,
+            'service.remainingAmount': rc - advance,
+            'service.parts': [...editParts], 
+            'service.totalParts': tp, 
+            'service.netProfit': rc - tp 
+        });
         hideLoading();
         closeModal('editModal');
         showToast('✅ Servicio actualizado');
@@ -1070,6 +1045,7 @@ window.openDetail = function(id) {
     const isPaid = s.service.paymentStatus === 'Pagado';
     const payBadge = isPaid ? '<span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">✅ PAGADO</span>' : '<span class="text-xs px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold">⏳ PENDIENTE</span>';
     const cobrarBtn = !isPaid ? `<button onclick="closeModal('detailModal');cobrarServicio('${s.id}')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition">💰 Cobrar ahora</button>` : '';
+    const tech = s.technician || 'No especificado';
     document.getElementById('detailContent').innerHTML = `
         <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
             <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
@@ -1097,10 +1073,12 @@ window.openDetail = function(id) {
             <div class="bg-brand-50 border border-brand-200 rounded-xl p-4 text-center"><p class="text-xs text-brand-700 uppercase font-semibold">Ganancia neta</p><p class="text-2xl font-bold text-brand-700">$${(s.service.repairCost - tp).toFixed(2)}</p></div>
         </div>
         ${s.service.warranty ? `<div class="bg-purple-50 border border-purple-200 rounded-xl p-3 mb-4 text-center"><p class="text-xs text-purple-700 uppercase font-semibold">Garantía</p><p class="font-bold text-purple-800">${s.service.warranty}</p></div>` : ''}
+        <div class="bg-slate-50 rounded-xl p-3 mb-4 text-center"><p class="text-xs text-slate-600">Atendido por: <strong>${tech}</strong></p></div>
         <div class="flex flex-wrap gap-2">
             ${cobrarBtn}
+            <button onclick="printReceptionTicket('${s.id}')" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition">📄 Nota de Recepción</button>
             <button onclick="closeModal('detailModal');openEdit('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">✏️ Editar</button>
-            <button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">🖨️ Ticket</button>
+            <button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">🖨️ Ticket de Cobro</button>
             <button onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition">🗑️ Eliminar</button>
         </div>
     `;
@@ -1132,7 +1110,7 @@ window.generarCorteDiario = async function() {
         ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosHoy.length, serviciosNuevos: nuevosHoy.length,
         pagosEfectivo, pagosTransferencia, pagosTarjeta,
         serviciosDetalle: serviciosHoy.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
-        createdBy: currentUser.email, createdAt: new Date().toISOString()
+        createdBy: currentUser.fullName, createdAt: new Date().toISOString()
     };
     try { await addDoc(collection(db, "dailyCuts"), corte); hideLoading(); showToast('✅ Corte del día generado exitosamente'); } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
@@ -1160,7 +1138,7 @@ window.generarCorteMensual = async function() {
         ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosMes.length, serviciosNuevos: nuevosMes.length,
         pagosEfectivo, pagosTransferencia, pagosTarjeta,
         serviciosDetalle: serviciosMes.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
-        createdBy: currentUser.email, createdAt: new Date().toISOString()
+        createdBy: currentUser.fullName, createdAt: new Date().toISOString()
     };
     try { await addDoc(collection(db, "dailyCuts"), corte); hideLoading(); showToast('✅ Corte mensual generado exitosamente'); } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
@@ -1228,9 +1206,7 @@ window.verDetalleCorte = function(id) {
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                 Imprimir Corte
             </button>
-            <button onclick="closeModal('corteDetailModal')" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 rounded-xl transition">
-                Cerrar
-            </button>
+            <button onclick="closeModal('corteDetailModal')" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 rounded-xl transition">Cerrar</button>
         </div>
     `;
     openModal('corteDetailModal');
