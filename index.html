@@ -1238,6 +1238,20 @@ window.printTicket = function(id) {
       <p class="t-section-title">EQUIPO</p>
       <div class="t-row"><span>Equipo:</span><span>${s.device.brand} ${s.device.model}</span></div>
       ${s.device.imei ? `<div class="t-row"><span>IMEI:</span><span>${s.device.imei}</span></div>` : ''}
+      ${s.device.accessType === 'patron' ? `
+  <div style="margin:6px 0; padding:6px; border:1px dashed #000; background:#f5f5f5;">
+    <strong style="font-size:10px; display:block; margin-bottom:6px;">🔐 Patrón (dibujar):</strong>
+    <div style="display:grid; grid-template-columns:repeat(3, 22px); grid-template-rows:repeat(3, 22px); gap:8px; margin:0 auto; width:fit-content;">
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+    </div>
   </div>
 ` : (s.device.password ? `<div class="t-row"><span><strong>Contraseña:</strong></span><span>${s.device.password}</span></div>` : '')}
       <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
