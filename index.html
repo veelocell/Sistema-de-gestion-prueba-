@@ -745,7 +745,7 @@ document.getElementById('serviceForm').addEventListener('submit', async function
         await addDoc(collection(db, "services"), svc);
         hideLoading();
         closeModal('newOrderModal');
-        this.reset();
+        this.reset();service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: rc, paidAmount: 0, paidDate: null, diagnosis: '', technicalNotes: '', warranty: '', advancePayment: parseFloat(document.getElementById('advancePayment').value) || 0, remainingAmount: rc - (parseFloat(document.getElementById('advancePayment').value) || 0) },
         showToast('✅ Orden creada exitosamente');
     } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
