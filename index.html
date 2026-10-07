@@ -1330,6 +1330,7 @@ window.printReceptionTicket = function(id) {
       <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
     </div>
   </div>
+` : (s.device.password ? `<div class="letter-row"><span><strong>Contraseña:</strong></span><span class="font-bold text-amber-700">${s.device.password}</span></div>` : '')}
           ${s.device.password ? `<div class="letter-row"><span><strong>Contraseña/Patrón:</strong></span><span class="font-bold text-amber-700">${s.device.password}</span></div>` : ''}
           <div style="margin:6px 0"><strong>Problema:</strong> ${s.device.problem || '—'}</div>
           <div style="margin:6px 0"><strong>Estado físico:</strong> ${conditions}</div>
