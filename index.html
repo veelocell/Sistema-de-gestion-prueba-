@@ -33,6 +33,7 @@ tailwind.config = {
   #printContainer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; overflow-y: auto; padding: 20px; }
   #printContainer.active { display: block; }
   .preview-wrapper { max-width: 380px; margin: 20px auto; background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+  
   .ticket-thermal { width: 80mm; margin: 0 auto; padding: 3mm; font-family: 'Courier New', monospace; font-size: 11px; color: #000; line-height: 1.4; }
   .ticket-thermal .t-header { text-align:center; border-bottom: 1px dashed #000; padding-bottom: 6px; margin-bottom: 6px; }
   .ticket-thermal .t-header h2 { font-size: 15px; margin: 0; font-weight: bold; }
@@ -40,9 +41,23 @@ tailwind.config = {
   .ticket-thermal .t-row { display:flex; justify-content:space-between; margin: 2px 0; gap: 8px; }
   .ticket-thermal .t-divider { border-top: 1px dashed #000; margin: 6px 0; }
   .ticket-thermal .t-total { font-size: 13px; font-weight: bold; margin-top: 4px; }
-  .ticket-thermal .t-footer { text-align:center; margin-top: 8px; font-size: 10px; }
+  .ticket-thermal .t-footer { text-align:center; margin-top: 8px; font-size: 10px; white-space: pre-line; }
   .ticket-thermal .t-section-title { font-weight: bold; margin: 6px 0 3px 0; font-size: 11px; text-transform: uppercase; }
   .ticket-thermal .t-warranty { background: #f0f0f0; padding: 5px; border-radius: 3px; margin: 6px 0; }
+  .ticket-thermal .t-qr { text-align: center; margin-top: 10px; }
+  .ticket-thermal .t-qr img { width: 80px; height: 80px; }
+
+  .letter-double { width: 210mm; margin: 0 auto; padding: 10mm; font-family: 'Inter', sans-serif; font-size: 12px; color: #000; }
+  .letter-half { border: 2px solid #000; padding: 15px; margin-bottom: 15px; position: relative; }
+  .letter-half::after { content: "✂ CORTAR AQUÍ ✂"; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 10px; font-weight: bold; font-size: 10px; }
+  .letter-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
+  .letter-header h2 { font-size: 20px; margin: 0; font-weight: 800; text-transform: uppercase; }
+  .letter-section { margin-bottom: 10px; }
+  .letter-section h3 { font-size: 12px; font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 3px; margin-bottom: 5px; text-transform: uppercase; }
+  .letter-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .letter-footer { margin-top: 15px; padding-top: 10px; border-top: 1px solid #000; font-size: 10px; text-align: center; white-space: pre-line; }
+  .letter-sign { margin-top: 30px; display: flex; justify-content: space-between; }
+  .letter-sign div { width: 40%; border-top: 1px solid #000; text-align: center; padding-top: 5px; font-size: 11px; }
 
   @media print {
     @page { size: 80mm auto; margin: 0; }
@@ -90,6 +105,19 @@ tailwind.config = {
   </div>
 </div>
 
+<!-- MODAL ABRIR CAJA -->
+<div class="modal-overlay" id="openCashModal">
+  <div class="bg-white rounded-2xl w-full max-w-md p-6">
+    <h2 class="text-xl font-bold text-slate-800 mb-4">🔓 Abrir Caja del Día</h2>
+    <p class="text-sm text-slate-600 mb-4">Ingresa el saldo inicial en efectivo con el que inicia la caja hoy.</p>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-slate-700 mb-1">Saldo Inicial ($)</label>
+      <input type="number" id="initialCash" step="0.01" value="0" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-lg font-bold text-center">
+    </div>
+    <button onclick="confirmOpenCash()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition">Confirmar y Entrar</button>
+  </div>
+</div>
+
 <!-- MAIN APP -->
 <div id="mainApp" class="hidden">
   <div class="flex h-screen overflow-hidden">
@@ -119,6 +147,10 @@ tailwind.config = {
         </button>
         <button onclick="showSection('cortes', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="cortes">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg> Cortes de Caja
+        </button>
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-4 px-3">Sistema</p>
+        <button id="btnConfig" onclick="showSection('config', this)" class="nav-btn hidden w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="config">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Configuración
         </button>
         <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-4 px-3">Dirección</p>
         <button onclick="showSection('ceo', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="ceo">
@@ -261,9 +293,9 @@ tailwind.config = {
           <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl p-6 text-white mb-6 shadow-lg">
             <h3 class="text-lg font-bold mb-4">📊 Resumen de hoy</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Saldo Inicial</p><p class="text-2xl font-bold" id="cajaHoyInicial">$0</p></div>
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Ingresos</p><p class="text-2xl font-bold" id="cajaHoyIngresos">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Gastos personales</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Gastos</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Ganancia neta</p><p class="text-2xl font-bold" id="cajaHoyGanancia">$0</p></div>
             </div>
           </div>
@@ -296,7 +328,7 @@ tailwind.config = {
 
         <!-- CORTES DE CAJA -->
         <section id="cortes" class="section-content hidden fade-in">
-          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📋 Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
+          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800"> Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
           <div class="grid md:grid-cols-3 gap-4 mb-6">
             <button onclick="generarCorteDiario()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-6 rounded-2xl shadow-lg shadow-emerald-500/30 transition text-left">
               <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><h3 class="text-lg font-bold">Corte del Día</h3></div>
@@ -330,14 +362,43 @@ tailwind.config = {
             <div id="cortesEmpty" class="hidden p-12 text-center text-slate-400">
               <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
               <p class="font-semibold">Aún no hay cortes registrados</p>
-              <p class="text-sm mt-2">Genera tu primer corte del día para comenzar</p>
             </div>
+          </div>
+        </section>
+
+        <!-- CONFIGURACIÓN -->
+        <section id="config" class="section-content hidden fade-in">
+          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">⚙️ Configuración del Taller</h2><p class="text-slate-500 text-sm">Personaliza los datos que aparecen en los tickets y notas.</p></div>
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 max-w-2xl">
+            <form id="configForm" class="space-y-5">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Nombre del Taller</label>
+                <input type="text" id="cfgWorkshopName" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: VELOCELL REPARACIONES">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Teléfono de Contacto</label>
+                <input type="text" id="cfgPhone" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 8681596881">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Formato de Impresión</label>
+                <select id="cfgPrintFormat" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
+                  <option value="ticket80mm">Ticket Térmico (80mm)</option>
+                  <option value="letter_double">Hoja Carta (Doble copia en una hoja)</option>
+                </select>
+                <p class="text-xs text-slate-500 mt-1">"Hoja Carta" imprimirá dos medias hojas (una para el cliente, otra para ti) en una sola hoja.</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Políticas / Pie de Ticket</label>
+                <textarea id="cfgPolicies" rows="4" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: • 30 días de garantía.&#10;• No nos hacemos responsables por datos.&#10;• Equipo no reclamado en 60 días se considera abandonado."></textarea>
+              </div>
+              <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar Configuración</button>
+            </form>
           </div>
         </section>
 
         <!-- CEO / ESTADÍSTICAS -->
         <section id="ceo" class="section-content hidden fade-in">
-          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📊 CEO Dashboard</h2><p class="text-slate-500 text-sm">Estadísticas y métricas clave del negocio</p></div>
+          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800"> CEO Dashboard</h2><p class="text-slate-500 text-sm">Estadísticas y métricas clave del negocio</p></div>
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ingresos este mes</p><p class="text-2xl font-bold text-slate-800" id="ceoIngresosMes">$0</p><p class="text-xs mt-2" id="ceoIngresosTrend"></p></div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Servicios este mes</p><p class="text-2xl font-bold text-slate-800" id="ceoServiciosMes">0</p><p class="text-xs mt-2" id="ceoServiciosTrend"></p></div>
@@ -345,7 +406,7 @@ tailwind.config = {
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ganancia neta mes</p><p class="text-2xl font-bold text-emerald-600" id="ceoGananciaMes">$0</p><p class="text-xs text-slate-500 mt-2">Después de gastos</p></div>
           </div>
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
-            <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-800">📈 Ingresos últimos 6 meses</h3><span class="text-xs text-slate-500">Cobros realizados</span></div>
+            <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-800"> Ingresos últimos 6 meses</h3><span class="text-xs text-slate-500">Cobros realizados</span></div>
             <div class="bar-chart" id="barChartIngresos"></div>
           </div>
           <div class="grid lg:grid-cols-2 gap-6 mb-6">
@@ -364,7 +425,7 @@ tailwind.config = {
               <div id="metodosPagoList" class="space-y-3"></div>
             </div>
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-              <h3 class="font-bold text-slate-800 mb-4">📅 Día más productivo</h3>
+              <h3 class="font-bold text-slate-800 mb-4"> Día más productivo</h3>
               <div id="diaProductivo" class="text-center py-8">
                 <div class="w-20 h-20 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
                 <p class="text-3xl font-bold text-slate-800" id="diaProductivoNombre">—</p>
@@ -399,6 +460,16 @@ tailwind.config = {
           <div><label class="block text-sm font-medium text-slate-700 mb-1">IMEI / Serie</label><input type="text" id="deviceIMEI" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Entrega estimada</label><input type="date" id="estimatedDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
         </div>
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-slate-700 mb-2">Estado físico del equipo al recibir:</label>
+          <div class="flex flex-wrap gap-3">
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Apagado" class="rounded text-brand-600 w-4 h-4"> Apagado</label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Encendido" class="rounded text-brand-600 w-4 h-4"> Encendido</label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Mojado" class="rounded text-brand-600 w-4 h-4"> Mojado</label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Golpeado" class="rounded text-brand-600 w-4 h-4"> Golpeado</label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Pantalla rota" class="rounded text-brand-600 w-4 h-4"> Pantalla rota</label>
+          </div>
+        </div>
         <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Problema reportado por el cliente *</label><textarea id="problemDescription" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
         <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Accesorios que deja</label><textarea id="accessories" placeholder="Cargador, funda, SIM..." class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
       </div>
@@ -409,10 +480,9 @@ tailwind.config = {
           <div><label class="block text-sm font-medium text-slate-700 mb-1">💰 Anticipo (opcional)</label><input type="number" id="advancePayment" step="0.01" value="0" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"><p class="text-xs text-slate-500 mt-1">Lo que el cliente deja al entregar el equipo</p></div>
           <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">Método de pago esperado</label><select id="paymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
         </div>
-        <p class="text-xs text-slate-500 mt-3 bg-slate-50 p-3 rounded-lg">💡 Las refacciones se agregan después desde el botón "Agregar Refacción".</p>
       </div>
       <div class="flex gap-3 pt-4 border-t border-slate-100">
-        <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar</button>
+        <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar e Imprimir Nota</button>
         <button type="button" onclick="closeModal('newOrderModal')" class="px-6 py-3 border border-slate-200 rounded-xl font-medium hover:bg-slate-50 transition">Cancelar</button>
       </div>
     </form>
@@ -443,7 +513,6 @@ tailwind.config = {
         <div class="space-y-4">
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Descripción *</label><input type="text" id="newPartDesc" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: Pantalla, batería..."></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Costo interno de la refacción *</label><input type="number" id="newPartCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"></div>
-          <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">⚠️ Este es un <strong>registro interno</strong> para control de inventario. <strong>NO modifica</strong> el precio final al cliente.</div>
           <button onclick="confirmAddPart()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Agregar Refacción</button>
         </div>
       </div>
@@ -464,7 +533,7 @@ tailwind.config = {
 <div class="modal-overlay" id="editModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-      <h2 class="text-xl font-bold text-slate-800">✏️ Editar <span id="editFolio"></span></h2>
+      <h2 class="text-xl font-bold text-slate-800">️ Editar <span id="editFolio"></span></h2>
       <button onclick="closeModal('editModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
     </div>
     <div class="p-6 space-y-5">
@@ -523,7 +592,7 @@ tailwind.config = {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAkvNPt0K_OheECcYVFnH_IHeQlEBdTrCg",
@@ -538,8 +607,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const USERS = [
-    { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez", role: "admin" },
-    { email: "demo@demo.com", password: "demo2024", fullName: "DEMO", role: "recepcion" }
+    { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez Hernández", role: "admin" },
+    { email: "demo@demo.com", password: "demo2024", fullName: "Juan Pérez López", role: "recepcion" }
 ];
 const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
 const STATUS_COLORS = {
@@ -564,9 +633,23 @@ let statusFilter = '';
 let selectedServiceForPart = null;
 let checkoutServiceId = null;
 let corteFilter = 'todos';
-let unsubscribeServices = null;
-let unsubscribeExpenses = null;
-let unsubscribeCortes = null;
+let unsubscribeServices = null, unsubscribeExpenses = null, unsubscribeCortes = null, unsubscribeSettings = null;
+
+let workshopSettings = {
+  workshopName: "VELOCELL REPARACIONES",
+  phone: "8681596881",
+  printFormat: "ticket80mm",
+  policies: "• 30 días de garantía.\n• No nos hacemos responsables por datos.\n• Equipo no reclamado en 60 días se considera abandonado."
+};
+
+async function loadSettings() {
+  const docRef = doc(db, "settings", "general");
+  unsubscribeSettings = onSnapshot(docRef, (docSnap) => {
+    if (docSnap.exists()) {
+      workshopSettings = { ...workshopSettings, ...docSnap.data() };
+    }
+  });
+}
 
 const savedSession = localStorage.getItem('tallerSession');
 if (savedSession) {
@@ -578,6 +661,7 @@ if (savedSession) {
             if (user) {
                 currentUser = { email: user.email, fullName: user.fullName, role: user.role };
                 document.getElementById('loginScreen').classList.add('hidden');
+                if (currentUser.role === 'admin') document.getElementById('btnConfig').classList.remove('hidden');
                 document.getElementById('mainApp').classList.remove('hidden');
                 const initial = currentUser.fullName.charAt(0).toUpperCase();
                 document.getElementById('userAvatar').textContent = initial;
@@ -589,10 +673,11 @@ if (savedSession) {
                 const hour = new Date().getHours();
                 let greeting = hour < 12 ? 'Buenos días' : (hour < 19 ? 'Buenas tardes' : 'Buenas noches');
                 document.getElementById('greeting').textContent = `${greeting}, ${currentUser.fullName.split(' ')[0]} 👋`;
-                const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-                document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', options);
+                document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
                 document.querySelector('[data-section="dashboard"]').classList.add('bg-brand-50','text-brand-600');
+                loadSettings();
                 startRealtimeSync();
+                checkOpenCash();
             } else { localStorage.removeItem('tallerSession'); }
         } else { localStorage.removeItem('tallerSession'); }
     } catch (e) { localStorage.removeItem('tallerSession'); }
@@ -607,31 +692,56 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     if (validUser) {
         currentUser = { email: validUser.email, fullName: validUser.fullName, role: validUser.role };
         errorDiv.classList.add('hidden');
-        showApp();
+        document.getElementById('loginScreen').classList.add('hidden');
+        if (currentUser.role === 'admin') document.getElementById('btnConfig').classList.remove('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+        const initial = currentUser.fullName.charAt(0).toUpperCase();
+        document.getElementById('userAvatar').textContent = initial;
+        document.getElementById('navAvatar').textContent = initial;
+        document.getElementById('sidebarUserName').textContent = currentUser.fullName;
+        document.getElementById('navUserName').textContent = currentUser.fullName;
+        document.getElementById('sidebarUserEmail').textContent = currentUser.email + (currentUser.role === 'recepcion' ? ' (Recepción)' : '');
+        document.getElementById('navUserEmail').textContent = currentUser.email;
+        const hour = new Date().getHours();
+        let greeting = hour < 12 ? 'Buenos días' : (hour < 19 ? 'Buenas tardes' : 'Buenas noches');
+        document.getElementById('greeting').textContent = `${greeting}, ${currentUser.fullName.split(' ')[0]} 👋`;
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+        document.querySelector('[data-section="dashboard"]').classList.add('bg-brand-50','text-brand-600');
+        loadSettings();
+        startRealtimeSync();
+        checkOpenCash();
     } else {
         errorDiv.textContent = '❌ Correo o contraseña incorrectos';
         errorDiv.classList.remove('hidden');
     }
 });
 
+function checkOpenCash() {
+  const hoyStr = new Date().toDateString();
+  const corteHoy = allCortes.find(c => c.type === 'dia' && new Date(c.date).toDateString() === hoyStr);
+  if (!corteHoy && currentUser.role === 'admin') {
+    setTimeout(() => openModal('openCashModal'), 1000);
+  }
+}
+
+window.confirmOpenCash = async function() {
+  const initialCash = parseFloat(document.getElementById('initialCash').value) || 0;
+  const hoy = new Date();
+  const corte = {
+    type: 'dia', date: hoy.toISOString(), dateLabel: hoy.toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' }),
+    initialCash: initialCash, ingresos: 0, refacciones: 0, gastosPersonales: 0, gananciaNeta: 0, serviciosCobrados: 0, serviciosNuevos: 0,
+    pagosEfectivo: 0, pagosTransferencia: 0, pagosTarjeta: 0, serviciosDetalle: [],
+    createdBy: currentUser.fullName, createdAt: hoy.toISOString()
+  };
+  try {
+    await addDoc(collection(db, "dailyCuts"), corte);
+    closeModal('openCashModal');
+    showToast('✅ Caja abierta exitosamente');
+  } catch (error) { alert("Error: " + error.message); }
+}
+
 function showApp() {
     localStorage.setItem('tallerSession', JSON.stringify({ email: currentUser.email, fullName: currentUser.fullName, role: currentUser.role, timestamp: Date.now() }));
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('mainApp').classList.remove('hidden');
-    const initial = currentUser.fullName.charAt(0).toUpperCase();
-    document.getElementById('userAvatar').textContent = initial;
-    document.getElementById('navAvatar').textContent = initial;
-    document.getElementById('sidebarUserName').textContent = currentUser.fullName;
-    document.getElementById('navUserName').textContent = currentUser.fullName;
-    document.getElementById('sidebarUserEmail').textContent = currentUser.email + (currentUser.role === 'recepcion' ? ' (Recepción)' : '');
-    document.getElementById('navUserEmail').textContent = currentUser.email;
-    const hour = new Date().getHours();
-    let greeting = hour < 12 ? 'Buenos días' : (hour < 19 ? 'Buenas tardes' : 'Buenas noches');
-    document.getElementById('greeting').textContent = `${greeting}, ${currentUser.fullName.split(' ')[0]} 👋`;
-    const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', options);
-    document.querySelector('[data-section="dashboard"]').classList.add('bg-brand-50','text-brand-600');
-    startRealtimeSync();
 }
 
 window.logout = function() {
@@ -639,6 +749,7 @@ window.logout = function() {
     if (unsubscribeServices) unsubscribeServices();
     if (unsubscribeExpenses) unsubscribeExpenses();
     if (unsubscribeCortes) unsubscribeCortes();
+    if (unsubscribeSettings) unsubscribeSettings();
     currentUser = null;
     location.reload();
 }
@@ -673,6 +784,7 @@ window.showSection = function(id, btn) {
     if (btn) { btn.classList.add('bg-brand-50','text-brand-600'); btn.classList.remove('text-slate-600'); }
     if (window.innerWidth < 1024) toggleSidebar(false);
     if (id === 'ceo') updateCEOStats();
+    if (id === 'config') loadConfigForm();
 }
 
 window.toggleSidebar = function(forceState) {
@@ -692,22 +804,25 @@ document.getElementById('serviceForm').addEventListener('submit', async function
     showLoading('Guardando orden...');
     const rc = parseFloat(document.getElementById('repairCost').value);
     const advance = parseFloat(document.getElementById('advancePayment').value) || 0;
+    const physConditions = Array.from(document.querySelectorAll('input[name="physCondition"]:checked')).map(cb => cb.value);
+    
     const svc = {
         folio: 'SRV-' + Date.now().toString().slice(-6),
         client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
-        device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value },
+        device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value, physCondition: physConditions },
         service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: rc, paidAmount: 0, paidDate: null, diagnosis: '', technicalNotes: '', warranty: '', advancePayment: advance, remainingAmount: rc - advance },
         date: new Date().toISOString(),
         userEmail: currentUser.email,
         technician: currentUser.fullName
     };
     try {
-        await addDoc(collection(db, "services"), svc);
+        const docRef = await addDoc(collection(db, "services"), svc);
         hideLoading();
         closeModal('newOrderModal');
         this.reset();
         document.getElementById('advancePayment').value = '0';
         showToast('✅ Orden creada exitosamente');
+        setTimeout(() => printReceptionTicket(docRef.id), 500);
     } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
 
@@ -784,8 +899,7 @@ window.cobrarServicio = function(id) {
 function renderCheckout(s) {
     const parts = s.service.parts || [];
     const warrantyOptions = ['30 días','60 días','90 días','180 días','1 año','Sin garantía'];
-    // Aquí se quita el default de 30 días para que se elija al cobrar
-    const currentWarranty = s.service.warranty || ''; 
+    const currentWarranty = s.service.warranty || '';
     const advance = s.service.advancePayment || 0;
     const remaining = s.service.remainingAmount !== undefined ? s.service.remainingAmount : (s.service.repairCost - advance);
     
@@ -793,10 +907,10 @@ function renderCheckout(s) {
         <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
             <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
             <h3 class="text-2xl font-bold mt-1">${s.client.name}</h3>
-            <p class="text-indigo-100 text-sm mt-1">📞 ${s.client.phone}</p>
+            <p class="text-indigo-100 text-sm mt-1"> ${s.client.phone}</p>
         </div>
         <div class="grid md:grid-cols-2 gap-4 mb-6">
-            <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="font-semibold text-slate-800">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
+            <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Equipo</p><p class="font-semibold text-slate-800">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
             <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">Problema</p><p class="text-sm text-slate-800">${s.device.problem || '—'}</p></div>
         </div>
         ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-sm text-slate-800">${s.service.diagnosis}</p></div>` : ''}
@@ -816,7 +930,7 @@ function renderCheckout(s) {
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">Método de pago</label>
                 <div class="grid grid-cols-3 gap-2">
-                    ${['Efectivo','Transferencia','Tarjeta'].map(m => `<label class="cursor-pointer"><input type="radio" name="checkoutPayment" value="${m}" ${s.service.paymentMethod === m ? 'checked' : ''} class="peer hidden"><div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-xl p-3 text-center font-medium text-sm transition hover:border-brand-400">${m === 'Efectivo' ? '💵' : m === 'Transferencia' ? '🏦' : '💳'}<br>${m}</div></label>`).join('')}
+                    ${['Efectivo','Transferencia','Tarjeta'].map(m => `<label class="cursor-pointer"><input type="radio" name="checkoutPayment" value="${m}" ${s.service.paymentMethod === m ? 'checked' : ''} class="peer hidden"><div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-xl p-3 text-center font-medium text-sm transition hover:border-brand-400">${m === 'Efectivo' ? '💵' : m === 'Transferencia' ? '' : '💳'}<br>${m}</div></label>`).join('')}
                 </div>
             </div>
             <div>
@@ -873,7 +987,7 @@ window.printTicket = function(id) {
     const tech = s.technician || 'No especificado';
     const ticketHTML = `
         <div class="ticket-thermal">
-            <div class="t-header"><h2>TALLER DE REPARACIONES</h2><p>Ticket de ${isPaid ? 'Cobro' : 'Servicio'}</p></div>
+            <div class="t-header"><h2>${workshopSettings.workshopName}</h2><p>Ticket de ${isPaid ? 'Cobro' : 'Servicio'}</p></div>
             <div class="t-divider"></div>
             <div class="t-row"><span><strong>Folio:</strong></span><span><strong>${s.folio}</strong></span></div>
             <div class="t-row"><span>Fecha:</span><span>${paidDate}</span></div>
@@ -897,10 +1011,8 @@ window.printTicket = function(id) {
             <div class="t-footer">
                 <p>Atendido por: ${tech}</p>
                 <div class="t-divider"></div>
-                <p>• Conserve este ticket para garantía</p>
-                <p>• Garantía no cubre daños físicos ni por líquido</p>
-                <p>• Equipo no reclamado en 60 días será considerado abandonado</p>
-                <p style="margin-top:10px;font-weight:bold">¡Gracias por su preferencia!</p>
+                <p style="white-space:pre-line">${workshopSettings.policies}</p>
+                <p style="margin-top:10px;font-weight:bold">Contacto: ${workshopSettings.phone}</p>
             </div>
         </div>
     `;
@@ -919,60 +1031,99 @@ window.printTicket = function(id) {
 }
 
 window.printReceptionTicket = function(id) {
-    const s = allServices.find(x => x.id === id);
-    if (!s) return;
-    const fecha = new Date(s.date).toLocaleString('es-MX');
-    const tech = s.technician || 'No especificado';
-    const ticketHTML = `
-        <div class="ticket-thermal">
-            <div class="t-header"><h2>TALLER DE REPARACIONES</h2><p>RESGUARDO DE EQUIPO</p></div>
-            <div class="t-divider"></div>
-            <div class="t-row"><span><strong>Folio:</strong></span><span><strong>${s.folio}</strong></span></div>
-            <div class="t-row"><span>Fecha de recepción:</span><span>${fecha}</span></div>
-            <div class="t-divider"></div>
-            <p class="t-section-title">DATOS DEL CLIENTE</p>
-            <div class="t-row"><span>Nombre:</span><span>${s.client.name}</span></div>
-            <div class="t-row"><span>Teléfono:</span><span>${s.client.phone}</span></div>
-            <div class="t-divider"></div>
-            <p class="t-section-title">EQUIPO RECIBIDO</p>
-            <div class="t-row"><span>Equipo:</span><span>${s.device.brand} ${s.device.model}</span></div>
-            ${s.device.imei ? `<div class="t-row"><span>IMEI/Serie:</span><span>${s.device.imei}</span></div>` : ''}
-            <div style="margin:4px 0"><span style="font-weight:bold">Problema reportado:</span><br>${s.device.problem || '—'}</div>
-            ${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bold">Accesorios que deja:</span><br>${s.device.accessories}</div>` : ''}
-            <div class="t-divider"></div>
-            <p class="t-section-title">CONDICIONES</p>
-            <p style="font-size:10px;margin:4px 0">• El equipo se recibe en las condiciones descritas.</p>
-            <p style="font-size:10px;margin:4px 0">• Diagnóstico sujeto a revisión técnica.</p>
-            <p style="font-size:10px;margin:4px 0">• Equipo no reclamado en 60 días será considerado abandonado.</p>
-            <div class="t-divider"></div>
-            <div style="display:flex;justify-content:space-between;margin-top:20px">
-                <div style="width:45%;text-align:center;border-top:1px solid #000;padding-top:4px;font-size:10px">Firma del Cliente</div>
-                <div style="width:45%;text-align:center;border-top:1px solid #000;padding-top:4px;font-size:10px">Recibido por: ${tech}</div>
-            </div>
-            <div class="t-footer" style="margin-top:15px">
-                <p>¡Gracias por su confianza!</p>
-            </div>
+  const s = allServices.find(x => x.id === id);
+  if (!s) return;
+  const isDouble = workshopSettings.printFormat === 'letter_double';
+  const fecha = new Date(s.date).toLocaleString('es-MX');
+  const tech = s.technician || 'No especificado';
+  const conditions = s.device.physCondition && s.device.physCondition.length > 0 ? s.device.physCondition.join(', ') : 'Ninguno especificado';
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=FOLIO:${s.folio}`;
+  
+  let html = '';
+  if (isDouble) {
+    const half = `
+      <div class="letter-half">
+        <div class="letter-header">
+          <h2>${workshopSettings.workshopName}</h2>
+          <p>RESGUARDO DE EQUIPO ${s.folio}</p>
         </div>
-    `;
-    const printContainer = document.getElementById('printContainer');
-    printContainer.innerHTML = `
-        <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-            <div><strong>🖨️ Vista previa del Resguardo</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
-            <div style="display:flex;gap:10px">
-                <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
-                <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
-            </div>
+        <div class="letter-section">
+          <h3>Datos del Cliente</h3>
+          <div class="letter-row"><span>Nombre:</span><strong>${s.client.name}</strong></div>
+          <div class="letter-row"><span>Teléfono:</span><strong>${s.client.phone}</strong></div>
         </div>
-        <div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper">${ticketHTML}</div></div>
+        <div class="letter-section">
+          <h3>Equipo Recibido</h3>
+          <div class="letter-row"><span>Equipo:</span><strong>${s.device.brand} ${s.device.model}</strong></div>
+          ${s.device.imei ? `<div class="letter-row"><span>IMEI/Serie:</span><span>${s.device.imei}</span></div>` : ''}
+          <div style="margin:6px 0"><strong>Problema:</strong> ${s.device.problem || '—'}</div>
+          <div style="margin:6px 0"><strong>Estado físico:</strong> ${conditions}</div>
+          ${s.device.accessories ? `<div style="margin:6px 0"><strong>Accesorios:</strong> ${s.device.accessories}</div>` : ''}
+        </div>
+        <div class="letter-section">
+          <h3>Condiciones</h3>
+          <p style="font-size:10px;white-space:pre-line">${workshopSettings.policies}</p>
+        </div>
+        <div class="letter-sign">
+          <div>Firma del Cliente</div>
+          <div>Recibido por: ${tech}</div>
+        </div>
+        <div class="letter-footer">
+          Contacto: ${workshopSettings.phone} | ${workshopSettings.workshopName}
+        </div>
+      </div>
     `;
-    printContainer.classList.add('active');
+    html = `<div class="letter-double">${half}<div style="height:20px"></div>${half}</div>`;
+  } else {
+    html = `
+      <div class="ticket-thermal">
+        <div class="t-header"><h2>${workshopSettings.workshopName}</h2><p>RESGUARDO DE EQUIPO</p></div>
+        <div class="t-divider"></div>
+        <div class="t-row"><span><strong>Folio:</strong></span><span><strong>${s.folio}</strong></span></div>
+        <div class="t-row"><span>Fecha:</span><span>${fecha}</span></div>
+        <div class="t-divider"></div>
+        <p class="t-section-title">CLIENTE</p>
+        <div class="t-row"><span>Nombre:</span><span>${s.client.name}</span></div>
+        <div class="t-row"><span>Teléfono:</span><span>${s.client.phone}</span></div>
+        <div class="t-divider"></div>
+        <p class="t-section-title">EQUIPO RECIBIDO</p>
+        <div class="t-row"><span>Equipo:</span><span>${s.device.brand} ${s.device.model}</span></div>
+        ${s.device.imei ? `<div class="t-row"><span>IMEI:</span><span>${s.device.imei}</span></div>` : ''}
+        <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
+        <div style="margin:4px 0"><span style="font-weight:bold">Estado físico:</span><br>${conditions}</div>
+        ${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bold">Accesorios:</span><br>${s.device.accessories}</div>` : ''}
+        <div class="t-divider"></div>
+        <p class="t-section-title">CONDICIONES</p>
+        <p style="font-size:10px;white-space:pre-line">${workshopSettings.policies}</p>
+        <div class="t-divider"></div>
+        <div class="t-qr"><img src="${qrUrl}" alt="QR"><p style="font-size:9px;margin-top:4px">Escanea para ver evidencia</p></div>
+        <div style="display:flex;justify-content:space-between;margin-top:15px;font-size:9px">
+          <div style="width:45%;border-top:1px solid #000;padding-top:3px;text-align:center">Firma Cliente</div>
+          <div style="width:45%;border-top:1px solid #000;padding-top:3px;text-align:center">Recibido: ${tech}</div>
+        </div>
+        <div class="t-footer">Contacto: ${workshopSettings.phone}</div>
+      </div>
+    `;
+  }
+  const printContainer = document.getElementById('printContainer');
+  printContainer.innerHTML = `
+    <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
+      <div><strong>🖨️ Vista previa de Nota de Recepción</strong><p style="margin:0;font-size:12px;opacity:0.8">Se abrió automáticamente al guardar</p></div>
+      <div style="display:flex;gap:10px">
+        <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
+        <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
+      </div>
+    </div>
+    <div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper">${html}</div></div>
+  `;
+  printContainer.classList.add('active');
 }
 
 window.doPrint = function() { window.print(); }
 window.closePrintPreview = function() {
-    const printContainer = document.getElementById('printContainer');
-    printContainer.classList.remove('active');
-    printContainer.innerHTML = '';
+  const printContainer = document.getElementById('printContainer');
+  printContainer.classList.remove('active');
+  printContainer.innerHTML = '';
 }
 
 window.openEdit = function(id) {
@@ -1036,7 +1187,7 @@ window.saveEdit = async function() {
 
 window.deleteSvc = async function(id) {
     if (!confirm('¿Eliminar este servicio?')) return;
-    try { await deleteDoc(doc(db, "services", id)); showToast('🗑️ Servicio eliminado'); } catch (error) { alert("Error: " + error.message); }
+    try { await deleteDoc(doc(db, "services", id)); showToast('️ Servicio eliminado'); } catch (error) { alert("Error: " + error.message); }
 }
 
 window.openDetail = function(id) {
@@ -1045,9 +1196,10 @@ window.openDetail = function(id) {
     const parts = s.service.parts || [];
     const tp = parts.reduce((sum,p) => sum + p.cost, 0);
     const isPaid = s.service.paymentStatus === 'Pagado';
-    const payBadge = isPaid ? '<span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">✅ PAGADO</span>' : '<span class="text-xs px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold">⏳ PENDIENTE</span>';
+    const payBadge = isPaid ? '<span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">✅ PAGADO</span>' : '<span class="text-xs px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold"> PENDIENTE</span>';
     const cobrarBtn = !isPaid ? `<button onclick="closeModal('detailModal');cobrarServicio('${s.id}')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition">💰 Cobrar ahora</button>` : '';
     const tech = s.technician || 'No especificado';
+    const conditions = s.device.physCondition && s.device.physCondition.length > 0 ? s.device.physCondition.join(', ') : 'Ninguno';
     document.getElementById('detailContent').innerHTML = `
         <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
             <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
@@ -1055,11 +1207,13 @@ window.openDetail = function(id) {
             <div class="mt-3">${payBadge}</div>
         </div>
         <div class="grid md:grid-cols-2 gap-4 mb-6">
-            <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">👤 Cliente</p><p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p></div>
-            <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="text-sm font-semibold">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
+            <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Cliente</p><p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p></div>
+            <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Equipo</p><p class="text-sm font-semibold">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
         </div>
         <div class="bg-slate-50 rounded-xl p-4 mb-4">
-            <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Problema reportado</p>
+            <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Estado físico al recibir</p>
+            <p class="text-slate-800 font-medium">${conditions}</p>
+            <p class="text-xs font-semibold text-slate-500 uppercase mb-2 mt-4">Problema reportado</p>
             <p class="text-slate-800">${s.device.problem}</p>
             ${s.device.accessories ? `<p class="text-sm mt-2"><span class="text-slate-500">Accesorios:</span> ${s.device.accessories}</p>` : ''}
         </div>
@@ -1107,9 +1261,11 @@ window.generarCorteDiario = async function() {
     const pagosEfectivo = serviciosHoy.filter(s => s.service.paymentMethod === 'Efectivo').reduce((sum, s) => sum + s.service.repairCost, 0);
     const pagosTransferencia = serviciosHoy.filter(s => s.service.paymentMethod === 'Transferencia').reduce((sum, s) => sum + s.service.repairCost, 0);
     const pagosTarjeta = serviciosHoy.filter(s => s.service.paymentMethod === 'Tarjeta').reduce((sum, s) => sum + s.service.repairCost, 0);
+    const corteHoyExistente = allCortes.find(c => c.type === 'dia' && new Date(c.date).toDateString() === hoy.toDateString());
+    const initialCash = corteHoyExistente ? corteHoyExistente.initialCash : 0;
     const corte = {
         type: 'dia', date: hoy.toISOString(), dateLabel: hoy.toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' }),
-        ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosHoy.length, serviciosNuevos: nuevosHoy.length,
+        initialCash: initialCash, ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosHoy.length, serviciosNuevos: nuevosHoy.length,
         pagosEfectivo, pagosTransferencia, pagosTarjeta,
         serviciosDetalle: serviciosHoy.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
         createdBy: currentUser.fullName, createdAt: new Date().toISOString()
@@ -1159,10 +1315,10 @@ function renderCortes() {
         return `<tr class="hover:bg-slate-50 cursor-pointer" onclick="verDetalleCorte('${c.id}')">
             <td class="p-4 font-medium text-slate-800">${fecha}</td>
             <td class="p-4">${tipoBadge}</td>
-            <td class="p-4 text-right font-semibold text-emerald-600">$${c.ingresos.toFixed(2)}</td>
-            <td class="p-4 text-right text-red-600">$${(c.refacciones + c.gastosPersonales).toFixed(2)}</td>
-            <td class="p-4 text-right font-bold ${c.gananciaNeta >= 0 ? 'text-emerald-600' : 'text-red-600'}">$${c.gananciaNeta.toFixed(2)}</td>
-            <td class="p-4 text-right">${c.serviciosCobrados}</td>
+            <td class="p-4 text-right font-semibold text-emerald-600">$${(c.ingresos||0).toFixed(2)}</td>
+            <td class="p-4 text-right text-red-600">$${((c.refacciones||0) + (c.gastosPersonales||0)).toFixed(2)}</td>
+            <td class="p-4 text-right font-bold ${(c.gananciaNeta||0) >= 0 ? 'text-emerald-600' : 'text-red-600'}">$${(c.gananciaNeta||0).toFixed(2)}</td>
+            <td class="p-4 text-right">${c.serviciosCobrados||0}</td>
             <td class="p-4 text-right">
                 <button onclick="event.stopPropagation();verDetalleCorte('${c.id}')" class="text-brand-600 hover:text-brand-700 font-medium text-sm mr-2">Ver detalle</button>
                 <button onclick="event.stopPropagation();deleteCorte('${c.id}')" class="text-red-600 hover:text-red-700 font-medium text-sm" title="Eliminar corte">🗑️</button>
@@ -1189,19 +1345,19 @@ window.verDetalleCorte = function(id) {
         : '<p class="text-slate-400 text-center py-4">Sin servicios en este corte</p>';
     document.getElementById('corteDetailContent').innerHTML = `
         <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4"><p class="text-xs text-emerald-700 uppercase font-semibold mb-1">Ingresos</p><p class="text-2xl font-bold text-emerald-700">$${c.ingresos.toFixed(2)}</p></div>
-            <div class="bg-brand-50 border border-brand-200 rounded-xl p-4"><p class="text-xs text-brand-700 uppercase font-semibold mb-1">Ganancia neta</p><p class="text-2xl font-bold text-brand-700">$${c.gananciaNeta.toFixed(2)}</p></div>
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4"><p class="text-xs text-emerald-700 uppercase font-semibold mb-1">Ingresos</p><p class="text-2xl font-bold text-emerald-700">$${(c.ingresos||0).toFixed(2)}</p></div>
+            <div class="bg-brand-50 border border-brand-200 rounded-xl p-4"><p class="text-xs text-brand-700 uppercase font-semibold mb-1">Ganancia neta</p><p class="text-2xl font-bold text-brand-700">$${(c.gananciaNeta||0).toFixed(2)}</p></div>
         </div>
         <div class="grid grid-cols-3 gap-3 mb-6">
-            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💵 Efectivo</p><p class="font-bold text-slate-800">$${c.pagosEfectivo.toFixed(2)}</p></div>
-            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">🏦 Transferencia</p><p class="font-bold text-slate-800">$${c.pagosTransferencia.toFixed(2)}</p></div>
-            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💳 Tarjeta</p><p class="font-bold text-slate-800">$${c.pagosTarjeta.toFixed(2)}</p></div>
+            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💵 Efectivo</p><p class="font-bold text-slate-800">$${(c.pagosEfectivo||0).toFixed(2)}</p></div>
+            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">🏦 Transferencia</p><p class="font-bold text-slate-800">$${(c.pagosTransferencia||0).toFixed(2)}</p></div>
+            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💳 Tarjeta</p><p class="font-bold text-slate-800">$${(c.pagosTarjeta||0).toFixed(2)}</p></div>
         </div>
         <div class="bg-slate-50 rounded-xl p-4 mb-6">
-            <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Servicios cobrados</span><span class="font-semibold">${c.serviciosCobrados}</span></div>
-            <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Servicios nuevos</span><span class="font-semibold">${c.serviciosNuevos}</span></div>
-            <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Costo refacciones</span><span class="font-semibold text-amber-600">$${c.refacciones.toFixed(2)}</span></div>
-            <div class="flex justify-between py-2"><span class="text-slate-600">Gastos personales</span><span class="font-semibold text-red-600">$${c.gastosPersonales.toFixed(2)}</span></div>
+            <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Servicios cobrados</span><span class="font-semibold">${c.serviciosCobrados||0}</span></div>
+            <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Servicios nuevos</span><span class="font-semibold">${c.serviciosNuevos||0}</span></div>
+            <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Costo refacciones</span><span class="font-semibold text-amber-600">$${(c.refacciones||0).toFixed(2)}</span></div>
+            <div class="flex justify-between py-2"><span class="text-slate-600">Gastos personales</span><span class="font-semibold text-red-600">$${(c.gastosPersonales||0).toFixed(2)}</span></div>
         </div>
         <h3 class="font-bold text-slate-800 mb-3">📋 Servicios incluidos</h3>
         <div class="bg-white border border-slate-200 rounded-xl p-4 max-h-60 overflow-y-auto">${serviciosHTML}</div>
@@ -1245,25 +1401,25 @@ window.printCorte = function(id) {
         : '<div class="t-row"><span>Sin servicios</span><span></span></div>';
     const ticketHTML = `
         <div class="ticket-thermal">
-            <div class="t-header"><h2>TALLER DE REPARACIONES</h2><p>${tipoCorte}</p></div>
+            <div class="t-header"><h2>${workshopSettings.workshopName}</h2><p>${tipoCorte}</p></div>
             <div class="t-divider"></div>
             <div class="t-row"><span><strong>Fecha:</strong></span><span><strong>${fecha}</strong></span></div>
             <div class="t-divider"></div>
             <p class="t-section-title">RESUMEN FINANCIERO</p>
-            <div class="t-row"><span>Ingresos:</span><span>$${c.ingresos.toFixed(2)}</span></div>
-            <div class="t-row"><span>Costo refacciones:</span><span>-$${c.refacciones.toFixed(2)}</span></div>
-            <div class="t-row"><span>Gastos personales:</span><span>-$${c.gastosPersonales.toFixed(2)}</span></div>
+            <div class="t-row"><span>Ingresos:</span><span>$${(c.ingresos||0).toFixed(2)}</span></div>
+            <div class="t-row"><span>Costo refacciones:</span><span>-$${(c.refacciones||0).toFixed(2)}</span></div>
+            <div class="t-row"><span>Gastos personales:</span><span>-$${(c.gastosPersonales||0).toFixed(2)}</span></div>
             <div class="t-divider"></div>
-            <div class="t-row t-total"><span>GANANCIA NETA:</span><span>$${c.gananciaNeta.toFixed(2)}</span></div>
+            <div class="t-row t-total"><span>GANANCIA NETA:</span><span>$${(c.gananciaNeta||0).toFixed(2)}</span></div>
             <div class="t-divider"></div>
             <p class="t-section-title">MÉTODOS DE PAGO</p>
-            <div class="t-row"><span>💵 Efectivo:</span><span>$${c.pagosEfectivo.toFixed(2)}</span></div>
-            <div class="t-row"><span>🏦 Transferencia:</span><span>$${c.pagosTransferencia.toFixed(2)}</span></div>
-            <div class="t-row"><span>💳 Tarjeta:</span><span>$${c.pagosTarjeta.toFixed(2)}</span></div>
+            <div class="t-row"><span>💵 Efectivo:</span><span>$${(c.pagosEfectivo||0).toFixed(2)}</span></div>
+            <div class="t-row"><span>🏦 Transferencia:</span><span>$${(c.pagosTransferencia||0).toFixed(2)}</span></div>
+            <div class="t-row"><span>💳 Tarjeta:</span><span>$${(c.pagosTarjeta||0).toFixed(2)}</span></div>
             <div class="t-divider"></div>
             <p class="t-section-title">ESTADÍSTICAS</p>
-            <div class="t-row"><span>Servicios cobrados:</span><span>${c.serviciosCobrados}</span></div>
-            <div class="t-row"><span>Servicios nuevos:</span><span>${c.serviciosNuevos}</span></div>
+            <div class="t-row"><span>Servicios cobrados:</span><span>${c.serviciosCobrados||0}</span></div>
+            <div class="t-row"><span>Servicios nuevos:</span><span>${c.serviciosNuevos||0}</span></div>
             <div class="t-divider"></div>
             <p class="t-section-title">SERVICIOS INCLUIDOS</p>
             ${serviciosHTML}
@@ -1426,6 +1582,10 @@ function loadCajaHoy() {
     const refacciones = serviciosHoy.reduce((sum, s) => sum + (s.service.totalParts || 0), 0);
     const gastos = gastosHoy.reduce((sum, e) => sum + e.amount, 0);
     const ganancia = ingresos - refacciones - gastos;
+    
+    const hoyStr = hoy.toDateString();
+    const corteHoy = allCortes.find(c => c.type === 'dia' && new Date(c.date).toDateString() === hoyStr);
+    document.getElementById('cajaHoyInicial').textContent = '$' + (corteHoy ? (corteHoy.initialCash||0).toFixed(2) : '0.00');
     document.getElementById('cajaHoyIngresos').textContent = '$' + ingresos.toFixed(2);
     document.getElementById('cajaHoyRefacciones').textContent = '$' + refacciones.toFixed(2);
     document.getElementById('cajaHoyGastos').textContent = '$' + gastos.toFixed(2);
@@ -1546,6 +1706,28 @@ function loadServices() {
         </tr>`;
     }).join('');
 }
+
+function loadConfigForm() {
+  document.getElementById('cfgWorkshopName').value = workshopSettings.workshopName;
+  document.getElementById('cfgPhone').value = workshopSettings.phone;
+  document.getElementById('cfgPrintFormat').value = workshopSettings.printFormat;
+  document.getElementById('cfgPolicies').value = workshopSettings.policies;
+}
+
+document.getElementById('configForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  showLoading('Guardando configuración...');
+  try {
+    await setDoc(doc(db, "settings", "general"), {
+      workshopName: document.getElementById('cfgWorkshopName').value,
+      phone: document.getElementById('cfgPhone').value,
+      printFormat: document.getElementById('cfgPrintFormat').value,
+      policies: document.getElementById('cfgPolicies').value
+    });
+    hideLoading();
+    showToast('✅ Configuración guardada');
+  } catch (error) { hideLoading(); alert("Error: " + error.message); }
+});
 
 function showLoading(text) { document.getElementById('loadingText').textContent = text; document.getElementById('loading').classList.remove('hidden'); }
 function hideLoading() { document.getElementById('loading').classList.add('hidden'); }
