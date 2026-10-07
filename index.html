@@ -31,39 +31,10 @@ tailwind.config = {
   ::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
 
   /* ===== SISTEMA DE IMPRESIÓN ===== */
-  #printContainer {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: white;
-    z-index: 99999;
-    overflow-y: auto;
-    padding: 20px;
-  }
+  #printContainer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; overflow-y: auto; padding: 20px; }
   #printContainer.active { display: block; }
-
-  /* Vista previa en pantalla */
-  .preview-wrapper {
-    max-width: 380px;
-    margin: 20px auto;
-    background: white;
-    border: 2px dashed #cbd5e1;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-  }
-
-  /* Formato térmico 80mm */
-  .ticket-thermal {
-    width: 80mm;
-    margin: 0 auto;
-    padding: 3mm;
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
-    color: #000;
-    line-height: 1.4;
-  }
+  .preview-wrapper { max-width: 380px; margin: 20px auto; background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+  .ticket-thermal { width: 80mm; margin: 0 auto; padding: 3mm; font-family: 'Courier New', monospace; font-size: 11px; color: #000; line-height: 1.4; }
   .ticket-thermal .t-header { text-align:center; border-bottom: 1px dashed #000; padding-bottom: 6px; margin-bottom: 6px; }
   .ticket-thermal .t-header h2 { font-size: 15px; margin: 0; font-weight: bold; }
   .ticket-thermal .t-header p { margin: 2px 0; font-size: 11px; }
@@ -74,83 +45,56 @@ tailwind.config = {
   .ticket-thermal .t-section-title { font-weight: bold; margin: 6px 0 3px 0; font-size: 11px; text-transform: uppercase; }
   .ticket-thermal .t-warranty { background: #f0f0f0; padding: 5px; border-radius: 3px; margin: 6px 0; }
 
-  /* Al imprimir: solo mostrar el ticket */
   @media print {
-    @page {
-      size: 80mm auto;
-      margin: 0;
-    }
+    @page { size: 80mm auto; margin: 0; }
     body * { visibility: hidden !important; }
     #printContainer, #printContainer * { visibility: visible !important; }
-    #printContainer {
-      display: block !important;
-      position: absolute !important;
-      top: 0; left: 0;
-      width: 80mm;
-      padding: 0;
-      background: white;
-    }
-    #printContainer .preview-wrapper {
-      border: none;
-      box-shadow: none;
-      margin: 0;
-      padding: 0;
-      max-width: 80mm;
-    }
+    #printContainer { display: block !important; position: absolute !important; top: 0; left: 0; width: 80mm; padding: 0; background: white; }
+    #printContainer .preview-wrapper { border: none; box-shadow: none; margin: 0; padding: 0; max-width: 80mm; }
     #printContainer .no-print { display: none !important; }
   }
 
-  /* Modal overlay genérico */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 50;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
+  .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
   .modal-overlay.active { display: flex; }
+
+  /* Gráficas CEO */
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 200px; padding: 10px 0; }
+  .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .bar { width: 100%; max-width: 50px; background: linear-gradient(to top, #6366f1, #8b5cf6); border-radius: 6px 6px 0 0; transition: all 0.3s; position: relative; min-height: 4px; }
+  .bar:hover { opacity: 0.8; }
+  .bar-label { font-size: 10px; color: #64748b; text-align: center; }
+  .bar-value { font-size: 11px; font-weight: 600; color: #1e293b; }
 </style>
 </head>
 <body class="bg-surface-50 text-slate-800">
 
-<!-- ==================== LOGIN ==================== -->
+<!-- LOGIN -->
 <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-brand-600 via-indigo-600 to-purple-700">
   <div class="w-full max-w-md fade-in">
     <div class="text-center mb-8">
       <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur rounded-2xl mb-4">
         <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
       </div>
-      <h1 class="text-3xl font-bold text-white mb-2">Taller de Reparaciones</h1>
+      <h1 class="text-3xl font-bold text-white mb-2">MiTallerPro</h1>
       <p class="text-indigo-100">Sistema de gestión</p>
     </div>
     <div class="bg-white rounded-2xl shadow-2xl p-8">
       <h2 class="text-xl font-semibold text-slate-800 mb-1">Bienvenido</h2>
       <p class="text-slate-500 text-sm mb-6">Inicia sesión para continuar</p>
       <form id="loginForm" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-slate-700 mb-1.5">Correo electrónico</label>
-          <input type="email" id="loginEmail" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="tu@correo.com">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-slate-700 mb-1.5">Contraseña</label>
-          <input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="••••••••">
-        </div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1.5">Correo electrónico</label><input type="email" id="loginEmail" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="tu@correo.com"></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1.5">Contraseña</label><input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="••••••••"></div>
         <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-lg transition shadow-lg shadow-brand-500/30">Iniciar Sesión</button>
       </form>
       <div id="loginError" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center"></div>
-      <p class="text-center text-xs text-slate-400 mt-6">🔒 Conexión segura </p>
+      <p class="text-center text-xs text-slate-400 mt-6">🔒 Conexión segura</p>
     </div>
   </div>
 </div>
 
-<!-- ==================== MAIN APP ==================== -->
+<!-- MAIN APP -->
 <div id="mainApp" class="hidden">
   <div class="flex h-screen overflow-hidden">
-
     <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar-transition fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 flex flex-col -translate-x-full lg:translate-x-0">
       <div class="p-6 border-b border-slate-100">
@@ -162,7 +106,7 @@ tailwind.config = {
         </div>
       </div>
       <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-3">Menú Principal</p>
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-3">Operación</p>
         <button onclick="showSection('dashboard', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition" data-section="dashboard">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
           Dashboard
@@ -176,10 +120,23 @@ tailwind.config = {
           Inventario
           <span class="ml-auto text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Pronto</span>
         </button>
+
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-4 px-3">Finanzas</p>
         <button onclick="showSection('caja', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="caja">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           Caja
         </button>
+        <button onclick="showSection('cortes', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="cortes">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
+          Cortes de Caja
+        </button>
+
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-4 px-3">Dirección</p>
+        <button onclick="showSection('ceo', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="ceo">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          CEO / Estadísticas
+        </button>
+
         <div class="pt-4 mt-4 border-t border-slate-100">
           <button onclick="logout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
@@ -235,44 +192,20 @@ tailwind.config = {
         <section id="dashboard" class="section-content fade-in">
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
-              <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                  <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                </div>
-                <span class="text-xs text-slate-400">Activas</span>
-              </div>
-              <p class="text-2xl font-bold text-slate-800" id="kpiActivas">0</p>
-              <p class="text-xs text-slate-500 mt-1">Órdenes en proceso</p>
+              <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><span class="text-xs text-slate-400">Activas</span></div>
+              <p class="text-2xl font-bold text-slate-800" id="kpiActivas">0</p><p class="text-xs text-slate-500 mt-1">Órdenes en proceso</p>
             </div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
-              <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-                  <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-                <span class="text-xs text-slate-400">Hoy</span>
-              </div>
-              <p class="text-2xl font-bold text-slate-800" id="kpiIngresos">$0</p>
-              <p class="text-xs text-slate-500 mt-1">Ingresos del día (cobrado)</p>
+              <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xs text-slate-400">Hoy</span></div>
+              <p class="text-2xl font-bold text-slate-800" id="kpiIngresos">$0</p><p class="text-xs text-slate-500 mt-1">Ingresos del día (cobrado)</p>
             </div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
-              <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                  <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-                <span class="text-xs text-slate-400">Espera</span>
-              </div>
-              <p class="text-2xl font-bold text-slate-800" id="kpiEspera">0</p>
-              <p class="text-xs text-slate-500 mt-1">Equipos en espera</p>
+              <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xs text-slate-400">Espera</span></div>
+              <p class="text-2xl font-bold text-slate-800" id="kpiEspera">0</p><p class="text-xs text-slate-500 mt-1">Equipos en espera</p>
             </div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
-              <div class="flex items-center justify-between mb-3">
-                <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                  <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-                <span class="text-xs text-slate-400">Total</span>
-              </div>
-              <p class="text-2xl font-bold text-slate-800" id="kpiEntregados">0</p>
-              <p class="text-xs text-slate-500 mt-1">Entregados</p>
+              <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xs text-slate-400">Total</span></div>
+              <p class="text-2xl font-bold text-slate-800" id="kpiEntregados">0</p><p class="text-xs text-slate-500 mt-1">Entregados</p>
             </div>
           </div>
 
@@ -280,9 +213,7 @@ tailwind.config = {
             <div class="lg:col-span-1">
               <div class="bg-gradient-to-br from-brand-600 to-purple-700 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30 h-full flex flex-col justify-between">
                 <div>
-                  <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center mb-4">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                  </div>
+                  <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg></div>
                   <h3 class="text-xl font-bold mb-2">Nueva Orden</h3>
                   <p class="text-indigo-100 text-sm">Registra un nuevo servicio de reparación</p>
                 </div>
@@ -296,10 +227,7 @@ tailwind.config = {
               </div>
               <div class="overflow-x-auto">
                 <table class="w-full">
-                  <thead><tr class="text-xs text-slate-500 border-b border-slate-100">
-                    <th class="text-left py-2 font-medium">Folio</th><th class="text-left py-2 font-medium">Cliente</th>
-                    <th class="text-left py-2 font-medium">Estado</th><th class="text-right py-2 font-medium">Monto</th>
-                  </tr></thead>
+                  <thead><tr class="text-xs text-slate-500 border-b border-slate-100"><th class="text-left py-2 font-medium">Folio</th><th class="text-left py-2 font-medium">Cliente</th><th class="text-left py-2 font-medium">Estado</th><th class="text-right py-2 font-medium">Monto</th></tr></thead>
                   <tbody id="recentOrdersTable" class="text-sm"></tbody>
                 </table>
               </div>
@@ -309,23 +237,12 @@ tailwind.config = {
 
         <!-- ÓRDENES -->
         <section id="ordenes" class="section-content hidden fade-in">
-          <div class="mb-6">
-            <h2 class="text-2xl font-bold text-slate-800">Órdenes de Servicio</h2>
-            <p class="text-slate-500 text-sm">Gestiona todas las órdenes de reparación</p>
-          </div>
+          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">Órdenes de Servicio</h2><p class="text-slate-500 text-sm">Gestiona todas las órdenes de reparación</p></div>
           <div class="flex flex-wrap gap-3 mb-6">
-            <button onclick="openModal('newOrderModal')" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-              Nueva Orden
-            </button>
-            <button onclick="openAddPartModal()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Agregar Refacción
-            </button>
+            <button onclick="openModal('newOrderModal')" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Nueva Orden</button>
+            <button onclick="openAddPartModal()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Agregar Refacción</button>
           </div>
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-6">
-            <div class="flex items-center gap-2 overflow-x-auto pb-2" id="statusFilters"></div>
-          </div>
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-6"><div class="flex items-center gap-2 overflow-x-auto pb-2" id="statusFilters"></div></div>
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div class="p-4 border-b border-slate-100">
               <div class="relative">
@@ -335,12 +252,7 @@ tailwind.config = {
             </div>
             <div class="overflow-x-auto">
               <table class="w-full">
-                <thead class="bg-slate-50"><tr class="text-xs text-slate-600 uppercase">
-                  <th class="text-left p-4 font-semibold">Folio</th><th class="text-left p-4 font-semibold">Cliente</th>
-                  <th class="text-left p-4 font-semibold">Equipo</th><th class="text-left p-4 font-semibold">Estado</th>
-                  <th class="text-left p-4 font-semibold">Pago</th><th class="text-right p-4 font-semibold">Costo</th>
-                  <th class="text-right p-4 font-semibold">Acciones</th>
-                </tr></thead>
+                <thead class="bg-slate-50"><tr class="text-xs text-slate-600 uppercase"><th class="text-left p-4 font-semibold">Folio</th><th class="text-left p-4 font-semibold">Cliente</th><th class="text-left p-4 font-semibold">Equipo</th><th class="text-left p-4 font-semibold">Estado</th><th class="text-left p-4 font-semibold">Pago</th><th class="text-right p-4 font-semibold">Costo</th><th class="text-right p-4 font-semibold">Acciones</th></tr></thead>
                 <tbody id="servicesList" class="text-sm divide-y divide-slate-100"></tbody>
               </table>
             </div>
@@ -350,9 +262,7 @@ tailwind.config = {
         <!-- INVENTARIO -->
         <section id="inventario" class="section-content hidden fade-in">
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-12 text-center">
-            <div class="w-20 h-20 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <svg class="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-            </div>
+            <div class="w-20 h-20 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
             <h2 class="text-2xl font-bold text-slate-800 mb-2">Módulo de Inventario</h2>
             <p class="text-slate-500 mb-6">Próximamente disponible.</p>
             <span class="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">En desarrollo</span>
@@ -361,36 +271,36 @@ tailwind.config = {
 
         <!-- CAJA -->
         <section id="caja" class="section-content hidden fade-in">
-          <div class="mb-6">
-            <h2 class="text-2xl font-bold text-slate-800">Caja / Finanzas</h2>
-            <p class="text-slate-500 text-sm">Resumen financiero del mes</p>
+          <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+            <div><h2 class="text-2xl font-bold text-slate-800">Caja / Finanzas</h2><p class="text-slate-500 text-sm">Resumen financiero y cortes de caja</p></div>
+            <button onclick="generarCorteDiario()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition shadow-lg shadow-emerald-500/30 flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              Generar Corte del Día
+            </button>
           </div>
+
+          <!-- Resumen del día -->
+          <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl p-6 text-white mb-6 shadow-lg">
+            <h3 class="text-lg font-bold mb-4">📊 Resumen de hoy</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Ingresos</p><p class="text-2xl font-bold" id="cajaHoyIngresos">$0</p></div>
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div>
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Gastos personales</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Ganancia neta</p><p class="text-2xl font-bold" id="cajaHoyGanancia">$0</p></div>
+            </div>
+          </div>
+
+          <!-- Resumen del mes -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg shadow-emerald-500/30">
-              <p class="text-emerald-100 text-sm mb-1">Ingresos del mes</p>
-              <p class="text-3xl font-bold" id="cajaIngresos">$0</p>
-              <p class="text-xs text-emerald-100 mt-1">(cobrado a clientes)</p>
-            </div>
-            <div class="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg shadow-amber-500/30">
-              <p class="text-amber-100 text-sm mb-1">Gasto en refacciones</p>
-              <p class="text-3xl font-bold" id="cajaRefacciones">$0</p>
-              <p class="text-xs text-amber-100 mt-1">(costo interno)</p>
-            </div>
-            <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6 text-white shadow-lg shadow-red-500/30">
-              <p class="text-red-100 text-sm mb-1">Gastos personales</p>
-              <p class="text-3xl font-bold" id="cajaGastos">$0</p>
-            </div>
-            <div class="bg-gradient-to-br from-brand-500 to-brand-600 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30">
-              <p class="text-indigo-100 text-sm mb-1">Ganancia neta</p>
-              <p class="text-3xl font-bold" id="cajaBalance">$0</p>
-              <p class="text-xs text-indigo-100 mt-1">(ingresos - gastos)</p>
-            </div>
+            <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg shadow-emerald-500/30"><p class="text-emerald-100 text-sm mb-1">Ingresos del mes</p><p class="text-3xl font-bold" id="cajaIngresos">$0</p><p class="text-xs text-emerald-100 mt-1">(cobrado a clientes)</p></div>
+            <div class="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg shadow-amber-500/30"><p class="text-amber-100 text-sm mb-1">Gasto en refacciones</p><p class="text-3xl font-bold" id="cajaRefacciones">$0</p><p class="text-xs text-amber-100 mt-1">(costo interno)</p></div>
+            <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6 text-white shadow-lg shadow-red-500/30"><p class="text-red-100 text-sm mb-1">Gastos personales</p><p class="text-3xl font-bold" id="cajaGastos">$0</p></div>
+            <div class="bg-gradient-to-br from-brand-500 to-brand-600 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30"><p class="text-indigo-100 text-sm mb-1">Ganancia neta</p><p class="text-3xl font-bold" id="cajaBalance">$0</p><p class="text-xs text-indigo-100 mt-1">(ingresos - gastos)</p></div>
           </div>
+
+          <!-- Formulario gasto -->
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
-            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
-              <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              Registrar gasto personal
-            </h3>
+            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Registrar gasto personal</h3>
             <form id="expenseForm" class="grid md:grid-cols-2 gap-4">
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Fecha</label><input type="date" id="expenseDate" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
               <div><label class="block text-sm font-medium text-slate-700 mb-1">Monto</label><input type="number" id="expenseAmount" step="0.01" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"></div>
@@ -399,16 +309,100 @@ tailwind.config = {
               <div class="md:col-span-2"><button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2.5 rounded-lg font-medium transition">Registrar gasto</button></div>
             </form>
           </div>
+
+          <!-- Historial gastos -->
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             <div class="p-6 border-b border-slate-100"><h3 class="font-bold text-slate-800">Historial de gastos personales</h3></div>
             <div class="overflow-x-auto">
               <table class="w-full">
-                <thead class="bg-slate-50"><tr class="text-xs text-slate-600 uppercase">
-                  <th class="text-left p-4 font-semibold">Fecha</th><th class="text-left p-4 font-semibold">Categoría</th>
-                  <th class="text-left p-4 font-semibold">Descripción</th><th class="text-right p-4 font-semibold">Monto</th><th class="text-right p-4 font-semibold"></th>
-                </tr></thead>
+                <thead class="bg-slate-50"><tr class="text-xs text-slate-600 uppercase"><th class="text-left p-4 font-semibold">Fecha</th><th class="text-left p-4 font-semibold">Categoría</th><th class="text-left p-4 font-semibold">Descripción</th><th class="text-right p-4 font-semibold">Monto</th><th class="text-right p-4 font-semibold"></th></tr></thead>
                 <tbody id="expensesList" class="text-sm divide-y divide-slate-100"></tbody>
               </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- CORTES DE CAJA -->
+        <section id="cortes" class="section-content hidden fade-in">
+          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📋 Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
+          <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <button onclick="generarCorteDiario()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-6 rounded-2xl shadow-lg shadow-emerald-500/30 transition text-left">
+              <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><h3 class="text-lg font-bold">Corte del Día</h3></div>
+              <p class="text-emerald-100 text-sm">Cierra la caja del día actual y genera el resumen</p>
+            </button>
+            <button onclick="generarCorteMensual()" class="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white p-6 rounded-2xl shadow-lg shadow-brand-500/30 transition text-left">
+              <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><h3 class="text-lg font-bold">Corte del Mes</h3></div>
+              <p class="text-indigo-100 text-sm">Resumen completo del mes en curso</p>
+            </button>
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl">
+              <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><h3 class="text-lg font-bold text-slate-800">Total de cortes</h3></div>
+              <p class="text-3xl font-bold text-slate-800" id="totalCortesCount">0</p>
+              <p class="text-sm text-slate-500 mt-1">Cortes registrados</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between flex-wrap gap-2">
+              <h3 class="font-bold text-slate-800">Historial de cortes</h3>
+              <div class="flex gap-2">
+                <button onclick="filtrarCortes('todos')" class="corte-filter-btn px-3 py-1.5 rounded-lg text-sm font-medium bg-brand-600 text-white" data-filter="todos">Todos</button>
+                <button onclick="filtrarCortes('dia')" class="corte-filter-btn px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-700" data-filter="dia">Diarios</button>
+                <button onclick="filtrarCortes('mes')" class="corte-filter-btn px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-700" data-filter="mes">Mensuales</button>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-slate-50"><tr class="text-xs text-slate-600 uppercase"><th class="text-left p-4 font-semibold">Fecha</th><th class="text-left p-4 font-semibold">Tipo</th><th class="text-right p-4 font-semibold">Ingresos</th><th class="text-right p-4 font-semibold">Gastos</th><th class="text-right p-4 font-semibold">Ganancia</th><th class="text-right p-4 font-semibold">Servicios</th><th class="text-right p-4 font-semibold">Acciones</th></tr></thead>
+                <tbody id="cortesList" class="text-sm divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+            <div id="cortesEmpty" class="hidden p-12 text-center text-slate-400">
+              <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
+              <p class="font-semibold">Aún no hay cortes registrados</p>
+              <p class="text-sm mt-2">Genera tu primer corte del día para comenzar</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CEO / ESTADÍSTICAS -->
+        <section id="ceo" class="section-content hidden fade-in">
+          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📊 CEO Dashboard</h2><p class="text-slate-500 text-sm">Estadísticas y métricas clave del negocio</p></div>
+
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ingresos este mes</p><p class="text-2xl font-bold text-slate-800" id="ceoIngresosMes">$0</p><p class="text-xs mt-2" id="ceoIngresosTrend"></p></div>
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Servicios este mes</p><p class="text-2xl font-bold text-slate-800" id="ceoServiciosMes">0</p><p class="text-xs mt-2" id="ceoServiciosTrend"></p></div>
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ticket promedio</p><p class="text-2xl font-bold text-slate-800" id="ceoTicketPromedio">$0</p><p class="text-xs text-slate-500 mt-2">Por servicio</p></div>
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ganancia neta mes</p><p class="text-2xl font-bold text-emerald-600" id="ceoGananciaMes">$0</p><p class="text-xs text-slate-500 mt-2">Después de gastos</p></div>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
+            <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-800">📈 Ingresos últimos 6 meses</h3><span class="text-xs text-slate-500">Cobros realizados</span></div>
+            <div class="bar-chart" id="barChartIngresos"></div>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+              <h3 class="font-bold text-slate-800 mb-4">🔧 Top servicios del mes</h3>
+              <div id="topServiciosList" class="space-y-3"></div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+              <h3 class="font-bold text-slate-800 mb-4">📱 Marcas más atendidas</h3>
+              <div id="topMarcasList" class="space-y-3"></div>
+            </div>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+              <h3 class="font-bold text-slate-800 mb-4">💳 Métodos de pago</h3>
+              <div id="metodosPagoList" class="space-y-3"></div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+              <h3 class="font-bold text-slate-800 mb-4">📅 Día más productivo</h3>
+              <div id="diaProductivo" class="text-center py-8">
+                <div class="w-20 h-20 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+                <p class="text-3xl font-bold text-slate-800" id="diaProductivoNombre">—</p>
+                <p class="text-sm text-slate-500 mt-2" id="diaProductivoDetalle">Calculando...</p>
+              </div>
             </div>
           </div>
         </section>
@@ -418,25 +412,21 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ==================== MODAL NUEVA ORDEN ==================== -->
+<!-- MODALES (Nueva Orden, Refacción, Detalle, Editar, Cobro, Detalle Corte) -->
 <div class="modal-overlay" id="newOrderModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
       <h2 class="text-xl font-bold text-slate-800">📝 Nueva Orden de Servicio</h2>
-      <button onclick="closeModal('newOrderModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
+      <button onclick="closeModal('newOrderModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
     </div>
     <form id="serviceForm" class="p-6 space-y-5">
-      <div>
-        <h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Datos del Cliente</h3>
+      <div><h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Datos del Cliente</h3>
         <div class="grid md:grid-cols-2 gap-4">
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Nombre *</label><input type="text" id="clientName" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Teléfono *</label><input type="tel" id="clientPhone" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
         </div>
       </div>
-      <div>
-        <h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Datos del Equipo</h3>
+      <div><h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Datos del Equipo</h3>
         <div class="grid md:grid-cols-2 gap-4">
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Marca *</label><select id="deviceBrand" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Samsung</option><option>iPhone</option><option>Xiaomi</option><option>Huawei</option><option>Motorola</option><option>LG</option><option>Otro</option></select></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Modelo *</label><input type="text" id="deviceModel" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
@@ -446,8 +436,7 @@ tailwind.config = {
         <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Problema reportado por el cliente *</label><textarea id="problemDescription" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
         <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Accesorios que deja</label><textarea id="accessories" placeholder="Cargador, funda, SIM..." class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
       </div>
-      <div>
-        <h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Servicio</h3>
+      <div><h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Servicio</h3>
         <div class="grid md:grid-cols-2 gap-4">
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Estado *</label><select id="serviceStatus" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option>En diagnóstico</option><option>Por revisar</option><option>Revisado</option><option>En espera de autorización</option><option>Reparado (en espera de que pasen por él)</option><option>Entregado</option></select></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Precio total al cliente *</label><input type="number" id="repairCost" step="0.01" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
@@ -456,21 +445,18 @@ tailwind.config = {
         <p class="text-xs text-slate-500 mt-3 bg-slate-50 p-3 rounded-lg">💡 Las refacciones se agregan después desde el botón "Agregar Refacción".</p>
       </div>
       <div class="flex gap-3 pt-4 border-t border-slate-100">
-        <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar </button>
+        <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar</button>
         <button type="button" onclick="closeModal('newOrderModal')" class="px-6 py-3 border border-slate-200 rounded-xl font-medium hover:bg-slate-50 transition">Cancelar</button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- ==================== MODAL AGREGAR REFACCIÓN ==================== -->
 <div class="modal-overlay" id="addPartModal">
   <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
       <h2 class="text-xl font-bold text-slate-800">🔧 Agregar Refacción</h2>
-      <button onclick="closeModal('addPartModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
+      <button onclick="closeModal('addPartModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
     </div>
     <div class="p-6">
       <div id="addPartStep1">
@@ -490,9 +476,7 @@ tailwind.config = {
         <div class="space-y-4">
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Descripción *</label><input type="text" id="newPartDesc" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: Pantalla, batería..."></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Costo interno de la refacción *</label><input type="number" id="newPartCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"></div>
-          <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">
-            ⚠️ Este es un <strong>registro interno</strong> para control de inventario. <strong>NO modifica</strong> el precio final al cliente.
-          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">⚠️ Este es un <strong>registro interno</strong> para control de inventario. <strong>NO modifica</strong> el precio final al cliente.</div>
           <button onclick="confirmAddPart()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Agregar Refacción</button>
         </div>
       </div>
@@ -500,61 +484,36 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ==================== MODAL DETALLE ==================== -->
 <div class="modal-overlay" id="detailModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
       <h2 class="text-xl font-bold text-slate-800">📄 Detalle del Servicio</h2>
-      <button onclick="closeModal('detailModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
+      <button onclick="closeModal('detailModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
     </div>
     <div id="detailContent" class="p-6"></div>
   </div>
 </div>
 
-<!-- ==================== MODAL EDITAR ==================== -->
 <div class="modal-overlay" id="editModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
       <h2 class="text-xl font-bold text-slate-800">✏️ Editar <span id="editFolio"></span></h2>
-      <button onclick="closeModal('editModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
+      <button onclick="closeModal('editModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
     </div>
     <div class="p-6 space-y-5">
-      <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-2">Estado del servicio</label>
-        <div class="flex flex-wrap gap-2" id="statusFlow"></div>
-      </div>
+      <div><label class="block text-sm font-semibold text-slate-700 mb-2">Estado del servicio</label><div class="flex flex-wrap gap-2" id="statusFlow"></div></div>
       <div>
         <label class="block text-sm font-semibold text-slate-700 mb-1">Diagnóstico técnico</label>
         <textarea id="editDiagnosis" rows="3" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Descripción del diagnóstico realizado..."></textarea>
         <p class="text-xs text-slate-500 mt-1">Diagnóstico técnico (✅Se incluye en el ticket impreso del cliente)</p>
       </div>
-      <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-1">Notas técnicas</label>
-        <textarea id="editTechnicalNotes" rows="2" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Observaciones, detalles técnicos..."></textarea>
-      </div>
+      <div><label class="block text-sm font-semibold text-slate-700 mb-1">Notas técnicas</label><textarea id="editTechnicalNotes" rows="2" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Observaciones, detalles técnicos..."></textarea></div>
       <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Precio total al cliente</label>
-          <input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
-          <p class="text-xs text-slate-500 mt-1">Lo que se cobra al cliente</p>
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1">Método de pago</label>
-          <select id="editPaymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select>
-        </div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Precio total al cliente</label><input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><p class="text-xs text-slate-500 mt-1">Lo que se cobra al cliente</p></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Método de pago</label><select id="editPaymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
       </div>
-      <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-1">Entrega estimada</label>
-        <input type="date" id="editDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
-      </div>
-      <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-2">Refacciones </label>
-        <div id="editPartsList" class="space-y-2"></div>
-      </div>
+      <div><label class="block text-sm font-semibold text-slate-700 mb-1">Entrega estimada</label><input type="date" id="editDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
+      <div><label class="block text-sm font-semibold text-slate-700 mb-2">Refacciones</label><div id="editPartsList" class="space-y-2"></div></div>
       <div class="bg-slate-50 rounded-xl p-4 space-y-1 text-sm">
         <div class="flex justify-between"><span class="text-slate-600">Costo refacciones:</span><span class="font-semibold">$<span id="editTotalParts">0.00</span></span></div>
         <div class="flex justify-between"><span class="text-slate-600">Precio al cliente:</span><span class="font-semibold">$<span id="editRepairCostDisplay">0.00</span></span></div>
@@ -565,23 +524,28 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- ==================== MODAL COBRO (CHECKOUT) ==================== -->
 <div class="modal-overlay" id="checkoutModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
       <h2 class="text-xl font-bold text-slate-800">💰 Cobrar Servicio</h2>
-      <button onclick="closeModal('checkoutModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
+      <button onclick="closeModal('checkoutModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
     </div>
     <div class="p-6" id="checkoutContent"></div>
   </div>
 </div>
 
-<!-- ==================== CONTENEDOR DE IMPRESIÓN ==================== -->
+<div class="modal-overlay" id="corteDetailModal">
+  <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
+      <h2 class="text-xl font-bold text-slate-800" id="corteDetailTitle">Detalle del Corte</h2>
+      <button onclick="closeModal('corteDetailModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div id="corteDetailContent" class="p-6"></div>
+  </div>
+</div>
+
 <div id="printContainer"></div>
 
-<!-- Loading -->
 <div id="loading" class="hidden fixed inset-0 bg-white/95 z-[100] flex items-center justify-center flex-col gap-3">
   <div class="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
   <p class="text-slate-600 font-medium" id="loadingText">Procesando...</p>
@@ -603,12 +567,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-  // Sistema de usuarios (agrega o quita usuarios aquí)
 const USERS = [
     { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07" },
     { email: "demo@demo.com", password: "demo2024" }
 ];
-
 const ADMIN_EMAIL = "ismaelrh@velocell.com";
 const ADMIN_PASS = "ROHI981115HTSDNS07";
 const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
@@ -620,82 +582,77 @@ const STATUS_COLORS = {
   'Reparado (en espera de que pasen por él)': 'bg-emerald-100 text-emerald-700',
   'Entregado': 'bg-slate-100 text-slate-700'
 };
+const DIAS_SEMANA = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
 let currentUser = null;
-  // Verificar sesión guardada al cargar la página
-const savedSession = localStorage.getItem('tallerSession');
-if (savedSession) {
-    try {
-        const session = JSON.parse(savedSession);
-        // Verificar que la sesión no tenga más de 24 horas (opcional, por seguridad)
-        const hoursSinceLogin = (Date.now() - session.timestamp) / (1000 * 60 * 60);
-        if (hoursSinceLogin < 24) {
-            currentUser = { email: session.email, role: session.role };
-            // Mostrar app directamente sin login
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-            const name = currentUser.email.split('@')[0];
-            const initial = name.charAt(0).toUpperCase();
-            document.getElementById('userAvatar').textContent = initial;
-            document.getElementById('navAvatar').textContent = initial;
-            document.getElementById('sidebarUserName').textContent = name;
-            document.getElementById('navUserName').textContent = name;
-            document.getElementById('sidebarUserEmail').textContent = currentUser.email;
-            document.getElementById('navUserEmail').textContent = currentUser.email;
-            const hour = new Date().getHours();
-            let greeting = 'Buenas noches';
-            if (hour < 12) greeting = 'Buenos días';
-            else if (hour < 19) greeting = 'Buenas tardes';
-            document.getElementById('greeting').textContent = `${greeting}, ${name} 👋`;
-            const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', options);
-            const dashBtn = document.querySelector('[data-section="dashboard"]');
-            dashBtn.classList.add('bg-brand-50','text-brand-600');
-            startRealtimeSync();
-        } else {
-            // Sesión expirada, limpiar
-            localStorage.removeItem('tallerSession');
-        }
-    } catch (e) {
-        localStorage.removeItem('tallerSession');
-    }
-}
 let allServices = [];
 let allExpenses = [];
+let allCortes = [];
 let editParts = [];
 let editId = null;
 let editStatus = '';
 let statusFilter = '';
 let selectedServiceForPart = null;
 let checkoutServiceId = null;
+let corteFilter = 'todos';
 let unsubscribeServices = null;
 let unsubscribeExpenses = null;
+let unsubscribeCortes = null;
 
-// LOGIN
+// Verificar sesión guardada
+const savedSession = localStorage.getItem('tallerSession');
+if (savedSession) {
+    try {
+        const session = JSON.parse(savedSession);
+        const hoursSinceLogin = (Date.now() - session.timestamp) / (1000 * 60 * 60);
+        if (hoursSinceLogin < 24) {
+            const user = USERS.find(u => u.email === session.email);
+            if (user) {
+                currentUser = { email: user.email, role: 'admin' };
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                const name = currentUser.email.split('@')[0];
+                const initial = name.charAt(0).toUpperCase();
+                document.getElementById('userAvatar').textContent = initial;
+                document.getElementById('navAvatar').textContent = initial;
+                document.getElementById('sidebarUserName').textContent = name;
+                document.getElementById('navUserName').textContent = name;
+                document.getElementById('sidebarUserEmail').textContent = currentUser.email;
+                document.getElementById('navUserEmail').textContent = currentUser.email;
+                const hour = new Date().getHours();
+                let greeting = 'Buenas noches';
+                if (hour < 12) greeting = 'Buenos días';
+                else if (hour < 19) greeting = 'Buenas tardes';
+                document.getElementById('greeting').textContent = `${greeting}, ${name} 👋`;
+                const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+                document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', options);
+                const dashBtn = document.querySelector('[data-section="dashboard"]');
+                dashBtn.classList.add('bg-brand-50','text-brand-600');
+                startRealtimeSync();
+            } else { localStorage.removeItem('tallerSession'); }
+        } else { localStorage.removeItem('tallerSession'); }
+    } catch (e) { localStorage.removeItem('tallerSession'); }
+}
+
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value.trim();
     const pass = document.getElementById('loginPassword').value;
     const errorDiv = document.getElementById('loginError');
     const validUser = USERS.find(u => u.email === email && u.password === pass);
-if (validUser) {
-    currentUser = { email: validUser.email, role: 'admin' };
-    errorDiv.classList.add('hidden');
-    showApp();
-} else {
-    errorDiv.textContent = '❌ Correo o contraseña incorrectos';
-    errorDiv.classList.remove('hidden');
-}
+    if (validUser) {
+        currentUser = { email: validUser.email, role: 'admin' };
+        errorDiv.classList.add('hidden');
+        showApp();
+    } else {
+        errorDiv.textContent = '❌ Correo o contraseña incorrectos';
+        errorDiv.classList.remove('hidden');
+    }
 });
 
 function showApp() {
-    // Guardar sesión en localStorage
-    localStorage.setItem('tallerSession', JSON.stringify({
-        email: currentUser.email,
-        role: currentUser.role,
-        timestamp: Date.now()
-    }));
-    
+    localStorage.setItem('tallerSession', JSON.stringify({ email: currentUser.email, role: currentUser.role, timestamp: Date.now() }));
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('mainApp').classList.remove('hidden');
     const name = currentUser.email.split('@')[0];
@@ -719,30 +676,34 @@ function showApp() {
 }
 
 window.logout = function() {
-    // Limpiar sesión
     localStorage.removeItem('tallerSession');
     if (unsubscribeServices) unsubscribeServices();
     if (unsubscribeExpenses) unsubscribeExpenses();
+    if (unsubscribeCortes) unsubscribeCortes();
     currentUser = null;
     location.reload();
 }
+
 function startRealtimeSync() {
     const qServices = query(collection(db, "services"), orderBy("date", "desc"));
     unsubscribeServices = onSnapshot(qServices, (snapshot) => {
         allServices = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         refreshAll();
-    }, (error) => {
-        console.error("Firebase error:", error);
-        alert("Error de conexión: " + error.message);
     });
     const qExpenses = query(collection(db, "expenses"), orderBy("date", "desc"));
     unsubscribeExpenses = onSnapshot(qExpenses, (snapshot) => {
         allExpenses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         loadExpenses();
+        loadCajaHoy();
+    });
+    const qCortes = query(collection(db, "dailyCuts"), orderBy("createdAt", "desc"));
+    unsubscribeCortes = onSnapshot(qCortes, (snapshot) => {
+        allCortes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderCortes();
+        updateCorteCount();
     });
 }
 
-// NAV
 window.showSection = function(id, btn) {
     document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
@@ -752,6 +713,7 @@ window.showSection = function(id, btn) {
     });
     if (btn) { btn.classList.add('bg-brand-50','text-brand-600'); btn.classList.remove('text-slate-600'); }
     if (window.innerWidth < 1024) toggleSidebar(false);
+    if (id === 'ceo') updateCEOStats();
 }
 
 window.toggleSidebar = function(forceState) {
@@ -766,7 +728,6 @@ window.toggleSidebar = function(forceState) {
 window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
 window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
 
-// NUEVA ORDEN
 document.getElementById('serviceForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     showLoading('Guardando orden...');
@@ -775,16 +736,7 @@ document.getElementById('serviceForm').addEventListener('submit', async function
         folio: 'SRV-' + Date.now().toString().slice(-6),
         client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
         device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value },
-        service: {
-            status: document.getElementById('serviceStatus').value,
-            repairCost: rc,
-            paymentStatus: 'Pendiente',
-            paymentMethod: document.getElementById('paymentMethod').value,
-            estimatedDelivery: document.getElementById('estimatedDelivery').value,
-            parts: [], totalParts: 0, netProfit: rc,
-            paidAmount: 0, paidDate: null,
-            diagnosis: '', technicalNotes: '', warranty: ''
-        },
+        service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: rc, paidAmount: 0, paidDate: null, diagnosis: '', technicalNotes: '', warranty: '' },
         date: new Date().toISOString(),
         userEmail: currentUser.email
     };
@@ -797,7 +749,6 @@ document.getElementById('serviceForm').addEventListener('submit', async function
     } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
 
-// REFACCIÓN
 window.openAddPartModal = function() {
     selectedServiceForPart = null;
     document.getElementById('addPartStep1').classList.remove('hidden');
@@ -811,11 +762,7 @@ window.openAddPartModal = function() {
 
 function renderServicesForPartList(filter = '') {
     const active = allServices.filter(s => s.service.status !== 'Entregado');
-    const filtered = filter ? active.filter(s =>
-        s.client.name.toLowerCase().includes(filter.toLowerCase()) ||
-        s.client.phone.includes(filter) ||
-        s.folio.toLowerCase().includes(filter.toLowerCase())
-    ) : active;
+    const filtered = filter ? active.filter(s => s.client.name.toLowerCase().includes(filter.toLowerCase()) || s.client.phone.includes(filter) || s.folio.toLowerCase().includes(filter.toLowerCase())) : active;
     const container = document.getElementById('servicesForPartList');
     if (filtered.length === 0) { container.innerHTML = '<p class="text-center text-slate-400 py-8">📭 No hay servicios activos</p>'; return; }
     container.innerHTML = filtered.map(s => `
@@ -833,7 +780,6 @@ function renderServicesForPartList(filter = '') {
 }
 
 window.filterServicesForPart = function() { renderServicesForPartList(document.getElementById('searchServiceForPart').value); }
-
 window.selectServiceForPart = function(id) {
     selectedServiceForPart = allServices.find(s => s.id === id);
     if (!selectedServiceForPart) return;
@@ -841,7 +787,6 @@ window.selectServiceForPart = function(id) {
     document.getElementById('addPartStep1').classList.add('hidden');
     document.getElementById('addPartStep2').classList.remove('hidden');
 }
-
 window.backToServiceSelection = function() {
     selectedServiceForPart = null;
     document.getElementById('addPartStep1').classList.remove('hidden');
@@ -859,18 +804,13 @@ window.confirmAddPart = async function() {
         const newParts = [...currentParts, { description: desc, cost: cost }];
         const totalParts = newParts.reduce((sum, p) => sum + p.cost, 0);
         const repairCost = selectedServiceForPart.service.repairCost || 0;
-        await updateDoc(doc(db, "services", selectedServiceForPart.id), {
-            'service.parts': newParts,
-            'service.totalParts': totalParts,
-            'service.netProfit': repairCost - totalParts
-        });
+        await updateDoc(doc(db, "services", selectedServiceForPart.id), { 'service.parts': newParts, 'service.totalParts': totalParts, 'service.netProfit': repairCost - totalParts });
         hideLoading();
         closeModal('addPartModal');
         showToast('✅ Refacción agregada (registro interno)');
     } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
 
-// COBRAR
 window.cobrarServicio = function(id) {
     checkoutServiceId = id;
     const s = allServices.find(x => x.id === id);
@@ -883,58 +823,32 @@ function renderCheckout(s) {
     const parts = s.service.parts || [];
     const warrantyOptions = ['30 días','60 días','90 días','180 días','1 año','Sin garantía'];
     const currentWarranty = s.service.warranty || '30 días';
-    
     document.getElementById('checkoutContent').innerHTML = `
         <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
             <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
             <h3 class="text-2xl font-bold mt-1">${s.client.name}</h3>
             <p class="text-indigo-100 text-sm mt-1">📞 ${s.client.phone}</p>
         </div>
-
         <div class="grid md:grid-cols-2 gap-4 mb-6">
-            <div class="bg-slate-50 rounded-xl p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p>
-                <p class="font-semibold text-slate-800">${s.device.brand} ${s.device.model}</p>
-                ${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}
-            </div>
-            <div class="bg-slate-50 rounded-xl p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Problema</p>
-                <p class="text-sm text-slate-800">${s.device.problem || '—'}</p>
-            </div>
+            <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="font-semibold text-slate-800">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
+            <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">Problema</p><p class="text-sm text-slate-800">${s.device.problem || '—'}</p></div>
         </div>
-
-        ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-            <p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p>
-            <p class="text-sm text-slate-800">${s.service.diagnosis}</p>
-        </div>` : ''}
-
+        ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-sm text-slate-800">${s.service.diagnosis}</p></div>` : ''}
         <div class="bg-slate-50 rounded-xl p-4 mb-6">
             <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Refacciones (registro interno)</p>
             ${parts.length ? parts.map(p => `<div class="flex justify-between py-1 text-sm"><span>${p.description}</span><span class="font-medium">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>'}
         </div>
-
         <div class="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-5 mb-6">
             <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-xs text-emerald-700 font-semibold uppercase">Total a cobrar al cliente</p>
-                    <p class="text-xs text-slate-500 mt-1">Precio acordado (no incluye refacciones internas)</p>
-                </div>
+                <div><p class="text-xs text-emerald-700 font-semibold uppercase">Total a cobrar al cliente</p><p class="text-xs text-slate-500 mt-1">Precio acordado (no incluye refacciones internas)</p></div>
                 <p class="text-4xl font-bold text-emerald-700">$${s.service.repairCost.toFixed(2)}</p>
             </div>
         </div>
-
         <div class="space-y-4 mb-6">
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">Método de pago</label>
                 <div class="grid grid-cols-3 gap-2">
-                    ${['Efectivo','Transferencia','Tarjeta'].map(m => `
-                        <label class="cursor-pointer">
-                            <input type="radio" name="checkoutPayment" value="${m}" ${s.service.paymentMethod === m ? 'checked' : ''} class="peer hidden">
-                            <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-xl p-3 text-center font-medium text-sm transition hover:border-brand-400">
-                                ${m === 'Efectivo' ? '💵' : m === 'Transferencia' ? '🏦' : '💳'}<br>${m}
-                            </div>
-                        </label>
-                    `).join('')}
+                    ${['Efectivo','Transferencia','Tarjeta'].map(m => `<label class="cursor-pointer"><input type="radio" name="checkoutPayment" value="${m}" ${s.service.paymentMethod === m ? 'checked' : ''} class="peer hidden"><div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-xl p-3 text-center font-medium text-sm transition hover:border-brand-400">${m === 'Efectivo' ? '💵' : m === 'Transferencia' ? '🏦' : '💳'}<br>${m}</div></label>`).join('')}
                 </div>
             </div>
             <div>
@@ -946,18 +860,11 @@ function renderCheckout(s) {
                 <input type="text" id="checkoutWarrantyCustom" class="hidden mt-2 w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 45 días">
             </div>
         </div>
-
         <div class="flex flex-col sm:flex-row gap-3">
-            <button onclick="confirmCheckout()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-emerald-500/30">
-                ✅ Confirmar Cobro
-            </button>
-            <button onclick="printTicket('${s.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                Imprimir Ticket
-            </button>
+            <button onclick="confirmCheckout()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-emerald-500/30">✅ Confirmar Cobro</button>
+            <button onclick="printTicket('${s.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg> Imprimir Ticket</button>
         </div>
     `;
-
     document.getElementById('checkoutWarranty').addEventListener('change', function() {
         const custom = document.getElementById('checkoutWarrantyCustom');
         if (this.value === 'personalizada') { custom.classList.remove('hidden'); custom.focus(); }
@@ -969,26 +876,16 @@ window.confirmCheckout = async function() {
     if (!checkoutServiceId) return;
     const paymentMethod = document.querySelector('input[name="checkoutPayment"]:checked')?.value;
     if (!paymentMethod) { alert('Selecciona un método de pago'); return; }
-    
     let warranty = document.getElementById('checkoutWarranty').value;
     if (warranty === 'personalizada') {
         warranty = document.getElementById('checkoutWarrantyCustom').value.trim();
         if (!warranty) { alert('Escribe la garantía personalizada'); return; }
     }
-    
     if (!confirm(`¿Confirmar cobro de $${allServices.find(s=>s.id===checkoutServiceId).service.repairCost.toFixed(2)}?\n\nSe marcará como PAGADO y ENTREGADO.`)) return;
-    
     showLoading('Procesando cobro...');
     try {
         const svc = allServices.find(s => s.id === checkoutServiceId);
-        await updateDoc(doc(db, "services", checkoutServiceId), {
-            'service.paymentStatus': 'Pagado',
-            'service.paidAmount': svc.service.repairCost,
-            'service.paidDate': new Date().toISOString(),
-            'service.paymentMethod': paymentMethod,
-            'service.warranty': warranty,
-            'service.status': 'Entregado'
-        });
+        await updateDoc(doc(db, "services", checkoutServiceId), { 'service.paymentStatus': 'Pagado', 'service.paidAmount': svc.service.repairCost, 'service.paidDate': new Date().toISOString(), 'service.paymentMethod': paymentMethod, 'service.warranty': warranty, 'service.status': 'Entregado' });
         hideLoading();
         closeModal('checkoutModal');
         showToast('✅ Cobro confirmado. Servicio marcado como Entregado.');
@@ -996,7 +893,6 @@ window.confirmCheckout = async function() {
     } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
 
-// ===== SISTEMA DE IMPRESIÓN CORREGIDO =====
 window.printTicket = function(id) {
     const s = allServices.find(x => x.id === id);
     if (!s) return;
@@ -1004,13 +900,9 @@ window.printTicket = function(id) {
     const paymentMethod = s.service.paymentMethod || 'No especificado';
     const paidDate = s.service.paidDate ? new Date(s.service.paidDate).toLocaleString('es-MX') : new Date().toLocaleString('es-MX');
     const isPaid = s.service.paymentStatus === 'Pagado';
-    
     const ticketHTML = `
         <div class="ticket-thermal">
-            <div class="t-header">
-                <h2>TALLER DE REPARACIONES</h2>
-                <p>Ticket de ${isPaid ? 'Cobro' : 'Servicio'}</p>
-            </div>
+            <div class="t-header"><h2>TALLER DE REPARACIONES</h2><p>Ticket de ${isPaid ? 'Cobro' : 'Servicio'}</p></div>
             <div class="t-divider"></div>
             <div class="t-row"><span><strong>Folio:</strong></span><span><strong>${s.folio}</strong></span></div>
             <div class="t-row"><span>Fecha:</span><span>${paidDate}</span></div>
@@ -1029,9 +921,7 @@ window.printTicket = function(id) {
             <div class="t-row"><span>Método de pago:</span><span>${paymentMethod}</span></div>
             <div class="t-row"><span>Estado:</span><span><strong>${isPaid ? 'PAGADO' : 'PENDIENTE'}</strong></span></div>
             <div class="t-divider"></div>
-            <div class="t-warranty">
-                <div class="t-row"><span><strong>GARANTÍA:</strong></span><span><strong>${warranty}</strong></span></div>
-            </div>
+            <div class="t-warranty"><div class="t-row"><span><strong>GARANTÍA:</strong></span><span><strong>${warranty}</strong></span></div></div>
             <div class="t-footer">
                 <div class="t-divider"></div>
                 <p>• Conserve este ticket para garantía</p>
@@ -1041,40 +931,26 @@ window.printTicket = function(id) {
             </div>
         </div>
     `;
-    
-    // Mostrar vista previa
     const printContainer = document.getElementById('printContainer');
     printContainer.innerHTML = `
         <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-            <div>
-                <strong>🖨️ Vista previa del ticket</strong>
-                <p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p>
-            </div>
+            <div><strong>🖨️ Vista previa del ticket</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
             <div style="display:flex;gap:10px">
                 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
                 <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
             </div>
         </div>
-        <div style="padding-top:70px;background:#f1f5f9;min-height:100vh">
-            <div class="preview-wrapper">
-                ${ticketHTML}
-            </div>
-        </div>
+        <div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper">${ticketHTML}</div></div>
     `;
     printContainer.classList.add('active');
 }
-
-window.doPrint = function() {
-    window.print();
-}
-
+window.doPrint = function() { window.print(); }
 window.closePrintPreview = function() {
     const printContainer = document.getElementById('printContainer');
     printContainer.classList.remove('active');
     printContainer.innerHTML = '';
 }
 
-// EDITAR
 window.openEdit = function(id) {
     const s = allServices.find(x => x.id === id);
     if (!s) return;
@@ -1093,11 +969,8 @@ window.openEdit = function(id) {
 }
 
 function renderEditStatus() {
-    document.getElementById('statusFlow').innerHTML = STATUSES.map(s => `
-        <button type="button" onclick="setEditStatus('${s}')" class="px-3 py-2 rounded-lg text-xs font-medium transition ${editStatus === s ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">${s}</button>
-    `).join('');
+    document.getElementById('statusFlow').innerHTML = STATUSES.map(s => `<button type="button" onclick="setEditStatus('${s}')" class="px-3 py-2 rounded-lg text-xs font-medium transition ${editStatus === s ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">${s}</button>`).join('');
 }
-
 window.setEditStatus = function(s) { editStatus = s; renderEditStatus(); }
 
 function renderEditParts() {
@@ -1108,7 +981,6 @@ function renderEditParts() {
     document.getElementById('editRepairCostDisplay').textContent = rc.toFixed(2);
     document.getElementById('editNetProfit').textContent = (rc - t).toFixed(2);
 }
-
 window.removeEditPart = function(i) { editParts.splice(i,1); renderEditParts(); }
 document.getElementById('editRepairCost').addEventListener('input', renderEditParts);
 
@@ -1117,17 +989,7 @@ window.saveEdit = async function() {
     const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
     const tp = editParts.reduce((s,p) => s + p.cost, 0);
     try {
-        await updateDoc(doc(db, "services", editId), {
-            'service.status': editStatus,
-            'service.repairCost': rc,
-            'service.paymentMethod': document.getElementById('editPaymentMethod').value,
-            'service.estimatedDelivery': document.getElementById('editDelivery').value,
-            'service.diagnosis': document.getElementById('editDiagnosis').value,
-            'service.technicalNotes': document.getElementById('editTechnicalNotes').value,
-            'service.parts': [...editParts],
-            'service.totalParts': tp,
-            'service.netProfit': rc - tp
-        });
+        await updateDoc(doc(db, "services", editId), { 'service.status': editStatus, 'service.repairCost': rc, 'service.paymentMethod': document.getElementById('editPaymentMethod').value, 'service.estimatedDelivery': document.getElementById('editDelivery').value, 'service.diagnosis': document.getElementById('editDiagnosis').value, 'service.technicalNotes': document.getElementById('editTechnicalNotes').value, 'service.parts': [...editParts], 'service.totalParts': tp, 'service.netProfit': rc - tp });
         hideLoading();
         closeModal('editModal');
         showToast('✅ Servicio actualizado');
@@ -1145,9 +1007,8 @@ window.openDetail = function(id) {
     const parts = s.service.parts || [];
     const tp = parts.reduce((sum,p) => sum + p.cost, 0);
     const isPaid = s.service.paymentStatus === 'Pagado';
-    const payBadge = isPaid ? '<span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">✅ PAGADO</span>' : '<span class="text-xs px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold"> PENDIENTE</span>';
+    const payBadge = isPaid ? '<span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">✅ PAGADO</span>' : '<span class="text-xs px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold">⏳ PENDIENTE</span>';
     const cobrarBtn = !isPaid ? `<button onclick="closeModal('detailModal');cobrarServicio('${s.id}')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition">💰 Cobrar ahora</button>` : '';
-    
     document.getElementById('detailContent').innerHTML = `
         <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
             <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
@@ -1155,87 +1016,359 @@ window.openDetail = function(id) {
             <div class="mt-3">${payBadge}</div>
         </div>
         <div class="grid md:grid-cols-2 gap-4 mb-6">
-            <div class="bg-slate-50 rounded-xl p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase mb-2">👤 Cliente</p>
-                <p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p>
-            </div>
-            <div class="bg-slate-50 rounded-xl p-4">
-                <p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p>
-                <p class="text-sm font-semibold">${s.device.brand} ${s.device.model}</p>
-                ${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}
-            </div>
+            <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">👤 Cliente</p><p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p></div>
+            <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="text-sm font-semibold">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
         </div>
         <div class="bg-slate-50 rounded-xl p-4 mb-4">
             <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Problema reportado</p>
             <p class="text-slate-800">${s.device.problem}</p>
             ${s.device.accessories ? `<p class="text-sm mt-2"><span class="text-slate-500">Accesorios:</span> ${s.device.accessories}</p>` : ''}
         </div>
-        ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-            <p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p>
-            <p class="text-slate-800">${s.service.diagnosis}</p>
-        </div>` : ''}
-        ${s.service.technicalNotes ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4">
-            <p class="text-xs font-semibold text-amber-700 uppercase mb-1">Notas técnicas</p>
-            <p class="text-slate-800">${s.service.technicalNotes}</p>
-        </div>` : ''}
+        ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-slate-800">${s.service.diagnosis}</p></div>` : ''}
+        ${s.service.technicalNotes ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-amber-700 uppercase mb-1">Notas técnicas</p><p class="text-slate-800">${s.service.technicalNotes}</p></div>` : ''}
         <div class="bg-slate-50 rounded-xl p-4 mb-4">
             <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Refacciones (${parts.length}) - Registro interno</p>
             ${parts.length ? parts.map(p => `<div class="flex justify-between py-2 border-b border-slate-200 last:border-0"><span>${p.description}</span><span class="font-semibold">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>'}
             <div class="flex justify-between pt-3 mt-2 border-t-2 border-slate-300 font-bold"><span>Total refacciones (interno)</span><span>$${tp.toFixed(2)}</span></div>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
-                <p class="text-xs text-emerald-700 uppercase font-semibold">Precio al cliente</p>
-                <p class="text-2xl font-bold text-emerald-700">$${s.service.repairCost.toFixed(2)}</p>
-            </div>
-            <div class="bg-brand-50 border border-brand-200 rounded-xl p-4 text-center">
-                <p class="text-xs text-brand-700 uppercase font-semibold">Ganancia neta</p>
-                <p class="text-2xl font-bold text-brand-700">$${(s.service.repairCost - tp).toFixed(2)}</p>
-            </div>
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center"><p class="text-xs text-emerald-700 uppercase font-semibold">Precio al cliente</p><p class="text-2xl font-bold text-emerald-700">$${s.service.repairCost.toFixed(2)}</p></div>
+            <div class="bg-brand-50 border border-brand-200 rounded-xl p-4 text-center"><p class="text-xs text-brand-700 uppercase font-semibold">Ganancia neta</p><p class="text-2xl font-bold text-brand-700">$${(s.service.repairCost - tp).toFixed(2)}</p></div>
         </div>
-        ${s.service.warranty ? `<div class="bg-purple-50 border border-purple-200 rounded-xl p-3 mb-4 text-center">
-            <p class="text-xs text-purple-700 uppercase font-semibold">Garantía</p>
-            <p class="font-bold text-purple-800">${s.service.warranty}</p>
-        </div>` : ''}
+        ${s.service.warranty ? `<div class="bg-purple-50 border border-purple-200 rounded-xl p-3 mb-4 text-center"><p class="text-xs text-purple-700 uppercase font-semibold">Garantía</p><p class="font-bold text-purple-800">${s.service.warranty}</p></div>` : ''}
         <div class="flex flex-wrap gap-2">
             ${cobrarBtn}
             <button onclick="closeModal('detailModal');openEdit('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">✏️ Editar</button>
             <button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">🖨️ Ticket</button>
-            <button onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition">️ Eliminar</button>
+            <button onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition">🗑️ Eliminar</button>
         </div>
     `;
     openModal('detailModal');
 }
 
-// REFRESH
+// ===== CORTES DE CAJA =====
+window.generarCorteDiario = async function() {
+    const hoy = new Date();
+    const hoyStr = hoy.toDateString();
+    const corteHoy = allCortes.find(c => c.type === 'dia' && new Date(c.date).toDateString() === hoyStr);
+    if (corteHoy) { if (!confirm('Ya existe un corte del día de hoy. ¿Deseas generar uno nuevo (se creará un duplicado)?')) return; }
+    if (!confirm('¿Generar corte de caja del día de hoy?\n\nSe calcularán todos los ingresos, gastos y servicios del día.')) return;
+    showLoading('Generando corte del día...');
+    const hoyInicio = new Date(hoy); hoyInicio.setHours(0,0,0,0);
+    const hoyFin = new Date(hoy); hoyFin.setHours(23,59,59,999);
+    const serviciosHoy = allServices.filter(s => { const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= hoyInicio && paidDate <= hoyFin; });
+    const nuevosHoy = allServices.filter(s => { const createdDate = new Date(s.date); return createdDate >= hoyInicio && createdDate <= hoyFin; });
+    const gastosHoy = allExpenses.filter(e => { const expDate = new Date(e.date); return expDate >= hoyInicio && expDate <= hoyFin; });
+    const ingresos = serviciosHoy.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
+    const refacciones = serviciosHoy.reduce((sum, s) => sum + (s.service.totalParts || 0), 0);
+    const gastosPersonales = gastosHoy.reduce((sum, e) => sum + e.amount, 0);
+    const gananciaNeta = ingresos - refacciones - gastosPersonales;
+    const pagosEfectivo = serviciosHoy.filter(s => s.service.paymentMethod === 'Efectivo').reduce((sum, s) => sum + s.service.repairCost, 0);
+    const pagosTransferencia = serviciosHoy.filter(s => s.service.paymentMethod === 'Transferencia').reduce((sum, s) => sum + s.service.repairCost, 0);
+    const pagosTarjeta = serviciosHoy.filter(s => s.service.paymentMethod === 'Tarjeta').reduce((sum, s) => sum + s.service.repairCost, 0);
+    const corte = {
+        type: 'dia', date: hoy.toISOString(), dateLabel: hoy.toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' }),
+        ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosHoy.length, serviciosNuevos: nuevosHoy.length,
+        pagosEfectivo, pagosTransferencia, pagosTarjeta,
+        serviciosDetalle: serviciosHoy.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
+        createdBy: currentUser.email, createdAt: new Date().toISOString()
+    };
+    try { await addDoc(collection(db, "dailyCuts"), corte); hideLoading(); showToast('✅ Corte del día generado exitosamente'); } catch (error) { hideLoading(); alert("Error: " + error.message); }
+}
+
+window.generarCorteMensual = async function() {
+    const ahora = new Date();
+    const mesActual = ahora.getMonth();
+    const añoActual = ahora.getFullYear();
+    if (!confirm(`¿Generar corte del mes de ${MESES[mesActual]} ${añoActual}?\n\nSe calcularán todos los ingresos, gastos y servicios del mes.`)) return;
+    showLoading('Generando corte mensual...');
+    const mesInicio = new Date(añoActual, mesActual, 1, 0, 0, 0, 0);
+    const mesFin = new Date(añoActual, mesActual + 1, 0, 23, 59, 59, 999);
+    const serviciosMes = allServices.filter(s => { const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= mesInicio && paidDate <= mesFin; });
+    const nuevosMes = allServices.filter(s => { const createdDate = new Date(s.date); return createdDate >= mesInicio && createdDate <= mesFin; });
+    const gastosMes = allExpenses.filter(e => { const expDate = new Date(e.date); return expDate >= mesInicio && expDate <= mesFin; });
+    const ingresos = serviciosMes.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
+    const refacciones = serviciosMes.reduce((sum, s) => sum + (s.service.totalParts || 0), 0);
+    const gastosPersonales = gastosMes.reduce((sum, e) => sum + e.amount, 0);
+    const gananciaNeta = ingresos - refacciones - gastosPersonales;
+    const pagosEfectivo = serviciosMes.filter(s => s.service.paymentMethod === 'Efectivo').reduce((sum, s) => sum + s.service.repairCost, 0);
+    const pagosTransferencia = serviciosMes.filter(s => s.service.paymentMethod === 'Transferencia').reduce((sum, s) => sum + s.service.repairCost, 0);
+    const pagosTarjeta = serviciosMes.filter(s => s.service.paymentMethod === 'Tarjeta').reduce((sum, s) => sum + s.service.repairCost, 0);
+    const corte = {
+        type: 'mes', date: ahora.toISOString(), dateLabel: `${MESES[mesActual]} ${añoActual}`, mes: mesActual, año: añoActual,
+        ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosMes.length, serviciosNuevos: nuevosMes.length,
+        pagosEfectivo, pagosTransferencia, pagosTarjeta,
+        serviciosDetalle: serviciosMes.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
+        createdBy: currentUser.email, createdAt: new Date().toISOString()
+    };
+    try { await addDoc(collection(db, "dailyCuts"), corte); hideLoading(); showToast('✅ Corte mensual generado exitosamente'); } catch (error) { hideLoading(); alert("Error: " + error.message); }
+}
+
+function renderCortes() {
+    const tbody = document.getElementById('cortesList');
+    const empty = document.getElementById('cortesEmpty');
+    let filtered = allCortes;
+    if (corteFilter === 'dia') filtered = allCortes.filter(c => c.type === 'dia');
+    if (corteFilter === 'mes') filtered = allCortes.filter(c => c.type === 'mes');
+    if (filtered.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+    tbody.innerHTML = filtered.map(c => {
+        const tipoBadge = c.type === 'dia' ? '<span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 font-medium">Diario</span>' : '<span class="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-700 font-medium">Mensual</span>';
+        const fecha = new Date(c.date).toLocaleDateString('es-MX', { year:'numeric', month:'short', day:'numeric' });
+        return `<tr class="hover:bg-slate-50 cursor-pointer" onclick="verDetalleCorte('${c.id}')">
+            <td class="p-4 font-medium text-slate-800">${fecha}</td>
+            <td class="p-4">${tipoBadge}</td>
+            <td class="p-4 text-right font-semibold text-emerald-600">$${c.ingresos.toFixed(2)}</td>
+            <td class="p-4 text-right text-red-600">$${(c.refacciones + c.gastosPersonales).toFixed(2)}</td>
+            <td class="p-4 text-right font-bold ${c.gananciaNeta >= 0 ? 'text-emerald-600' : 'text-red-600'}">$${c.gananciaNeta.toFixed(2)}</td>
+            <td class="p-4 text-right">${c.serviciosCobrados}</td>
+            <td class="p-4 text-right"><button onclick="event.stopPropagation();verDetalleCorte('${c.id}')" class="text-brand-600 hover:text-brand-700 font-medium text-sm">Ver detalle</button></td>
+        </tr>`;
+    }).join('');
+}
+
+window.filtrarCortes = function(filter) {
+    corteFilter = filter;
+    document.querySelectorAll('.corte-filter-btn').forEach(btn => {
+        if (btn.dataset.filter === filter) { btn.classList.add('bg-brand-600','text-white'); btn.classList.remove('bg-slate-100','text-slate-700'); }
+        else { btn.classList.remove('bg-brand-600','text-white'); btn.classList.add('bg-slate-100','text-slate-700'); }
+    });
+    renderCortes();
+}
+
+window.verDetalleCorte = function(id) {
+    const c = allCortes.find(x => x.id === id);
+    if (!c) return;
+    document.getElementById('corteDetailTitle').textContent = `Corte ${c.type === 'dia' ? 'Diario' : 'Mensual'} - ${c.dateLabel}`;
+    const serviciosHTML = c.serviciosDetalle && c.serviciosDetalle.length > 0
+        ? c.serviciosDetalle.map(s => `<div class="flex justify-between py-2 border-b border-slate-100 last:border-0"><div><p class="font-semibold text-slate-800">${s.folio}</p><p class="text-xs text-slate-500">${s.cliente}</p></div><div class="text-right"><p class="font-semibold text-emerald-600">$${s.monto.toFixed(2)}</p><p class="text-xs text-slate-500">${s.metodo}</p></div></div>`).join('')
+        : '<p class="text-slate-400 text-center py-4">Sin servicios en este corte</p>';
+    document.getElementById('corteDetailContent').innerHTML = `
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4"><p class="text-xs text-emerald-700 uppercase font-semibold mb-1">Ingresos</p><p class="text-2xl font-bold text-emerald-700">$${c.ingresos.toFixed(2)}</p></div>
+            <div class="bg-brand-50 border border-brand-200 rounded-xl p-4"><p class="text-xs text-brand-700 uppercase font-semibold mb-1">Ganancia neta</p><p class="text-2xl font-bold text-brand-700">$${c.gananciaNeta.toFixed(2)}</p></div>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💵 Efectivo</p><p class="font-bold text-slate-800">$${c.pagosEfectivo.toFixed(2)}</p></div>
+            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">🏦 Transferencia</p><p class="font-bold text-slate-800">$${c.pagosTransferencia.toFixed(2)}</p></div>
+            <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💳 Tarjeta</p><p class="font-bold text-slate-800">$${c.pagosTarjeta.toFixed(2)}</p></div>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 mb-6">
+            <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Servicios cobrados</span><span class="font-semibold">${c.serviciosCobrados}</span></div>
+            <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Servicios nuevos</span><span class="font-semibold">${c.serviciosNuevos}</span></div>
+            <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Costo refacciones</span><span class="font-semibold text-amber-600">$${c.refacciones.toFixed(2)}</span></div>
+            <div class="flex justify-between py-2"><span class="text-slate-600">Gastos personales</span><span class="font-semibold text-red-600">$${c.gastosPersonales.toFixed(2)}</span></div>
+        </div>
+        <h3 class="font-bold text-slate-800 mb-3">📋 Servicios incluidos</h3>
+        <div class="bg-white border border-slate-200 rounded-xl p-4 max-h-60 overflow-y-auto">${serviciosHTML}</div>
+        <div class="mt-4 text-xs text-slate-500 text-center">Corte generado por ${c.createdBy} el ${new Date(c.createdAt).toLocaleString('es-MX')}</div>
+    `;
+    openModal('corteDetailModal');
+}
+
+function updateCorteCount() { document.getElementById('totalCortesCount').textContent = allCortes.length; }
+
+// ===== CEO / ESTADÍSTICAS =====
+function updateCEOStats() {
+    const ahora = new Date();
+    const mesActual = ahora.getMonth();
+    const añoActual = ahora.getFullYear();
+    const mesAnterior = mesActual === 0 ? 11 : mesActual - 1;
+    const añoAnterior = mesActual === 0 ? añoActual - 1 : añoActual;
+    const mesInicio = new Date(añoActual, mesActual, 1, 0, 0, 0, 0);
+    const mesFin = new Date(añoActual, mesActual + 1, 0, 23, 59, 59, 999);
+    const mesAntInicio = new Date(añoAnterior, mesAnterior, 1, 0, 0, 0, 0);
+    const mesAntFin = new Date(añoAnterior, mesAnterior + 1, 0, 23, 59, 59, 999);
+    const serviciosMes = allServices.filter(s => { const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= mesInicio && paidDate <= mesFin; });
+    const serviciosMesAnt = allServices.filter(s => { const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= mesAntInicio && paidDate <= mesAntFin; });
+    const ingresosMes = serviciosMes.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
+    const ingresosMesAnt = serviciosMesAnt.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
+    const refaccionesMes = serviciosMes.reduce((sum, s) => sum + (s.service.totalParts || 0), 0);
+    const gastosMes = allExpenses.filter(e => { const expDate = new Date(e.date); return expDate >= mesInicio && expDate <= mesFin; }).reduce((sum, e) => sum + e.amount, 0);
+    const gananciaNeta = ingresosMes - refaccionesMes - gastosMes;
+    document.getElementById('ceoIngresosMes').textContent = '$' + ingresosMes.toFixed(2);
+    document.getElementById('ceoServiciosMes').textContent = serviciosMes.length;
+    document.getElementById('ceoGananciaMes').textContent = '$' + gananciaNeta.toFixed(2);
+    document.getElementById('ceoTicketPromedio').textContent = serviciosMes.length > 0 ? '$' + (ingresosMes / serviciosMes.length).toFixed(2) : '$0';
+    const trendIngresos = ingresosMesAnt > 0 ? ((ingresosMes - ingresosMesAnt) / ingresosMesAnt * 100).toFixed(1) : 0;
+    const trendServicios = serviciosMesAnt > 0 ? ((serviciosMes.length - serviciosMesAnt.length) / serviciosMesAnt * 100).toFixed(1) : 0;
+    document.getElementById('ceoIngresosTrend').innerHTML = trendIngresos >= 0 ? `<span class="text-emerald-600">▲ ${trendIngresos}% vs mes anterior</span>` : `<span class="text-red-600">▼ ${Math.abs(trendIngresos)}% vs mes anterior</span>`;
+    document.getElementById('ceoServiciosTrend').innerHTML = trendServicios >= 0 ? `<span class="text-emerald-600">▲ ${trendServicios}% vs mes anterior</span>` : `<span class="text-red-600">▼ ${Math.abs(trendServicios)}% vs mes anterior</span>`;
+    renderBarChart();
+    renderTopServicios(serviciosMes);
+    renderTopMarcas(serviciosMes);
+    renderMetodosPago(serviciosMes);
+    renderDiaProductivo(serviciosMes);
+}
+
+function renderBarChart() {
+    const ahora = new Date();
+    const meses = [];
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date(ahora.getFullYear(), ahora.getMonth() - i, 1);
+        const mesInicio = new Date(d.getFullYear(), d.getMonth(), 1, 0, 0, 0, 0);
+        const mesFin = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
+        const ingresos = allServices.filter(s => { const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= mesInicio && paidDate <= mesFin; }).reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
+        meses.push({ label: MESES[d.getMonth()].substring(0,3), value: ingresos });
+    }
+    const max = Math.max(...meses.map(m => m.value), 1);
+    const container = document.getElementById('barChartIngresos');
+    container.innerHTML = meses.map(m => {
+        const height = (m.value / max) * 100;
+        return `<div class="bar-item"><div class="bar-value">$${m.value > 0 ? (m.value/1000).toFixed(1) + 'k' : '0'}</div><div class="bar" style="height:${Math.max(height, 2)}%"></div><div class="bar-label">${m.label}</div></div>`;
+    }).join('');
+}
+
+function renderTopServicios(servicios) {
+    const container = document.getElementById('topServiciosList');
+    if (servicios.length === 0) { container.innerHTML = '<p class="text-slate-400 text-center py-4">Sin datos este mes</p>'; return; }
+    const problemas = {};
+    servicios.forEach(s => {
+        const p = s.device.problem || 'Sin descripción';
+        const corto = p.length > 30 ? p.substring(0,30) + '...' : p;
+        if (!problemas[corto]) problemas[corto] = { count: 0, total: 0 };
+        problemas[corto].count++;
+        problemas[corto].total += s.service.repairCost;
+    });
+    const top = Object.entries(problemas).sort((a,b) => b[1].count - a[1].count).slice(0,5);
+    const maxCount = top[0]?.[1].count || 1;
+    container.innerHTML = top.map(([nombre, data], i) => `
+        <div>
+            <div class="flex justify-between items-center mb-1"><span class="text-sm font-medium text-slate-800">${i+1}. ${nombre}</span><span class="text-xs font-semibold text-brand-600">${data.count} servicios • $${data.total.toFixed(0)}</span></div>
+            <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-gradient-to-r from-brand-500 to-purple-600 h-2 rounded-full" style="width:${(data.count/maxCount)*100}%"></div></div>
+        </div>
+    `).join('');
+}
+
+function renderTopMarcas(servicios) {
+    const container = document.getElementById('topMarcasList');
+    if (servicios.length === 0) { container.innerHTML = '<p class="text-slate-400 text-center py-4">Sin datos este mes</p>'; return; }
+    const marcas = {};
+    servicios.forEach(s => { const m = s.device.brand || 'Otro'; if (!marcas[m]) marcas[m] = 0; marcas[m]++; });
+    const top = Object.entries(marcas).sort((a,b) => b[1] - a[1]);
+    const max = top[0]?.[1] || 1;
+    const colors = ['from-blue-500 to-blue-600','from-emerald-500 to-emerald-600','from-amber-500 to-amber-600','from-red-500 to-red-600','from-purple-500 to-purple-600'];
+    container.innerHTML = top.map(([marca, count], i) => `
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gradient-to-br ${colors[i % colors.length]} rounded-lg flex items-center justify-center text-white font-bold text-sm">${i+1}</div>
+            <div class="flex-1">
+                <div class="flex justify-between mb-1"><span class="text-sm font-medium text-slate-800">${marca}</span><span class="text-xs font-semibold text-slate-600">${count} equipos</span></div>
+                <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-gradient-to-r ${colors[i % colors.length]} h-2 rounded-full" style="width:${(count/max)*100}%"></div></div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderMetodosPago(servicios) {
+    const container = document.getElementById('metodosPagoList');
+    if (servicios.length === 0) { container.innerHTML = '<p class="text-slate-400 text-center py-4">Sin datos este mes</p>'; return; }
+    const metodos = { 'Efectivo': 0, 'Transferencia': 0, 'Tarjeta': 0, 'No especificado': 0 };
+    servicios.forEach(s => { const m = s.service.paymentMethod || 'No especificado'; metodos[m] = (metodos[m] || 0) + 1; });
+    const total = servicios.length;
+    const icons = { 'Efectivo': '💵', 'Transferencia': '🏦', 'Tarjeta': '💳', 'No especificado': '❓' };
+    const colors = { 'Efectivo': 'bg-emerald-500', 'Transferencia': 'bg-blue-500', 'Tarjeta': 'bg-purple-500', 'No especificado': 'bg-slate-400' };
+    container.innerHTML = Object.entries(metodos).filter(([_,v]) => v > 0).map(([metodo, count]) => {
+        const pct = ((count/total)*100).toFixed(0);
+        return `<div>
+            <div class="flex justify-between items-center mb-1"><span class="text-sm font-medium text-slate-800">${icons[metodo]} ${metodo}</span><span class="text-xs font-semibold text-slate-600">${count} (${pct}%)</span></div>
+            <div class="w-full bg-slate-100 rounded-full h-2"><div class="${colors[metodo]} h-2 rounded-full" style="width:${pct}%"></div></div>
+        </div>`;
+    }).join('');
+}
+
+function renderDiaProductivo(servicios) {
+    if (servicios.length === 0) { document.getElementById('diaProductivoNombre').textContent = '—'; document.getElementById('diaProductivoDetalle').textContent = 'Sin datos este mes'; return; }
+    const dias = {};
+    servicios.forEach(s => {
+        const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null;
+        if (!paidDate) return;
+        const dia = DIAS_SEMANA[paidDate.getDay()];
+        if (!dias[dia]) dias[dia] = { count: 0, total: 0 };
+        dias[dia].count++;
+        dias[dia].total += s.service.repairCost;
+    });
+    const top = Object.entries(dias).sort((a,b) => b[1].total - a[1].total)[0];
+    document.getElementById('diaProductivoNombre').textContent = top[0];
+    document.getElementById('diaProductivoDetalle').textContent = `${top[1].count} servicios • $${top[1].total.toFixed(2)} en ingresos`;
+}
+
+// ===== CAJA =====
+function loadCajaHoy() {
+    const hoy = new Date();
+    const hoyInicio = new Date(hoy); hoyInicio.setHours(0,0,0,0);
+    const hoyFin = new Date(hoy); hoyFin.setHours(23,59,59,999);
+    const serviciosHoy = allServices.filter(s => { const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= hoyInicio && paidDate <= hoyFin; });
+    const gastosHoy = allExpenses.filter(e => { const expDate = new Date(e.date); return expDate >= hoyInicio && expDate <= hoyFin; });
+    const ingresos = serviciosHoy.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
+    const refacciones = serviciosHoy.reduce((sum, s) => sum + (s.service.totalParts || 0), 0);
+    const gastos = gastosHoy.reduce((sum, e) => sum + e.amount, 0);
+    const ganancia = ingresos - refacciones - gastos;
+    document.getElementById('cajaHoyIngresos').textContent = '$' + ingresos.toFixed(2);
+    document.getElementById('cajaHoyRefacciones').textContent = '$' + refacciones.toFixed(2);
+    document.getElementById('cajaHoyGastos').textContent = '$' + gastos.toFixed(2);
+    document.getElementById('cajaHoyGanancia').textContent = '$' + ganancia.toFixed(2);
+}
+
+document.getElementById('expenseForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    showLoading('Registrando gasto...');
+    const exp = { date: document.getElementById('expenseDate').value, amount: parseFloat(document.getElementById('expenseAmount').value), category: document.getElementById('expenseCategory').value, description: document.getElementById('expenseDescription').value, userEmail: currentUser.email };
+    try {
+        await addDoc(collection(db, "expenses"), exp);
+        hideLoading();
+        this.reset();
+        document.getElementById('expenseDate').valueAsDate = new Date();
+        showToast('✅ Gasto registrado');
+    } catch (error) { hideLoading(); alert("Error: " + error.message); }
+});
+
+function loadExpenses() {
+    const tbody = document.getElementById('expensesList');
+    tbody.innerHTML = allExpenses.length ? allExpenses.map(e => `<tr class="hover:bg-slate-50">
+        <td class="p-4">${new Date(e.date).toLocaleDateString()}</td>
+        <td class="p-4"><span class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-700">${e.category}</span></td>
+        <td class="p-4 text-slate-700">${e.description}</td>
+        <td class="p-4 text-right font-semibold text-red-600">-$${e.amount.toFixed(2)}</td>
+        <td class="p-4 text-right"><button onclick="deleteExp('${e.id}')" class="text-red-500 hover:text-red-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></td>
+    </tr>`).join('') : '<tr><td colspan="5" class="py-12 text-center text-slate-400">Sin gastos registrados</td></tr>';
+    const now = new Date();
+    const me = allExpenses.filter(e => { const d = new Date(e.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
+    const te = me.reduce((s,e) => s + e.amount, 0);
+    document.getElementById('cajaGastos').textContent = '$' + te.toFixed(2);
+    const ms = allServices.filter(s => { const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; return s.service.paymentStatus === 'Pagado' && paidDate && paidDate.getMonth() === now.getMonth() && paidDate.getFullYear() === now.getFullYear(); });
+    const ingresos = ms.reduce((s,x) => s + (x.service.repairCost || 0), 0);
+    const gastoRefacciones = ms.reduce((s,x) => s + (x.service.totalParts || 0), 0);
+    document.getElementById('cajaIngresos').textContent = '$' + ingresos.toFixed(2);
+    document.getElementById('cajaRefacciones').textContent = '$' + gastoRefacciones.toFixed(2);
+    document.getElementById('cajaBalance').textContent = '$' + (ingresos - gastoRefacciones - te).toFixed(2);
+}
+
+window.deleteExp = async function(id) {
+    if (!confirm('¿Eliminar este gasto?')) return;
+    try { await deleteDoc(doc(db, "expenses", id)); showToast('🗑️ Gasto eliminado'); } catch (error) { console.error(error); }
+}
+
 function refreshAll() {
     updateDashboard();
     loadServices();
     renderStatusFilters();
+    loadCajaHoy();
 }
 
 function updateDashboard() {
     const activas = allServices.filter(s => s.service.status !== 'Entregado').length;
     document.getElementById('kpiActivas').textContent = activas;
-    
     const hoy = new Date().toDateString();
-    const ingresosHoy = allServices.filter(s => {
-        const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null;
-        return s.service.paymentStatus === 'Pagado' && paidDate && paidDate.toDateString() === hoy;
-    }).reduce((sum, x) => sum + (x.service.repairCost || 0), 0);
+    const ingresosHoy = allServices.filter(s => { const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; return s.service.paymentStatus === 'Pagado' && paidDate && paidDate.toDateString() === hoy; }).reduce((sum, x) => sum + (x.service.repairCost || 0), 0);
     document.getElementById('kpiIngresos').textContent = '$' + ingresosHoy.toFixed(2);
-    
     const espera = allServices.filter(s => s.service.status === 'Reparado (en espera de que pasen por él)').length;
     document.getElementById('kpiEspera').textContent = espera;
-    
     const entregados = allServices.filter(s => s.service.status === 'Entregado').length;
     document.getElementById('kpiEntregados').textContent = entregados;
-    
     const recent = allServices.slice(0, 5);
     const tbody = document.getElementById('recentOrdersTable');
-    if (recent.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-400">Sin órdenes aún</td></tr>';
-    } else {
+    if (recent.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-400">Sin órdenes aún</td></tr>'; }
+    else {
         tbody.innerHTML = recent.map(s => `
             <tr class="hover:bg-slate-50 cursor-pointer" onclick="openDetail('${s.id}')">
                 <td class="py-3 font-semibold text-brand-600">${s.folio}</td>
@@ -1270,9 +1403,7 @@ function loadServices() {
     const tbody = document.getElementById('servicesList');
     if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" class="py-12 text-center text-slate-400">📭 No hay servicios</td></tr>'; return; }
     tbody.innerHTML = filtered.map(s => {
-        const payBadge = s.service.paymentStatus === 'Pagado' 
-            ? '<span class="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium">Pagado</span>'
-            : '<span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700 font-medium">Pendiente</span>';
+        const payBadge = s.service.paymentStatus === 'Pagado' ? '<span class="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium">Pagado</span>' : '<span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700 font-medium">Pendiente</span>';
         const cobrarBtn = s.service.paymentStatus !== 'Pagado' ? `<button class="text-emerald-600 hover:text-emerald-700 p-1" onclick="event.stopPropagation();cobrarServicio('${s.id}')" title="Cobrar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>` : '';
         return `<tr class="hover:bg-slate-50 cursor-pointer" onclick="openDetail('${s.id}')">
             <td class="p-4 font-semibold text-brand-600">${s.folio}</td>
@@ -1293,59 +1424,6 @@ function loadServices() {
     }).join('');
 }
 
-// GASTOS
-document.getElementById('expenseForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    showLoading('Registrando gasto...');
-    const exp = {
-        date: document.getElementById('expenseDate').value,
-        amount: parseFloat(document.getElementById('expenseAmount').value),
-        category: document.getElementById('expenseCategory').value,
-        description: document.getElementById('expenseDescription').value,
-        userEmail: currentUser.email
-    };
-    try {
-        await addDoc(collection(db, "expenses"), exp);
-        hideLoading();
-        this.reset();
-        document.getElementById('expenseDate').valueAsDate = new Date();
-        showToast('✅ Gasto registrado');
-    } catch (error) { hideLoading(); alert("Error: " + error.message); }
-});
-
-function loadExpenses() {
-    const tbody = document.getElementById('expensesList');
-    tbody.innerHTML = allExpenses.length ? allExpenses.map(e => `<tr class="hover:bg-slate-50">
-        <td class="p-4">${new Date(e.date).toLocaleDateString()}</td>
-        <td class="p-4"><span class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-700">${e.category}</span></td>
-        <td class="p-4 text-slate-700">${e.description}</td>
-        <td class="p-4 text-right font-semibold text-red-600">-$${e.amount.toFixed(2)}</td>
-        <td class="p-4 text-right"><button onclick="deleteExp('${e.id}')" class="text-red-500 hover:text-red-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></td>
-    </tr>`).join('') : '<tr><td colspan="5" class="py-12 text-center text-slate-400">Sin gastos registrados</td></tr>';
-    
-    const now = new Date();
-    const me = allExpenses.filter(e => { const d = new Date(e.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
-    const te = me.reduce((s,e) => s + e.amount, 0);
-    document.getElementById('cajaGastos').textContent = '$' + te.toFixed(2);
-    
-    const ms = allServices.filter(s => { 
-        const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null;
-        return s.service.paymentStatus === 'Pagado' && paidDate && paidDate.getMonth() === now.getMonth() && paidDate.getFullYear() === now.getFullYear();
-    });
-    const ingresos = ms.reduce((s,x) => s + (x.service.repairCost || 0), 0);
-    const gastoRefacciones = ms.reduce((s,x) => s + (x.service.totalParts || 0), 0);
-    
-    document.getElementById('cajaIngresos').textContent = '$' + ingresos.toFixed(2);
-    document.getElementById('cajaRefacciones').textContent = '$' + gastoRefacciones.toFixed(2);
-    document.getElementById('cajaBalance').textContent = '$' + (ingresos - gastoRefacciones - te).toFixed(2);
-}
-
-window.deleteExp = async function(id) {
-    if (!confirm('¿Eliminar este gasto?')) return;
-    try { await deleteDoc(doc(db, "expenses", id)); showToast('🗑️ Gasto eliminado'); } catch (error) { console.error(error); }
-}
-
-// UTILS
 function showLoading(text) { document.getElementById('loadingText').textContent = text; document.getElementById('loading').classList.remove('hidden'); }
 function hideLoading() { document.getElementById('loading').classList.add('hidden'); }
 function showToast(msg) {
