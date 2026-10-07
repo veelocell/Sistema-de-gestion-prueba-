@@ -29,11 +29,16 @@ body { font-family: 'Inter', sans-serif; }
 ::-webkit-scrollbar-track { background:#f1f5f9; }
 ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:4px; }
 ::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
+
+#evidencePortal { display: none; }
+#evidencePortal.active { display: block; }
+
 #printContainer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; overflow-y: auto; padding: 20px; }
 #printContainer.active { display: block; }
 .preview-wrapper { max-width: 900px; margin: 20px auto; background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow-x: auto; }
 .preview-wrapper.ticket-mode { max-width: 380px; }
 .preview-wrapper.letter-mode { max-width: 850px; }
+
 .ticket-thermal { width: 80mm; margin: 0 auto; padding: 3mm; font-family: 'Courier New', monospace; font-size: 11px; color: #000; line-height: 1.4; }
 .ticket-thermal .t-header { text-align:center; border-bottom: 1px dashed #000; padding-bottom: 6px; margin-bottom: 6px; }
 .ticket-thermal .t-header h2 { font-size: 15px; margin: 0; font-weight: bold; }
@@ -46,9 +51,10 @@ body { font-family: 'Inter', sans-serif; }
 .ticket-thermal .t-warranty { background: #f0f0f0; padding: 5px; border-radius: 3px; margin: 6px 0; }
 .ticket-thermal .t-qr { text-align: center; margin-top: 10px; }
 .ticket-thermal .t-qr img { width: 100px; height: 100px; }
+
 .letter-double { width: 210mm; margin: 0 auto; padding: 10mm; font-family: 'Inter', sans-serif; font-size: 12px; color: #000; }
 .letter-half { border: 2px solid #000; padding: 15px; margin-bottom: 15px; position: relative; }
-.letter-half::after { content: "✂ CORTAR AQUÍ "; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 10px; font-weight: bold; font-size: 10px; }
+.letter-half::after { content: "✂ CORTAR AQUÍ ✂"; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 10px; font-weight: bold; font-size: 10px; }
 .letter-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
 .letter-header h2 { font-size: 20px; margin: 0; font-weight: 800; text-transform: uppercase; }
 .letter-section { margin-bottom: 10px; }
@@ -57,6 +63,7 @@ body { font-family: 'Inter', sans-serif; }
 .letter-footer { margin-top: 15px; padding-top: 10px; border-top: 1px solid #000; font-size: 10px; text-align: center; white-space: pre-line; }
 .letter-sign { margin-top: 30px; display: flex; justify-content: space-between; }
 .letter-sign div { width: 40%; border-top: 1px solid #000; text-align: center; padding-top: 5px; font-size: 11px; }
+
 @media print {
 body * { visibility: hidden !important; }
 #printContainer, #printContainer * { visibility: visible !important; }
@@ -70,14 +77,17 @@ body * { visibility: hidden !important; }
 #printContainer.print-letter { width: 210mm; }
 #printContainer.print-letter .preview-wrapper { max-width: 210mm; }
 }
+
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.active { display: flex; }
+
 .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 200px; padding: 10px 0; }
 .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .bar { width: 100%; max-width: 50px; background: linear-gradient(to top, #6366f1, #8b5cf6); border-radius: 6px 6px 0 0; transition: all 0.3s; position: relative; min-height: 4px; }
 .bar:hover { opacity: 0.8; }
 .bar-label { font-size: 10px; color: #64748b; text-align: center; }
 .bar-value { font-size: 11px; font-weight: 600; color: #1e293b; }
+
 .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 .photo-item { position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .photo-item img { width: 100%; height: 150px; object-fit: cover; cursor: pointer; }
@@ -87,8 +97,8 @@ body * { visibility: hidden !important; }
 </head>
 <body class="bg-surface-50 text-slate-800">
 
-<!-- PORTAL DE EVIDENCIA (se muestra si hay ?folio= en la URL) -->
-<div id="evidencePortal" class="hidden min-h-screen bg-gradient-to-br from-brand-600 to-purple-700 p-4">
+<!-- PORTAL DE EVIDENCIA -->
+<div id="evidencePortal" class="min-h-screen bg-gradient-to-br from-brand-600 to-purple-700 p-4">
 <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-6 mt-8">
 <div class="text-center mb-6">
 <div class="w-20 h-20 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -101,7 +111,7 @@ body * { visibility: hidden !important; }
 <p class="text-sm text-slate-600">Cargando información del servicio...</p>
 </div>
 <div class="mb-6">
-<label class="block text-sm font-semibold text-slate-700 mb-2"> Subir fotos del equipo</label>
+<label class="block text-sm font-semibold text-slate-700 mb-2">📷 Subir fotos del equipo</label>
 <input type="file" id="photoInput" accept="image/*" capture="environment" multiple class="hidden" onchange="handlePhotoUpload(event)">
 <button onclick="document.getElementById('photoInput').click()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-4 rounded-xl transition flex items-center justify-center gap-2">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -322,7 +332,7 @@ Tomar/Subir Fotos
 </button>
 </div>
 <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl p-6 text-white mb-6 shadow-lg">
-<h3 class="text-lg font-bold mb-4"> Resumen de hoy</h3>
+<h3 class="text-lg font-bold mb-4">📊 Resumen de hoy</h3>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Saldo Inicial</p><p class="text-2xl font-bold" id="cajaHoyInicial">$0</p></div>
 <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Ingresos</p><p class="text-2xl font-bold" id="cajaHoyIngresos">$0</p></div>
@@ -357,7 +367,7 @@ Tomar/Subir Fotos
 </div>
 </section>
 <section id="cortes" class="section-content hidden fade-in">
-<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📋 Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
+<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800"> Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
 <div class="grid md:grid-cols-3 gap-4 mb-6">
 <button onclick="generarCorteDiario()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-6 rounded-2xl shadow-lg shadow-emerald-500/30 transition text-left">
 <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><h3 class="text-lg font-bold">Corte del Día</h3></div>
@@ -502,12 +512,12 @@ Tomar/Subir Fotos
 <div class="grid md:grid-cols-2 gap-4">
 <div><label class="block text-sm font-medium text-slate-700 mb-1">Estado *</label><select id="serviceStatus" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option>En diagnóstico</option><option>Por revisar</option><option>Revisado</option><option>En espera de autorización</option><option>Reparado (en espera de que pasen por él)</option><option>Entregado</option></select></div>
 <div><label class="block text-sm font-medium text-slate-700 mb-1">Precio total al cliente *</label><input type="number" id="repairCost" step="0.01" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-<div><label class="block text-sm font-medium text-slate-700 mb-1"> Anticipo (opcional)</label><input type="number" id="advancePayment" step="0.01" value="0" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"><p class="text-xs text-slate-500 mt-1">Lo que el cliente deja al entregar el equipo</p></div>
+<div><label class="block text-sm font-medium text-slate-700 mb-1">💰 Anticipo (opcional)</label><input type="number" id="advancePayment" step="0.01" value="0" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"><p class="text-xs text-slate-500 mt-1">Lo que el cliente deja al entregar el equipo</p></div>
 <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">Método de pago esperado</label><select id="paymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
 </div>
 </div>
 <div class="flex gap-3 pt-4 border-t border-slate-100">
-<button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition"> Guardar e Imprimir Nota</button>
+<button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar e Imprimir Nota</button>
 <button type="button" onclick="closeModal('newOrderModal')" class="px-6 py-3 border border-slate-200 rounded-xl font-medium hover:bg-slate-50 transition">Cancelar</button>
 </div>
 </form>
@@ -517,7 +527,7 @@ Tomar/Subir Fotos
 <div class="modal-overlay" id="addPartModal">
 <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-<h2 class="text-xl font-bold text-slate-800">🔧 Agregar Refacción</h2>
+<h2 class="text-xl font-bold text-slate-800"> Agregar Refacción</h2>
 <button onclick="closeModal('addPartModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
 </div>
 <div class="p-6">
@@ -558,7 +568,7 @@ Tomar/Subir Fotos
 <div class="modal-overlay" id="editModal">
 <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-<h2 class="text-xl font-bold text-slate-800">✏️ Editar <span id="editFolio"></span></h2>
+<h2 class="text-xl font-bold text-slate-800">️ Editar <span id="editFolio"></span></h2>
 <button onclick="closeModal('editModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
 </div>
 <div class="p-6 space-y-5">
@@ -566,16 +576,15 @@ Tomar/Subir Fotos
 <div>
 <label class="block text-sm font-semibold text-slate-700 mb-1">Diagnóstico técnico</label>
 <textarea id="editDiagnosis" rows="3" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Descripción del diagnóstico realizado..."></textarea>
-<p class="text-xs text-slate-500 mt-1">Diagnóstico técnico (✅Se incluye en el ticket impreso del cliente)</p>
 </div>
 <div><label class="block text-sm font-semibold text-slate-700 mb-1">Notas técnicas</label><textarea id="editTechnicalNotes" rows="2" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Observaciones, detalles técnicos..."></textarea></div>
 <div class="grid grid-cols-2 gap-4">
-<div><label class="block text-sm font-semibold text-slate-700 mb-1">Precio total al cliente</label><input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><p class="text-xs text-slate-500 mt-1">Lo que se cobra al cliente</p></div>
+<div><label class="block text-sm font-semibold text-slate-700 mb-1">Precio total al cliente</label><input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
 <div><label class="block text-sm font-semibold text-slate-700 mb-1">Método de pago</label><select id="editPaymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
 </div>
 <div class="grid grid-cols-2 gap-4">
 <div><label class="block text-sm font-semibold text-slate-700 mb-1">Entrega estimada</label><input type="date" id="editDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-<div><label class="block text-sm font-semibold text-slate-700 mb-1">Anticipo recibido</label><input type="number" id="editAdvancePayment" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><p class="text-xs text-slate-500 mt-1">Lo que el cliente dejó al inicio</p></div>
+<div><label class="block text-sm font-semibold text-slate-700 mb-1">Anticipo recibido</label><input type="number" id="editAdvancePayment" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
 </div>
 <div><label class="block text-sm font-semibold text-slate-700 mb-2">Refacciones</label><div id="editPartsList" class="space-y-2"></div></div>
 <div class="bg-slate-50 rounded-xl p-4 space-y-1 text-sm">
@@ -591,7 +600,7 @@ Tomar/Subir Fotos
 <div class="modal-overlay" id="checkoutModal">
 <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-<h2 class="text-xl font-bold text-slate-800"> Cobrar Servicio</h2>
+<h2 class="text-xl font-bold text-slate-800">💰 Cobrar Servicio</h2>
 <button onclick="closeModal('checkoutModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
 </div>
 <div class="p-6" id="checkoutContent"></div>
@@ -617,7 +626,7 @@ Tomar/Subir Fotos
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy, setDoc, getDoc, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy, setDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 const firebaseConfig = {
@@ -671,7 +680,7 @@ printFormat: "letter_double",
 policies: "• Ticket obligatorio: La garantía aplica únicamente con la presentación de este ticket. Su pérdida la invalida.\n• Abandono (90 días): Equipos no retirados en 90 días naturales se consideran abandonados, perdiendo el cliente sus derechos sobre el mismo.\n• Equipos mojados: Los equipos con antecedentes o daño por líquidos no cuentan con garantía.\n• Manipulación externa: Cualquier apertura, alteración o intervención por terceros anula automáticamente la garantía.\n• Pantallas económicas: En pantallas de calidad baja y media no hay garantía."
 };
 
-// Detectar si estamos en modo evidencia (URL con ?folio=)
+// Detectar modo evidencia
 function checkEvidenceMode() {
 const urlParams = new URLSearchParams(window.location.search);
 const folio = urlParams.get('folio');
@@ -679,7 +688,7 @@ if (folio) {
 currentEvidenceFolio = folio;
 document.getElementById('loginScreen').classList.add('hidden');
 document.getElementById('mainApp').classList.add('hidden');
-document.getElementById('evidencePortal').classList.remove('hidden');
+document.getElementById('evidencePortal').classList.add('active');
 loadEvidenceService(folio);
 return true;
 }
@@ -688,8 +697,9 @@ return false;
 
 async function loadEvidenceService(folio) {
 document.getElementById('evidenceFolio').textContent = folio;
+try {
 const q = query(collection(db, "services"), where("folio", "==", folio));
-const snapshot = await getDoc(q);
+const snapshot = await getDocs(q);
 if (snapshot.empty) {
 document.getElementById('evidenceServiceInfo').innerHTML = '<p class="text-red-600">❌ Servicio no encontrado</p>';
 return;
@@ -705,6 +715,10 @@ document.getElementById('evidenceServiceInfo').innerHTML = `
 <div class="mt-2 text-sm"><strong>Problema:</strong> ${service.device.problem}</div>
 `;
 loadEvidencePhotos(folio);
+} catch (error) {
+console.error('Error:', error);
+document.getElementById('evidenceServiceInfo').innerHTML = '<p class="text-red-600">❌ Error al cargar: ' + error.message + '</p>';
+}
 }
 
 function loadEvidencePhotos(folio) {
@@ -714,6 +728,8 @@ unsubscribePhotos = onSnapshot(q, (snapshot) => {
 const photos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 servicePhotos[folio] = photos;
 renderEvidencePhotos(photos);
+}, (error) => {
+console.error('Error loading photos:', error);
 });
 }
 
@@ -734,6 +750,10 @@ container.innerHTML = photos.map(photo => `
 window.handlePhotoUpload = async function(event) {
 const files = event.target.files;
 if (!files || files.length === 0) return;
+
+console.log('Files:', files);
+console.log('Folio:', currentEvidenceFolio);
+console.log('Storage bucket:', storage.app.options.storageBucket);
 
 const progressDiv = document.getElementById('uploadProgress');
 const progressBar = document.getElementById('progressBar');
@@ -763,7 +783,7 @@ progressBar.style.width = totalProgress + '%';
 progressText.textContent = `Subiendo ${Math.round(totalProgress)}%`;
 },
 (error) => {
-console.error('Error en upload:', error);
+console.error('Upload error:', error);
 alert('Error al subir la foto: ' + error.message);
 progressDiv.classList.add('hidden');
 },
@@ -821,14 +841,7 @@ workshopSettings = { ...workshopSettings, ...docSnap.data() };
 });
 }
 
-const savedSession = localStorage.getItem('tallerSession');
-if (!checkEvidenceMode() && savedSession) {
-try {
-const session = JSON.parse(savedSession);
-const hoursSinceLogin = (Date.now() - session.timestamp) / (1000 * 60 * 60);
-if (hoursSinceLogin < 24) {
-const user = USERS.find(u => u.email === session.email);
-if (user) {
+function enterApp(user) {
 currentUser = { email: user.email, fullName: user.fullName, role: user.role };
 document.getElementById('loginScreen').classList.add('hidden');
 if (currentUser.role === 'admin') document.getElementById('btnConfig').classList.remove('hidden');
@@ -848,6 +861,18 @@ document.querySelector('[data-section="dashboard"]').classList.add('bg-brand-50'
 loadSettings();
 startRealtimeSync();
 checkOpenCash();
+}
+
+// Recuperar sesión al cargar
+const savedSession = localStorage.getItem('tallerSession');
+if (!checkEvidenceMode() && savedSession) {
+try {
+const session = JSON.parse(savedSession);
+const hoursSinceLogin = (Date.now() - session.timestamp) / (1000 * 60 * 60);
+if (hoursSinceLogin < 24) {
+const user = USERS.find(u => u.email === session.email);
+if (user) {
+enterApp(user);
 } else { localStorage.removeItem('tallerSession'); }
 } else { localStorage.removeItem('tallerSession'); }
 } catch (e) { localStorage.removeItem('tallerSession'); }
@@ -860,26 +885,9 @@ const pass = document.getElementById('loginPassword').value;
 const errorDiv = document.getElementById('loginError');
 const validUser = USERS.find(u => u.email === email && u.password === pass);
 if (validUser) {
-currentUser = { email: validUser.email, fullName: validUser.fullName, role: validUser.role };
+localStorage.setItem('tallerSession', JSON.stringify({ email: validUser.email, fullName: validUser.fullName, role: validUser.role, timestamp: Date.now() }));
 errorDiv.classList.add('hidden');
-document.getElementById('loginScreen').classList.add('hidden');
-if (currentUser.role === 'admin') document.getElementById('btnConfig').classList.remove('hidden');
-document.getElementById('mainApp').classList.remove('hidden');
-const initial = currentUser.fullName.charAt(0).toUpperCase();
-document.getElementById('userAvatar').textContent = initial;
-document.getElementById('navAvatar').textContent = initial;
-document.getElementById('sidebarUserName').textContent = currentUser.fullName;
-document.getElementById('navUserName').textContent = currentUser.fullName;
-document.getElementById('sidebarUserEmail').textContent = currentUser.email + (currentUser.role === 'recepcion' ? ' (Recepción)' : '');
-document.getElementById('navUserEmail').textContent = currentUser.email;
-const hour = new Date().getHours();
-let greeting = hour < 12 ? 'Buenos días' : (hour < 19 ? 'Buenas tardes' : 'Buenas noches');
-document.getElementById('greeting').textContent = `${greeting}, ${currentUser.fullName.split(' ')[0]} 👋`;
-document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-document.querySelector('[data-section="dashboard"]').classList.add('bg-brand-50','text-brand-600');
-loadSettings();
-startRealtimeSync();
-checkOpenCash();
+enterApp(validUser);
 } else {
 errorDiv.textContent = '❌ Correo o contraseña incorrectos';
 errorDiv.classList.remove('hidden');
@@ -894,7 +902,7 @@ setTimeout(() => openModal('openCashModal'), 1000);
 }
 }
 
-window.confirmOpenCash = async function() {
+window.confirmOpenCash = function() {
 const initialCash = parseFloat(document.getElementById('initialCash').value) || 0;
 const hoyStr = new Date().toDateString();
 localStorage.setItem('cashOpened_' + hoyStr, JSON.stringify({
@@ -905,10 +913,6 @@ openedBy: currentUser.fullName
 closeModal('openCashModal');
 showToast('✅ Caja abierta exitosamente');
 loadCajaHoy();
-}
-
-function showApp() {
-localStorage.setItem('tallerSession', JSON.stringify({ email: currentUser.email, fullName: currentUser.fullName, role: currentUser.role, timestamp: Date.now() }));
 }
 
 window.logout = function() {
@@ -1073,7 +1077,7 @@ document.getElementById('checkoutContent').innerHTML = `
 <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
 <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
 <h3 class="text-2xl font-bold mt-1">${s.client.name}</h3>
-<p class="text-indigo-100 text-sm mt-1">📞 ${s.client.phone}</p>
+<p class="text-indigo-100 text-sm mt-1"> ${s.client.phone}</p>
 </div>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
 <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="font-semibold text-slate-800">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
@@ -1183,12 +1187,13 @@ ${s.service.advancePayment > 0 ? `<div class="t-row"><span>Anticipo:</span><span
 </div>
 `;
 const printContainer = document.getElementById('printContainer');
+printContainer.className = 'print-ticket';
 printContainer.innerHTML = `
 <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
 <div><strong>🖨️ Vista previa del ticket</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
 <div style="display:flex;gap:10px">
 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
-<button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px"> Cerrar</button>
+<button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
 </div>
 </div>
 <div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper ticket-mode">${ticketHTML}</div></div>
@@ -1210,24 +1215,25 @@ const half = `
 <div class="letter-half">
 <div class="letter-header">
 <h2>${workshopSettings.workshopName}</h2>
-<p>NOTA DE RECEPCION ${s.folio}</p>
+<p style="font-size:14px;font-weight:bold;margin-top:5px">NOTA DE RECEPCIÓN ${s.folio}</p>
 </div>
 <div class="letter-section">
 <h3>Datos del Cliente</h3>
-<div class="letter-row"><span>Nombre:</span><strong>${s.client.name}</strong></div>
-<div class="letter-row"><span>Teléfono:</span><strong>${s.client.phone}</strong></div>
+<div class="letter-row"><span><strong>Nombre:</strong></span><strong>${s.client.name}</strong></div>
+<div class="letter-row"><span><strong>Teléfono:</strong></span><strong>${s.client.phone}</strong></div>
+<div class="letter-row"><span><strong>Fecha:</strong></span><span>${fecha}</span></div>
 </div>
 <div class="letter-section">
 <h3>Equipo Recibido</h3>
-<div class="letter-row"><span>Equipo:</span><strong>${s.device.brand} ${s.device.model}</strong></div>
-${s.device.imei ? `<div class="letter-row"><span>IMEI/Serie:</span><span>${s.device.imei}</span></div>` : ''}
+<div class="letter-row"><span><strong>Equipo:</strong></span><strong>${s.device.brand} ${s.device.model}</strong></div>
+${s.device.imei ? `<div class="letter-row"><span><strong>IMEI/Serie:</strong></span><span>${s.device.imei}</span></div>` : ''}
 <div style="margin:6px 0"><strong>Problema:</strong> ${s.device.problem || '—'}</div>
 <div style="margin:6px 0"><strong>Estado físico:</strong> ${conditions}</div>
 ${s.device.accessories ? `<div style="margin:6px 0"><strong>Trabajo a realizar:</strong> ${s.device.accessories}</div>` : ''}
 </div>
 <div class="letter-section">
-<h3>Condiciones</h3>
-<p style="font-size:10px;white-space:pre-line">${workshopSettings.policies}</p>
+<h3>Condiciones del Servicio</h3>
+<p style="font-size:11px;white-space:pre-line;line-height:1.5">${workshopSettings.policies}</p>
 </div>
 <div class="letter-sign">
 <div>Firma del Cliente</div>
@@ -1238,14 +1244,13 @@ Contacto: ${workshopSettings.phone} | ${workshopSettings.workshopName}
 </div>
 </div>
 `;
-html = `<div class="letter-double">${half}<div style="height:20px"></div>${half}</div>`;
+html = `<div class="letter-double">${half}<div style="height:30px"></div>${half}</div>`;
 } else {
 html = `
 <div class="ticket-thermal">
-<div class="t-header"><h2>${workshopSettings.workshopName}</h2><p>RESGUARDO DE EQUIPO</p></div>
+<div class="t-header"><h2>${workshopSettings.workshopName}</h2><p>NOTA DE RECEPCIÓN</p><p style="font-size:10px">${s.folio}</p></div>
 <div class="t-divider"></div>
-<div class="t-row"><span><strong>Folio:</strong></span><span><strong>${s.folio}</strong></span></div>
-<div class="t-row"><span>Fecha:</span><span>${fecha}</span></div>
+<div class="t-row"><span><strong>Fecha:</strong></span><span>${fecha}</span></div>
 <div class="t-divider"></div>
 <p class="t-section-title">CLIENTE</p>
 <div class="t-row"><span>Nombre:</span><span>${s.client.name}</span></div>
@@ -1256,7 +1261,7 @@ html = `
 ${s.device.imei ? `<div class="t-row"><span>IMEI:</span><span>${s.device.imei}</span></div>` : ''}
 <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
 <div style="margin:4px 0"><span style="font-weight:bold">Estado físico:</span><br>${conditions}</div>
-${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bold">Accesorios:</span><br>${s.device.accessories}</div>` : ''}
+${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bold">Trabajo a realizar:</span><br>${s.device.accessories}</div>` : ''}
 <div class="t-divider"></div>
 <p class="t-section-title">CONDICIONES</p>
 <p style="font-size:10px;white-space:pre-line">${workshopSettings.policies}</p>
@@ -1270,18 +1275,21 @@ ${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bol
 `;
 }
 const printContainer = document.getElementById('printContainer');
+printContainer.className = isDouble ? 'print-letter' : 'print-ticket';
 printContainer.innerHTML = `
 <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-<div><strong>🖨️ Vista previa de Nota de Recepción</strong><p style="margin:0;font-size:12px;opacity:0.8">Se abrió automáticamente al guardar</p></div>
+<div><strong>🖨️ Vista previa de Nota de Recepción</strong><p style="margin:0;font-size:12px;opacity:0.8">Formato: ${isDouble ? 'Hoja Carta (Doble copia)' : 'Ticket 80mm'}</p></div>
 <div style="display:flex;gap:10px">
 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
 <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
 </div>
 </div>
-<div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper">${html}</div></div>
+<div style="padding-top:70px;background:#f1f5f9;min-height:100vh">
+<div class="preview-wrapper ${isDouble ? 'letter-mode' : 'ticket-mode'}">${html}</div>
+</div>
 `;
 printContainer.classList.add('active');
-  }
+}
 
 window.doPrint = function() { window.print(); }
 window.closePrintPreview = function() {
@@ -1355,7 +1363,7 @@ if (!confirm('¿Eliminar este servicio?')) return;
 try { await deleteDoc(doc(db, "services", id)); showToast('🗑️ Servicio eliminado'); } catch (error) { alert("Error: " + error.message); }
 }
 
-window.openDetail = async function(id) {
+window.openDetail = function(id) {
 const s = allServices.find(x => x.id === id);
 if (!s) return;
 const parts = s.service.parts || [];
@@ -1365,7 +1373,6 @@ const payBadge = isPaid ? '<span class="text-xs px-3 py-1 rounded-full bg-emeral
 const cobrarBtn = !isPaid ? `<button onclick="closeModal('detailModal');cobrarServicio('${s.id}')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition">💰 Cobrar ahora</button>` : '';
 const tech = s.technician || 'No especificado';
 const conditions = s.device.physCondition && s.device.physCondition.length > 0 ? s.device.physCondition.join(', ') : 'Ninguno';
-// Cargar fotos de evidencia
 const photos = servicePhotos[s.folio] || [];
 const photosHTML = photos.length > 0 ? `
 <div class="bg-slate-50 rounded-xl p-4 mb-4">
@@ -1380,7 +1387,6 @@ ${photos.map(photo => `
 </div>
 </div>
 ` : '<div class="bg-slate-50 rounded-xl p-4 mb-4 text-center text-slate-400">📷 Sin fotos de evidencia</div>';
-// URL del QR para evidencias
 const currentUrl = window.location.origin + window.location.pathname;
 const evidenceUrl = currentUrl + '?folio=' + s.folio;
 const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(evidenceUrl)}`;
@@ -1391,8 +1397,8 @@ document.getElementById('detailContent').innerHTML = `
 <div class="mt-3">${payBadge}</div>
 </div>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
-<div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">👤 Cliente</p><p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p></div>
-<div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Equipo</p><p class="text-sm font-semibold">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
+<div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Cliente</p><p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p></div>
+<div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="text-sm font-semibold">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
 </div>
 <div class="bg-slate-50 rounded-xl p-4 mb-4">
 <p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Estado físico al recibir</p>
@@ -1405,7 +1411,7 @@ ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-x
 ${s.service.technicalNotes ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-amber-700 uppercase mb-1">Notas técnicas</p><p class="text-slate-800">${s.service.technicalNotes}</p></div>` : ''}
 ${photosHTML}
 <div class="bg-brand-50 border-2 border-brand-200 rounded-xl p-4 mb-4 text-center">
-<p class="text-xs font-semibold text-brand-700 uppercase mb-2"> Escanea para agregar fotos de evidencia</p>
+<p class="text-xs font-semibold text-brand-700 uppercase mb-2">📱 Escanea para agregar fotos de evidencia</p>
 <img src="${qrUrl}" alt="QR Evidencia" class="mx-auto" style="width:120px;height:120px">
 <p class="text-xs text-brand-600 mt-2 break-all">${evidenceUrl}</p>
 </div>
@@ -1424,7 +1430,7 @@ ${s.service.warranty ? `<div class="bg-purple-50 border border-purple-200 rounde
 ${cobrarBtn}
 <button onclick="printReceptionTicket('${s.id}')" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition">📄 Nota de Recepción</button>
 <button onclick="closeModal('detailModal');openEdit('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">✏️ Editar</button>
-<button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">🖨️ Ticket de Cobro</button>
+<button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">️ Ticket de Cobro</button>
 <button onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition">🗑️ Eliminar</button>
 </div>
 `;
@@ -1545,7 +1551,7 @@ document.getElementById('corteDetailContent').innerHTML = `
 </div>
 <div class="grid grid-cols-3 gap-3 mb-6">
 <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💵 Efectivo</p><p class="font-bold text-slate-800">$${(c.pagosEfectivo||0).toFixed(2)}</p></div>
-<div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">🏦 Transferencia</p><p class="font-bold text-slate-800">$${(c.pagosTransferencia||0).toFixed(2)}</p></div>
+<div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1"> Transferencia</p><p class="font-bold text-slate-800">$${(c.pagosTransferencia||0).toFixed(2)}</p></div>
 <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💳 Tarjeta</p><p class="font-bold text-slate-800">$${(c.pagosTarjeta||0).toFixed(2)}</p></div>
 </div>
 <div class="bg-slate-50 rounded-xl p-4 mb-6">
@@ -1612,7 +1618,7 @@ const ticketHTML = `
 <p class="t-section-title">MÉTODOS DE PAGO</p>
 <div class="t-row"><span>💵 Efectivo:</span><span>$${(c.pagosEfectivo||0).toFixed(2)}</span></div>
 <div class="t-row"><span>🏦 Transferencia:</span><span>$${(c.pagosTransferencia||0).toFixed(2)}</span></div>
-<div class="t-row"><span>💳 Tarjeta:</span><span>$${(c.pagosTarjeta||0).toFixed(2)}</span></div>
+<div class="t-row"><span> Tarjeta:</span><span>$${(c.pagosTarjeta||0).toFixed(2)}</span></div>
 <div class="t-divider"></div>
 <p class="t-section-title">ESTADÍSTICAS</p>
 <div class="t-row"><span>Servicios cobrados:</span><span>${c.serviciosCobrados||0}</span></div>
@@ -1635,7 +1641,7 @@ printContainer.innerHTML = `
 <div><strong>🖨️ Vista previa del corte</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
 <div style="display:flex;gap:10px">
 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
-<button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px"> Cerrar</button>
+<button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
 </div>
 </div>
 <div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper ticket-mode">${ticketHTML}</div></div>
@@ -1826,7 +1832,7 @@ document.getElementById('cajaBalance').textContent = '$' + (ingresos - gastoRefa
 
 window.deleteExp = async function(id) {
 if (!confirm('¿Eliminar este gasto?')) return;
-try { await deleteDoc(doc(db, "expenses", id)); showToast('️ Gasto eliminado'); } catch (error) { console.error(error); }
+try { await deleteDoc(doc(db, "expenses", id)); showToast('🗑️ Gasto eliminado'); } catch (error) { console.error(error); }
 }
 
 function refreshAll() {
