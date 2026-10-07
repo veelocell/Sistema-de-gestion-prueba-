@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VELOCELL REPARACIONES</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 tailwind.config = {
 theme: {
@@ -30,13 +29,16 @@ body { font-family: 'Inter', sans-serif; }
 ::-webkit-scrollbar-track { background:#f1f5f9; }
 ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:4px; }
 ::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
+
 #evidencePortal { display: none; }
 #evidencePortal.active { display: block; }
+
 #printContainer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; overflow-y: auto; padding: 20px; }
 #printContainer.active { display: block; }
 .preview-wrapper { max-width: 900px; margin: 20px auto; background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow-x: auto; }
 .preview-wrapper.ticket-mode { max-width: 380px; }
 .preview-wrapper.letter-mode { max-width: 850px; }
+
 .ticket-thermal { width: 80mm; margin: 0 auto; padding: 3mm; font-family: 'Courier New', monospace; font-size: 11px; color: #000; line-height: 1.4; }
 .ticket-thermal .t-header { text-align:center; border-bottom: 1px dashed #000; padding-bottom: 6px; margin-bottom: 6px; }
 .ticket-thermal .t-header h2 { font-size: 15px; margin: 0; font-weight: bold; }
@@ -49,9 +51,31 @@ body { font-family: 'Inter', sans-serif; }
 .ticket-thermal .t-warranty { background: #f0f0f0; padding: 5px; border-radius: 3px; margin: 6px 0; }
 .ticket-thermal .t-qr { text-align: center; margin-top: 10px; }
 .ticket-thermal .t-qr img { width: 100px; height: 100px; }
-.letter-double { width: 190mm; max-width: 190mm; margin: 0 auto; padding: 5mm; font-family: 'Inter', sans-serif; font-size: 11px; color: #000; display: block; }
-.letter-half { border: 1px solid #000; padding: 10px; margin-bottom: 10px; position: relative; display: block; width: 100%; box-sizing: border-box; page-break-inside: avoid; min-height: 115mm; }
-.letter-half::after { content: ""; }
+
+.letter-double {
+width: 190mm;
+max-width: 190mm;
+margin: 0 auto;
+padding: 5mm;
+font-family: 'Inter', sans-serif;
+font-size: 11px;
+color: #000;
+display: block;
+}
+.letter-half {
+border: 1px solid #000;
+padding: 10px;
+margin-bottom: 10px;
+position: relative;
+display: block;
+width: 100%;
+box-sizing: border-box;
+page-break-inside: avoid;
+min-height: 115mm;
+}
+.letter-half::after {
+content: "";
+}
 .letter-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
 .letter-header h2 { font-size: 20px; margin: 0; font-weight: 800; text-transform: uppercase; }
 .letter-section { margin-bottom: 10px; }
@@ -60,48 +84,110 @@ body { font-family: 'Inter', sans-serif; }
 .letter-footer { margin-top: 15px; padding-top: 10px; border-top: 1px solid #000; font-size: 10px; text-align: center; white-space: pre-line; }
 .letter-sign { margin-top: 30px; display: flex; justify-content: space-between; }
 .letter-sign div { width: 40%; border-top: 1px solid #000; text-align: center; padding-top: 5px; font-size: 11px; }
+
 @media print {
 body * { visibility: hidden !important; }
 #printContainer, #printContainer * { visibility: visible !important; }
-#printContainer { display: block !important; position: absolute !important; top: 0; left: 0; width: 100%; padding: 0; background: white; }
-#printContainer .preview-wrapper { border: none; box-shadow: none; margin: 0; padding: 0; max-width: 100%; }
-#printContainer .no-print { display: none !important; }
-#printContainer.print-ticket @page { size: 80mm auto; margin: 0; }
-#printContainer.print-ticket { width: 80mm; }
-#printContainer.print-ticket .preview-wrapper { max-width: 80mm; }
-#printContainer.print-letter @page { size: letter portrait; margin: 5mm; }
-#printContainer.print-letter { width: 200mm; max-width: 200mm; }
-#printContainer.print-letter .preview-wrapper { max-width: 200mm; padding: 0; }
-#printContainer.print-letter .letter-double { width: 100%; max-width: 190mm; padding: 0; margin: 0 auto; display: block; }
-#printContainer.print-letter .letter-half { display: block; width: 100%; max-width: 190mm; border: 1px solid #000; padding: 8px; margin-bottom: 8px; box-sizing: border-box; page-break-inside: avoid; min-height: 110mm; }
-#printContainer.print-letter .letter-half::after { content: ""; }
-#printContainer.print-letter .letter-header h2 { font-size: 14px; }
-#printContainer.print-letter .letter-header p { font-size: 11px; }
-#printContainer.print-letter .letter-section h3 { font-size: 10px; }
-#printContainer.print-letter .letter-row, #printContainer.print-letter .letter-section div { font-size: 10px; }
-#printContainer.print-letter .letter-sign div { font-size: 9px; }
-#printContainer.print-letter .letter-footer { font-size: 8px; }
+#printContainer {
+display: block !important;
+position: absolute !important;
+top: 0;
+left: 0;
+width: 100%;
+padding: 0;
+background: white;
 }
+#printContainer .preview-wrapper {
+border: none;
+box-shadow: none;
+margin: 0;
+padding: 0;
+max-width: 100%;
+}
+#printContainer .no-print { display: none !important; }
+
+/* Formato Ticket 80mm */
+#printContainer.print-ticket @page {
+size: 80mm auto;
+margin: 0;
+}
+#printContainer.print-ticket {
+width: 80mm;
+}
+#printContainer.print-ticket .preview-wrapper {
+max-width: 80mm;
+}
+
+/* Formato Carta Doble */
+#printContainer.print-letter @page {
+size: letter portrait;
+margin: 5mm;
+}
+#printContainer.print-letter {
+width: 200mm;
+max-width: 200mm;
+}
+#printContainer.print-letter .preview-wrapper {
+max-width: 200mm;
+padding: 0;
+}
+#printContainer.print-letter .letter-double {
+width: 100%;
+max-width: 190mm;
+padding: 0;
+margin: 0 auto;
+display: block;
+}
+#printContainer.print-letter .letter-half {
+display: block;
+width: 100%;
+max-width: 190mm;
+border: 1px solid #000;
+padding: 8px;
+margin-bottom: 8px;
+box-sizing: border-box;
+page-break-inside: avoid;
+min-height: 110mm;
+}
+#printContainer.print-letter .letter-half::after {
+content: "";
+}
+#printContainer.print-letter .letter-header h2 {
+font-size: 14px;
+}
+#printContainer.print-letter .letter-header p {
+font-size: 11px;
+}
+#printContainer.print-letter .letter-section h3 {
+font-size: 10px;
+}
+#printContainer.print-letter .letter-row,
+#printContainer.print-letter .letter-section div {
+font-size: 10px;
+}
+#printContainer.print-letter .letter-sign div {
+font-size: 9px;
+}
+#printContainer.print-letter .letter-footer {
+font-size: 8px;
+}
+}
+
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.active { display: flex; }
+
 .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 200px; padding: 10px 0; }
 .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .bar { width: 100%; max-width: 50px; background: linear-gradient(to top, #6366f1, #8b5cf6); border-radius: 6px 6px 0 0; transition: all 0.3s; position: relative; min-height: 4px; }
 .bar:hover { opacity: 0.8; }
 .bar-label { font-size: 10px; color: #64748b; text-align: center; }
 .bar-value { font-size: 11px; font-weight: 600; color: #1e293b; }
+
 .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 .photo-item { position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .photo-item img { width: 100%; height: 150px; object-fit: cover; cursor: pointer; }
 .photo-item .delete-photo { position: absolute; top: 5px; right: 5px; background: rgba(239,68,68,0.9); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 16px; }
 .photo-item .delete-photo:hover { background: rgba(220,38,38,1); }
-.timeline-item { position: relative; padding-left: 20px; padding-bottom: 15px; border-left: 2px solid #e2e8f0; }
-.timeline-item:last-child { border-left: 2px solid transparent; }
-.timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: #6366f1; }
-.priority-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; }
-.priority-normal { background: #d1fae5; color: #065f46; }
-.priority-urgente { background: #fef3c7; color: #92400e; }
-.priority-express { background: #fee2e2; color: #991b1b; }
 </style>
 </head>
 <body class="bg-surface-50 text-slate-800">
@@ -113,7 +199,7 @@ body * { visibility: hidden !important; }
 <div class="w-20 h-20 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
 <svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
 </div>
-<h1 class="text-2xl font-bold text-slate-800">📸 Registro de Evidencia</h1>
+<h1 class="text-2xl font-bold text-slate-800"> Registro de Evidencia</h1>
 <p class="text-slate-500 mt-2">Folio: <strong id="evidenceFolio">Cargando...</strong></p>
 </div>
 <div id="evidenceServiceInfo" class="bg-slate-50 rounded-xl p-4 mb-6">
@@ -160,7 +246,7 @@ Tomar/Subir Fotos
 <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-lg transition shadow-lg shadow-brand-500/30">Iniciar Sesión</button>
 </form>
 <div id="loginError" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center"></div>
-<p class="text-center text-xs text-slate-400 mt-6">🔒 Conexión segura</p>
+<p class="text-center text-xs text-slate-400 mt-6"> Conexión segura</p>
 </div>
 </div>
 </div>
@@ -376,7 +462,7 @@ Tomar/Subir Fotos
 </div>
 </section>
 <section id="cortes" class="section-content hidden fade-in">
-<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800"> Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
+<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📋 Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
 <div class="grid md:grid-cols-3 gap-4 mb-6">
 <button onclick="generarCorteDiario()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-6 rounded-2xl shadow-lg shadow-emerald-500/30 transition text-left">
 <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><h3 class="text-lg font-bold">Corte del Día</h3></div>
@@ -414,7 +500,7 @@ Tomar/Subir Fotos
 </div>
 </section>
 <section id="config" class="section-content hidden fade-in">
-<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">⚙️ Configuración del Taller</h2><p class="text-slate-500 text-sm">Personaliza los datos que aparecen en los tickets y notas.</p></div>
+<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">️ Configuración del Taller</h2><p class="text-slate-500 text-sm">Personaliza los datos que aparecen en los tickets y notas.</p></div>
 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 max-w-2xl">
 <form id="configForm" class="space-y-5">
 <div>
@@ -469,7 +555,7 @@ Tomar/Subir Fotos
 <div id="metodosPagoList" class="space-y-3"></div>
 </div>
 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-<h3 class="font-bold text-slate-800 mb-4">📅 Día más productivo</h3>
+<h3 class="font-bold text-slate-800 mb-4"> Día más productivo</h3>
 <div id="diaProductivo" class="text-center py-8">
 <div class="w-20 h-20 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
 <p class="text-3xl font-bold text-slate-800" id="diaProductivoNombre">—</p>
@@ -483,9 +569,9 @@ Tomar/Subir Fotos
 </div>
 </div>
 
-<!-- MODAL NUEVA ORDEN (MEJORADO) -->
+<!-- MODALES -->
 <div class="modal-overlay" id="newOrderModal">
-<div class="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+<div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
 <h2 class="text-xl font-bold text-slate-800">📝 Nueva Orden de Servicio</h2>
 <button onclick="closeModal('newOrderModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
@@ -494,7 +580,7 @@ Tomar/Subir Fotos
 <div><h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Datos del Cliente</h3>
 <div class="grid md:grid-cols-2 gap-4">
 <div><label class="block text-sm font-medium text-slate-700 mb-1">Nombre *</label><input type="text" id="clientName" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-<div><label class="block text-sm font-medium text-slate-700 mb-1">Teléfono *</label><input type="tel" id="clientPhone" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 8681234567"></div>
+<div><label class="block text-sm font-medium text-slate-700 mb-1">Teléfono *</label><input type="tel" id="clientPhone" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
 </div>
 </div>
 <div><h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Datos del Equipo</h3>
@@ -504,44 +590,6 @@ Tomar/Subir Fotos
 <div><label class="block text-sm font-medium text-slate-700 mb-1">IMEI / Serie</label><input type="text" id="deviceIMEI" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
 <div><label class="block text-sm font-medium text-slate-700 mb-1">Entrega estimada</label><input type="date" id="estimatedDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
 </div>
-
-<!-- PRIORIDAD -->
-<div class="mt-4">
-<label class="block text-sm font-medium text-slate-700 mb-2">Prioridad del servicio *</label>
-<div class="flex gap-3">
-<label class="flex-1 cursor-pointer">
-<input type="radio" name="priority" value="Normal" checked class="peer hidden">
-<div class="peer-checked:bg-emerald-500 peer-checked:text-white peer-checked:border-emerald-500 border-2 border-slate-200 rounded-lg p-3 text-center font-medium text-sm transition"> Normal</div>
-</label>
-<label class="flex-1 cursor-pointer">
-<input type="radio" name="priority" value="Urgente" class="peer hidden">
-<div class="peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-amber-500 border-2 border-slate-200 rounded-lg p-3 text-center font-medium text-sm transition">🟡 Urgente</div>
-</label>
-<label class="flex-1 cursor-pointer">
-<input type="radio" name="priority" value="Express" class="peer hidden">
-<div class="peer-checked:bg-red-500 peer-checked:text-white peer-checked:border-red-500 border-2 border-slate-200 rounded-lg p-3 text-center font-medium text-sm transition">🔴 Express</div>
-</label>
-</div>
-</div>
-
-<!-- CHECKLIST OBLIGATORIO -->
-<div class="mt-4 bg-amber-50 border-2 border-amber-200 rounded-lg p-4">
-<label class="block text-sm font-semibold text-amber-800 mb-2">✅ Checklist de revisión técnica (mínimo 3 items) *</label>
-<div class="grid md:grid-cols-2 gap-2">
-<label class="flex items-center gap-2 cursor-pointer bg-white p-2 rounded border border-amber-200"><input type="checkbox" name="checklist" value="Enciende" class="rounded text-brand-600 w-4 h-4"> El equipo enciende</label>
-<label class="flex items-center gap-2 cursor-pointer bg-white p-2 rounded border border-amber-200"><input type="checkbox" name="checklist" value="Pantalla funcional" class="rounded text-brand-600 w-4 h-4"> Pantalla funcional</label>
-<label class="flex items-center gap-2 cursor-pointer bg-white p-2 rounded border border-amber-200"><input type="checkbox" name="checklist" value="Botones operativos" class="rounded text-brand-600 w-4 h-4"> Botones operativos</label>
-<label class="flex items-center gap-2 cursor-pointer bg-white p-2 rounded border border-amber-200"><input type="checkbox" name="checklist" value="Cámara funciona" class="rounded text-brand-600 w-4 h-4"> Cámara funcional</label>
-<label class="flex items-center gap-2 cursor-pointer bg-white p-2 rounded border border-amber-200"><input type="checkbox" name="checklist" value="Carga correctamente" class="rounded text-brand-600 w-4 h-4"> Carga correctamente</label>
-<label class="flex items-center gap-2 cursor-pointer bg-white p-2 rounded border border-amber-200"><input type="checkbox" name="checklist" value="Audio funciona" class="rounded text-brand-600 w-4 h-4"> Audio funcional</label>
-<label class="flex items-center gap-2 cursor-pointer bg-white p-2 rounded border border-amber-200"><input type="checkbox" name="checklist" value="Sin cuentas bloqueadas" class="rounded text-brand-600 w-4 h-4"> Sin cuentas bloqueadas</label>
-<label class="flex items-center gap-2 cursor-pointer bg-white p-2 rounded border border-amber-200"><input type="checkbox" name="checklist" value="Sin rayones" class="rounded text-brand-600 w-4 h-4"> Sin rayones visibles</label>
-</div>
-<p class="text-xs text-red-600 mt-2 font-semibold" id="checklistError" style="display:none;">⚠️ Debes marcar al menos 3 items del checklist</p>
-<p class="text-xs text-amber-700 mt-1" id="checklistCount">Items marcados: 0</p>
-</div>
-
-<!-- ESTADO FÍSICO -->
 <div class="mt-4">
 <label class="block text-sm font-medium text-slate-700 mb-2">Estado físico del equipo al recibir:</label>
 <div class="flex flex-wrap gap-3">
@@ -552,14 +600,12 @@ Tomar/Subir Fotos
 <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Pantalla rota" class="rounded text-brand-600 w-4 h-4"> Pantalla rota</label>
 </div>
 </div>
-
 <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Problema reportado por el cliente *</label><textarea id="problemDescription" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
 <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Trabajo a realizar</label><textarea id="accessories" placeholder="Revision, cambio de pantalla, etc..." class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
 </div>
 <div><h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Servicio</h3>
 <div class="grid md:grid-cols-2 gap-4">
 <div><label class="block text-sm font-medium text-slate-700 mb-1">Estado *</label><select id="serviceStatus" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option>En diagnóstico</option><option>Por revisar</option><option>Revisado</option><option>En espera de autorización</option><option>Reparado (en espera de que pasen por él)</option><option>Entregado</option></select></div>
-<div><label class="block text-sm font-medium text-slate-700 mb-1">Técnico responsable *</label><select id="technician" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Ismael Rodríguez</option><option>Juan Pérez</option><option>Otro técnico</option></select></div>
 <div><label class="block text-sm font-medium text-slate-700 mb-1">Precio total al cliente *</label><input type="number" id="repairCost" step="0.01" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
 <div><label class="block text-sm font-medium text-slate-700 mb-1">💰 Anticipo (opcional)</label><input type="number" id="advancePayment" step="0.01" value="0" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"><p class="text-xs text-slate-500 mt-1">Lo que el cliente deja al entregar el equipo</p></div>
 <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">Método de pago esperado</label><select id="paymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
@@ -570,17 +616,6 @@ Tomar/Subir Fotos
 <button type="button" onclick="closeModal('newOrderModal')" class="px-6 py-3 border border-slate-200 rounded-xl font-medium hover:bg-slate-50 transition">Cancelar</button>
 </div>
 </form>
-</div>
-</div>
-
-<!-- MODAL HISTORIAL DEL CLIENTE -->
-<div class="modal-overlay" id="clientHistoryModal">
-<div class="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-<div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-<h2 class="text-xl font-bold text-slate-800">📋 Historial del Cliente</h2>
-<button onclick="closeModal('clientHistoryModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-</div>
-<div id="clientHistoryContent" class="p-6"></div>
 </div>
 </div>
 
@@ -668,7 +703,7 @@ Tomar/Subir Fotos
 </div>
 
 <div class="modal-overlay" id="corteDetailModal">
-<div class="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+<div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
 <h2 class="text-xl font-bold text-slate-800" id="corteDetailTitle">Detalle del Corte</h2>
 <button onclick="closeModal('corteDetailModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
@@ -706,7 +741,6 @@ const USERS = [
 { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez", role: "admin" },
 { email: "demo@demo.com", password: "demo2024", fullName: "DEMO", role: "recepcion" }
 ];
-const TECHNICIANS = ['Ismael Rodríguez', 'Juan Pérez', 'Otro técnico'];
 const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
 const STATUS_COLORS = {
 'En diagnóstico': 'bg-blue-100 text-blue-700',
@@ -731,7 +765,6 @@ let statusFilter = '';
 let selectedServiceForPart = null;
 let checkoutServiceId = null;
 let corteFilter = 'todos';
-let currentCorteId = null;
 let unsubscribeServices = null, unsubscribeExpenses = null, unsubscribeCortes = null, unsubscribeSettings = null, unsubscribePhotos = null;
 let currentEvidenceFolio = null;
 
@@ -812,21 +845,31 @@ container.innerHTML = photos.map(photo => `
 window.handlePhotoUpload = async function(event) {
 const files = event.target.files;
 if (!files || files.length === 0) return;
+
+console.log('Files:', files);
+console.log('Folio:', currentEvidenceFolio);
+console.log('Storage bucket:', storage.app.options.storageBucket);
+
 const progressDiv = document.getElementById('uploadProgress');
 const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressText');
+
 progressDiv.classList.remove('hidden');
+
 let uploaded = 0;
 const totalFiles = files.length;
+
 for (let i = 0; i < files.length; i++) {
 const file = files[i];
 const timestamp = Date.now();
 const randomId = Math.random().toString(36).substring(7);
 const fileName = `${timestamp}_${randomId}_${file.name}`;
 const storagePath = `evidence/${currentEvidenceFolio}/${fileName}`;
+
 try {
 const storageRef = ref(storage, storagePath);
 const uploadTask = uploadBytesResumable(storageRef, file);
+
 uploadTask.on('state_changed',
 (snapshot) => {
 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -849,10 +892,12 @@ uploadedAt: new Date().toISOString(),
 uploadedBy: 'Evidencia Portal',
 fileName: file.name
 });
+
 uploaded++;
 const totalProgress = (uploaded / totalFiles) * 100;
 progressBar.style.width = totalProgress + '%';
 progressText.textContent = `Subidas ${uploaded} de ${totalFiles}`;
+
 if (uploaded === totalFiles) {
 setTimeout(() => {
 progressDiv.classList.add('hidden');
@@ -866,6 +911,7 @@ console.error('Error:', error);
 alert('Error al procesar la foto: ' + error.message);
 }
 }
+
 event.target.value = '';
 }
 
@@ -912,6 +958,7 @@ startRealtimeSync();
 checkOpenCash();
 }
 
+// Recuperar sesión al cargar
 const savedSession = localStorage.getItem('tallerSession');
 if (!checkEvidenceMode() && savedSession) {
 try {
@@ -1019,170 +1066,31 @@ else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden
 window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
 window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
 
-// Validación de checklist en tiempo real
-document.querySelectorAll('input[name="checklist"]').forEach(cb => {
-cb.addEventListener('change', () => {
-const count = document.querySelectorAll('input[name="checklist"]:checked').length;
-document.getElementById('checklistCount').textContent = `Items marcados: ${count}/8 (mínimo 3)`;
-if (count >= 3) {
-document.getElementById('checklistError').style.display = 'none';
-document.getElementById('checklistCount').classList.remove('text-red-600');
-document.getElementById('checklistCount').classList.add('text-emerald-600');
-} else {
-document.getElementById('checklistCount').classList.remove('text-emerald-600');
-document.getElementById('checklistCount').classList.add('text-red-600');
-}
-});
-});
-
 document.getElementById('serviceForm').addEventListener('submit', async function(e) {
 e.preventDefault();
-
-// Validar checklist
-const checklistItems = Array.from(document.querySelectorAll('input[name="checklist"]:checked')).map(cb => cb.value);
-if (checklistItems.length < 3) {
-document.getElementById('checklistError').style.display = 'block';
-alert('⚠️ Debes completar al menos 3 items del checklist de revisión técnica');
-return;
-}
-
 showLoading('Guardando orden...');
 const rc = parseFloat(document.getElementById('repairCost').value);
 const advance = parseFloat(document.getElementById('advancePayment').value) || 0;
 const physConditions = Array.from(document.querySelectorAll('input[name="physCondition"]:checked')).map(cb => cb.value);
-const priority = document.querySelector('input[name="priority"]:checked').value;
-const technician = document.getElementById('technician').value;
-const now = new Date().toISOString();
-
 const svc = {
 folio: 'SRV-' + Date.now().toString().slice(-6),
 client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
-device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value, physCondition: physConditions, checklist: checklistItems },
-service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: rc, paidAmount: 0, paidDate: null, diagnosis: '', technicalNotes: '', warranty: '', advancePayment: advance, remainingAmount: rc - advance, priority: priority, technician: technician, statusHistory: [{ status: document.getElementById('serviceStatus').value, timestamp: now, user: currentUser.fullName }] },
-date: now,
+device: { brand: document.getElementById('deviceBrand').value, model: document.getElementById('deviceModel').value, imei: document.getElementById('deviceIMEI').value, problem: document.getElementById('problemDescription').value, accessories: document.getElementById('accessories').value, physCondition: physConditions },
+service: { status: document.getElementById('serviceStatus').value, repairCost: rc, paymentStatus: 'Pendiente', paymentMethod: document.getElementById('paymentMethod').value, estimatedDelivery: document.getElementById('estimatedDelivery').value, parts: [], totalParts: 0, netProfit: rc, paidAmount: 0, paidDate: null, diagnosis: '', technicalNotes: '', warranty: '', advancePayment: advance, remainingAmount: rc - advance },
+date: new Date().toISOString(),
 userEmail: currentUser.email,
-technician: technician
+technician: currentUser.fullName
 };
-
 try {
 const docRef = await addDoc(collection(db, "services"), svc);
 hideLoading();
 closeModal('newOrderModal');
 this.reset();
 document.getElementById('advancePayment').value = '0';
-document.getElementById('checklistCount').textContent = 'Items marcados: 0';
 showToast('✅ Orden creada exitosamente');
-
-// Enviar WhatsApp automático
-sendWhatsAppNotification(svc.client.phone, svc.folio, svc.service.status, svc.client.name);
-
 setTimeout(() => printReceptionTicket(docRef.id), 500);
 } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
-
-// Función WhatsApp
-function sendWhatsAppNotification(phone, folio, status, clientName) {
-if (!phone) return;
-const cleanPhone = phone.replace(/\D/g, '');
-let message = '';
-switch(status) {
-case 'En diagnóstico':
-message = `Hola ${clientName}, tu equipo con folio ${folio} ha sido recibido en ${workshopSettings.workshopName} y está en proceso de diagnóstico. Te mantendremos informado.`;
-break;
-case 'Revisado':
-message = `Hola ${clientName}, tu equipo con folio ${folio} ya fue revisado. Pronto te contactaremos con el diagnóstico.`;
-break;
-case 'Reparado (en espera de que pasen por él)':
-message = `Hola ${clientName}, tu equipo con folio ${folio} ya está reparado y listo para recoger. Te esperamos en ${workshopSettings.workshopName}. Contacto: ${workshopSettings.phone}`;
-break;
-case 'Entregado':
-message = `Hola ${clientName}, tu equipo con folio ${folio} ha sido entregado. Gracias por tu confianza en ${workshopSettings.workshopName}.`;
-break;
-default:
-message = `Hola ${clientName}, el estado de tu equipo con folio ${folio} ha cambiado a: ${status}.`;
-}
-const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
-window.open(whatsappUrl, '_blank');
-}
-
-// Actualizar estado con timestamp y WhatsApp
-window.updateServiceStatus = async function(serviceId, newStatus) {
-const service = allServices.find(s => s.id === serviceId);
-if (!service) return;
-const now = new Date().toISOString();
-const statusHistory = service.service.statusHistory || [];
-statusHistory.push({ status: newStatus, timestamp: now, user: currentUser.fullName });
-try {
-await updateDoc(doc(db, "services", serviceId), {
-'service.status': newStatus,
-'service.statusHistory': statusHistory
-});
-sendWhatsAppNotification(service.client.phone, service.folio, newStatus, service.client.name);
-showToast('✅ Estado actualizado y notificación enviada');
-} catch (error) {
-alert('Error al actualizar: ' + error.message);
-}
-};
-
-// Historial del cliente
-window.showClientHistory = function(clientPhone) {
-const clientServices = allServices.filter(s => s.client.phone === clientPhone);
-if (clientServices.length === 0) {
-document.getElementById('clientHistoryContent').innerHTML = `
-<div class="text-center py-8">
-<p class="text-slate-500">No hay servicios registrados para este número</p>
-</div>
-`;
-openModal('clientHistoryModal');
-return;
-}
-const totalSpent = clientServices.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
-const lastService = clientServices[0];
-let html = `
-<div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
-<h3 class="text-2xl font-bold">${lastService.client.name}</h3>
-<p class="text-indigo-100">📞 ${lastService.client.phone}</p>
-<div class="grid grid-cols-3 gap-4 mt-4">
-<div class="bg-white/10 rounded-lg p-3">
-<p class="text-xs text-indigo-100">Servicios totales</p>
-<p class="text-2xl font-bold">${clientServices.length}</p>
-</div>
-<div class="bg-white/10 rounded-lg p-3">
-<p class="text-xs text-indigo-100">Total gastado</p>
-<p class="text-2xl font-bold">$${totalSpent.toFixed(2)}</p>
-</div>
-<div class="bg-white/10 rounded-lg p-3">
-<p class="text-xs text-indigo-100">Último servicio</p>
-<p class="text-sm font-bold">${new Date(lastService.date).toLocaleDateString('es-MX')}</p>
-</div>
-</div>
-</div>
-<h4 class="font-bold text-slate-800 mb-3">Historial de Servicios</h4>
-<div class="space-y-3">
-`;
-clientServices.forEach(s => {
-const statusColor = STATUS_COLORS[s.service.status] || 'bg-slate-100 text-slate-700';
-const priorityBadge = s.service.priority ? `<span class="priority-badge priority-${s.service.priority.toLowerCase()}">${s.service.priority}</span>` : '';
-html += `
-<div class="bg-slate-50 rounded-lg p-4 hover:bg-slate-100 transition cursor-pointer" onclick="closeModal('clientHistoryModal'); openDetail('${s.id}')">
-<div class="flex justify-between items-start mb-2">
-<div>
-<p class="font-semibold text-brand-600">${s.folio} ${priorityBadge}</p>
-<p class="text-sm text-slate-600">${s.device.brand} ${s.device.model}</p>
-</div>
-<span class="text-xs px-2 py-1 rounded-full ${statusColor}">${s.service.status}</span>
-</div>
-<div class="flex justify-between items-center text-sm">
-<span class="text-slate-500">${new Date(s.date).toLocaleDateString('es-MX')}</span>
-<span class="font-bold text-slate-800">$${s.service.repairCost.toFixed(2)}</span>
-</div>
-</div>
-`;
-});
-html += '</div>';
-document.getElementById('clientHistoryContent').innerHTML = html;
-openModal('clientHistoryModal');
-};
 
 window.openAddPartModal = function() {
 selectedServiceForPart = null;
@@ -1199,7 +1107,7 @@ function renderServicesForPartList(filter = '') {
 const active = allServices.filter(s => s.service.status !== 'Entregado');
 const filtered = filter ? active.filter(s => s.client.name.toLowerCase().includes(filter.toLowerCase()) || s.client.phone.includes(filter) || s.folio.toLowerCase().includes(filter.toLowerCase())) : active;
 const container = document.getElementById('servicesForPartList');
-if (filtered.length === 0) { container.innerHTML = '<p class="text-center text-slate-400 py-8"> No hay servicios activos</p>'; return; }
+if (filtered.length === 0) { container.innerHTML = '<p class="text-center text-slate-400 py-8">📭 No hay servicios activos</p>'; return; }
 container.innerHTML = filtered.map(s => `
 <div class="p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50 transition" onclick="selectServiceForPart('${s.id}')">
 <div class="flex justify-between items-start gap-3">
@@ -1264,7 +1172,7 @@ document.getElementById('checkoutContent').innerHTML = `
 <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
 <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
 <h3 class="text-2xl font-bold mt-1">${s.client.name}</h3>
-<p class="text-indigo-100 text-sm mt-1">📞 ${s.client.phone}</p>
+<p class="text-indigo-100 text-sm mt-1"> ${s.client.phone}</p>
 </div>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
 <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="font-semibold text-slate-800">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
@@ -1287,7 +1195,7 @@ ${advance > 0 ? `<div class="flex justify-between items-center text-sm text-emer
 <div>
 <label class="block text-sm font-semibold text-slate-700 mb-2">Método de pago</label>
 <div class="grid grid-cols-3 gap-2">
-${['Efectivo','Transferencia','Tarjeta'].map(m => `<label class="cursor-pointer"><input type="radio" name="checkoutPayment" value="${m}" ${s.service.paymentMethod === m ? 'checked' : ''} class="peer hidden"><div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-xl p-3 text-center font-medium text-sm transition hover:border-brand-400">${m === 'Efectivo' ? '💵' : m === 'Transferencia' ? '' : '💳'}<br>${m}</div></label>`).join('')}
+${['Efectivo','Transferencia','Tarjeta'].map(m => `<label class="cursor-pointer"><input type="radio" name="checkoutPayment" value="${m}" ${s.service.paymentMethod === m ? 'checked' : ''} class="peer hidden"><div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-xl p-3 text-center font-medium text-sm transition hover:border-brand-400">${m === 'Efectivo' ? '💵' : m === 'Transferencia' ? '🏦' : '💳'}<br>${m}</div></label>`).join('')}
 </div>
 </div>
 <div>
@@ -1326,14 +1234,10 @@ if (!confirm(`¿Confirmar cobro?\n\nSe marcará como PAGADO y ENTREGADO.`)) retu
 showLoading('Procesando cobro...');
 try {
 const svc = allServices.find(s => s.id === checkoutServiceId);
-const now = new Date().toISOString();
-const statusHistory = svc.service.statusHistory || [];
-statusHistory.push({ status: 'Entregado', timestamp: now, user: currentUser.fullName });
-await updateDoc(doc(db, "services", checkoutServiceId), { 'service.paymentStatus': 'Pagado', 'service.paidAmount': svc.service.repairCost, 'service.paidDate': now, 'service.paymentMethod': paymentMethod, 'service.warranty': warranty, 'service.status': 'Entregado', 'service.statusHistory': statusHistory });
+await updateDoc(doc(db, "services", checkoutServiceId), { 'service.paymentStatus': 'Pagado', 'service.paidAmount': svc.service.repairCost, 'service.paidDate': new Date().toISOString(), 'service.paymentMethod': paymentMethod, 'service.warranty': warranty, 'service.status': 'Entregado' });
 hideLoading();
 closeModal('checkoutModal');
 showToast('✅ Cobro confirmado. Servicio marcado como Entregado.');
-sendWhatsAppNotification(svc.client.phone, svc.folio, 'Entregado', svc.client.name);
 setTimeout(() => printTicket(checkoutServiceId), 500);
 } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
@@ -1399,6 +1303,7 @@ const isDouble = workshopSettings.printFormat === 'letter_double';
 const fecha = new Date(s.date).toLocaleString('es-MX');
 const tech = s.technician || 'No especificado';
 const conditions = s.device.physCondition && s.device.physCondition.length > 0 ? s.device.physCondition.join(', ') : 'Ninguno especificado';
+
 let html = '';
 if (isDouble) {
 const half = `
@@ -1471,7 +1376,7 @@ printContainer.innerHTML = `
 <div><strong>🖨️ Vista previa de Nota de Recepción</strong><p style="margin:0;font-size:12px;opacity:0.8">Formato: ${isDouble ? 'Hoja Carta (Doble copia)' : 'Ticket 80mm'}</p></div>
 <div style="display:flex;gap:10px">
 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
-<button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px"> Cerrar</button>
+<button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
 </div>
 </div>
 <div style="padding-top:70px;background:#f1f5f9;min-height:100vh">
@@ -1528,13 +1433,6 @@ showLoading('Guardando cambios...');
 const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
 const advance = parseFloat(document.getElementById('editAdvancePayment').value) || 0;
 const tp = editParts.reduce((s,p) => s + p.cost, 0);
-const service = allServices.find(s => s.id === editId);
-const now = new Date().toISOString();
-const statusHistory = service.service.statusHistory || [];
-// Solo agregar si cambió el estado
-if (editStatus !== service.service.status) {
-statusHistory.push({ status: editStatus, timestamp: now, user: currentUser.fullName });
-}
 try {
 await updateDoc(doc(db, "services", editId), {
 'service.status': editStatus,
@@ -1547,8 +1445,7 @@ await updateDoc(doc(db, "services", editId), {
 'service.remainingAmount': rc - advance,
 'service.parts': [...editParts],
 'service.totalParts': tp,
-'service.netProfit': rc - tp,
-'service.statusHistory': statusHistory
+'service.netProfit': rc - tp
 });
 hideLoading();
 closeModal('editModal');
@@ -1571,8 +1468,6 @@ const payBadge = isPaid ? '<span class="text-xs px-3 py-1 rounded-full bg-emeral
 const cobrarBtn = !isPaid ? `<button onclick="closeModal('detailModal');cobrarServicio('${s.id}')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition">💰 Cobrar ahora</button>` : '';
 const tech = s.technician || 'No especificado';
 const conditions = s.device.physCondition && s.device.physCondition.length > 0 ? s.device.physCondition.join(', ') : 'Ninguno';
-const priority = s.service.priority || 'Normal';
-const priorityBadge = `<span class="priority-badge priority-${priority.toLowerCase()}">${priority}</span>`;
 const photos = servicePhotos[s.folio] || [];
 const photosHTML = photos.length > 0 ? `
 <div class="bg-slate-50 rounded-xl p-4 mb-4">
@@ -1586,63 +1481,39 @@ ${photos.map(photo => `
 `).join('')}
 </div>
 </div>
-` : '<div class="bg-slate-50 rounded-xl p-4 mb-4 text-center text-slate-400">📷 Sin fotos de evidencia</div>';
-
-// Historial de estados
-const statusHistory = s.service.statusHistory || [];
-const historyHTML = statusHistory.length > 0 ? `
-<div class="bg-slate-50 rounded-xl p-4 mb-4">
-<p class="text-xs font-semibold text-slate-500 uppercase mb-3">📅 Historial de Estados</p>
-<div class="space-y-2">
-${statusHistory.map(h => `
-<div class="timeline-item">
-<p class="text-sm font-medium text-slate-800">${h.status}</p>
-<p class="text-xs text-slate-500">${new Date(h.timestamp).toLocaleString('es-MX')} - ${h.user}</p>
-</div>
-`).join('')}
-</div>
-</div>
-` : '';
-
+` : '<div class="bg-slate-50 rounded-xl p-4 mb-4 text-center text-slate-400"> Sin fotos de evidencia</div>';
 const currentUrl = window.location.origin + window.location.pathname;
 const evidenceUrl = currentUrl + '?folio=' + s.folio;
 const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(evidenceUrl)}`;
-
 document.getElementById('detailContent').innerHTML = `
 <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
-<p class="text-indigo-100 text-sm">Folio: ${s.folio} ${priorityBadge}</p>
+<p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
 <h3 class="text-2xl font-bold mt-1">${s.client.name}</h3>
 <div class="mt-3">${payBadge}</div>
 </div>
 <div class="grid md:grid-cols-2 gap-4 mb-6">
-<div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">👤 Cliente</p><p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p>
-<button onclick="showClientHistory('${s.client.phone}')" class="mt-2 text-xs text-brand-600 hover:text-brand-700 font-medium">📋 Ver historial completo</button>
+<div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Cliente</p><p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p></div>
+<div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="text-sm font-semibold">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
 </div>
-<div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Equipo</p><p class="text-sm font-semibold">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}
-<p class="text-xs text-slate-500 mt-2">👨‍🔧 Técnico: <strong>${tech}</strong></p>
-</div>
-</div>
-${historyHTML}
 <div class="bg-slate-50 rounded-xl p-4 mb-4">
 <p class="text-xs font-semibold text-slate-500 uppercase mb-1">Problema reportado</p>
 <p class="text-slate-800 font-medium">${s.device.problem}</p>
 ${s.device.accessories ? `<p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Trabajo a realizar</p><p class="text-sm text-slate-700">${s.device.accessories}</p>` : ''}
 <p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Estado físico al recibir</p>
 <p class="text-sm text-slate-700">${conditions}</p>
-${s.device.checklist && s.device.checklist.length > 0 ? `<p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Checklist de revisión</p><div class="flex flex-wrap gap-1 mt-1">${s.device.checklist.map(c => `<span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded">${c}</span>`).join('')}</div>` : ''}
 </div>
 ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-slate-800">${s.service.diagnosis}</p></div>` : ''}
 ${s.service.technicalNotes ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-amber-700 uppercase mb-1">Notas técnicas</p><p class="text-slate-800">${s.service.technicalNotes}</p></div>` : ''}
 ${photosHTML}
 <div class="bg-brand-50 border-2 border-brand-200 rounded-xl p-4 mb-4 text-center">
-<p class="text-xs font-semibold text-brand-700 uppercase mb-2">📱 Escanea para agregar fotos de evidencia</p>
+<p class="text-xs font-semibold text-brand-700 uppercase mb-2"> Escanea para agregar fotos de evidencia</p>
 <img src="${qrUrl}" alt="QR Evidencia" class="mx-auto" style="width:120px;height:120px">
 <p class="text-xs text-brand-600 mt-2 break-all">${evidenceUrl}</p>
 </div>
 <div class="bg-slate-50 rounded-xl p-4 mb-4">
-<p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Refacciones (${parts.length}) - Registro interno</p>
+<p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Refacciones (${parts.length})</p>
 ${parts.length ? parts.map(p => `<div class="flex justify-between py-2 border-b border-slate-200 last:border-0"><span>${p.description}</span><span class="font-semibold">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>'}
-<div class="flex justify-between pt-3 mt-2 border-t-2 border-slate-300 font-bold"><span>Total refacciones (interno)</span><span>$${tp.toFixed(2)}</span></div>
+<div class="flex justify-between pt-3 mt-2 border-t-2 border-slate-300 font-bold"><span>Total refacciones</span><span>$${tp.toFixed(2)}</span></div>
 </div>
 <div class="grid grid-cols-2 gap-4 mb-6">
 <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center"><p class="text-xs text-emerald-700 uppercase font-semibold">Precio al cliente</p><p class="text-2xl font-bold text-emerald-700">$${s.service.repairCost.toFixed(2)}</p></div>
@@ -1746,7 +1617,7 @@ return `<tr class="hover:bg-slate-50 cursor-pointer" onclick="verDetalleCorte('$
 <td class="p-4 text-right">${c.serviciosCobrados||0}</td>
 <td class="p-4 text-right">
 <button onclick="event.stopPropagation();verDetalleCorte('${c.id}')" class="text-brand-600 hover:text-brand-700 font-medium text-sm mr-2">Ver detalle</button>
-<button onclick="event.stopPropagation();deleteCorte('${c.id}')" class="text-red-600 hover:text-red-700 font-medium text-sm" title="Eliminar corte">️</button>
+<button onclick="event.stopPropagation();deleteCorte('${c.id}')" class="text-red-600 hover:text-red-700 font-medium text-sm" title="Eliminar corte">🗑️</button>
 </td>
 </tr>`;
 }).join('');
@@ -1764,32 +1635,10 @@ renderCortes();
 window.verDetalleCorte = function(id) {
 const c = allCortes.find(x => x.id === id);
 if (!c) return;
-currentCorteId = id;
 document.getElementById('corteDetailTitle').textContent = `Corte ${c.type === 'dia' ? 'Diario' : 'Mensual'} - ${c.dateLabel}`;
 const serviciosHTML = c.serviciosDetalle && c.serviciosDetalle.length > 0
 ? c.serviciosDetalle.map(s => `<div class="flex justify-between py-2 border-b border-slate-100 last:border-0"><div><p class="font-semibold text-slate-800">${s.folio}</p><p class="text-xs text-slate-500">${s.cliente}</p></div><div class="text-right"><p class="font-semibold text-emerald-600">$${s.monto.toFixed(2)}</p><p class="text-xs text-slate-500">${s.metodo}</p></div></div>`).join('')
 : '<p class="text-slate-400 text-center py-4">Sin servicios en este corte</p>';
-
-const conciliacionHTML = c.type === 'dia' ? `
-<div class="mt-6 bg-slate-50 rounded-xl p-4">
-<h3 class="font-bold text-slate-800 mb-3">💵 Conciliación de Efectivo</h3>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-<div><label class="block text-xs text-slate-600 mb-1">Billetes $1000</label><input type="number" class="billete-count w-full px-3 py-2 border border-slate-200 rounded-lg" data-value="1000" placeholder="Cantidad" oninput="calculateCashTotal()"></div>
-<div><label class="block text-xs text-slate-600 mb-1">Billetes $500</label><input type="number" class="billete-count w-full px-3 py-2 border border-slate-200 rounded-lg" data-value="500" placeholder="Cantidad" oninput="calculateCashTotal()"></div>
-<div><label class="block text-xs text-slate-600 mb-1">Billetes $200</label><input type="number" class="billete-count w-full px-3 py-2 border border-slate-200 rounded-lg" data-value="200" placeholder="Cantidad" oninput="calculateCashTotal()"></div>
-<div><label class="block text-xs text-slate-600 mb-1">Billetes $100</label><input type="number" class="billete-count w-full px-3 py-2 border border-slate-200 rounded-lg" data-value="100" placeholder="Cantidad" oninput="calculateCashTotal()"></div>
-<div><label class="block text-xs text-slate-600 mb-1">Billetes $50</label><input type="number" class="billete-count w-full px-3 py-2 border border-slate-200 rounded-lg" data-value="50" placeholder="Cantidad" oninput="calculateCashTotal()"></div>
-<div><label class="block text-xs text-slate-600 mb-1">Billetes $20</label><input type="number" class="billete-count w-full px-3 py-2 border border-slate-200 rounded-lg" data-value="20" placeholder="Cantidad" oninput="calculateCashTotal()"></div>
-<div><label class="block text-xs text-slate-600 mb-1">Monedas</label><input type="number" class="billete-count w-full px-3 py-2 border border-slate-200 rounded-lg" data-value="1" placeholder="Cantidad" oninput="calculateCashTotal()"></div>
-</div>
-<div class="mt-4 p-3 bg-white rounded-lg border-2 border-slate-200">
-<div class="flex justify-between items-center"><span class="font-semibold text-slate-700">Total contado:</span><span class="text-2xl font-bold text-emerald-600" id="cashTotal">$0.00</span></div>
-<div class="flex justify-between items-center mt-2"><span class="font-semibold text-slate-700">Total en sistema (ingresos):</span><span class="text-xl font-bold text-brand-600">$${(c.ingresos || 0).toFixed(2)}</span></div>
-<div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-200"><span class="font-semibold text-slate-700">Diferencia:</span><span class="text-xl font-bold" id="cashDifference">$0.00</span></div>
-</div>
-</div>
-` : '';
-
 document.getElementById('corteDetailContent').innerHTML = `
 <div class="grid grid-cols-2 gap-4 mb-6">
 <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4"><p class="text-xs text-emerald-700 uppercase font-semibold mb-1">Ingresos</p><p class="text-2xl font-bold text-emerald-700">$${(c.ingresos||0).toFixed(2)}</p></div>
@@ -1809,127 +1658,21 @@ document.getElementById('corteDetailContent').innerHTML = `
 </div>
 <h3 class="font-bold text-slate-800 mb-3">📋 Servicios incluidos</h3>
 <div class="bg-white border border-slate-200 rounded-xl p-4 max-h-60 overflow-y-auto">${serviciosHTML}</div>
-${conciliacionHTML}
 <div class="mt-4 text-xs text-slate-500 text-center">Corte generado por ${c.createdBy} el ${new Date(c.createdAt).toLocaleString('es-MX')}</div>
-<div class="mt-6 flex flex-wrap gap-3">
-<button onclick="exportCortePDF('${c.id}')" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-Exportar PDF
-</button>
-<button onclick="exportCorteExcel('${c.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-Exportar Excel
-</button>
-<button onclick="printCorte('${c.id}')" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
+<div class="mt-6 flex gap-3">
+<button onclick="printCorte('${c.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-Imprimir
+Imprimir Corte
 </button>
 <button onclick="deleteCorte('${c.id}')" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-Eliminar
+Eliminar Corte
 </button>
 <button onclick="closeModal('corteDetailModal')" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 rounded-xl transition">Cerrar</button>
 </div>
 `;
 openModal('corteDetailModal');
 }
-
-// Calcular total de efectivo automáticamente
-window.calculateCashTotal = function() {
-let total = 0;
-document.querySelectorAll('.billete-count').forEach(input => {
-const value = parseInt(input.dataset.value);
-const count = parseInt(input.value) || 0;
-total += value * count;
-});
-document.getElementById('cashTotal').textContent = '$' + total.toFixed(2);
-const corte = allCortes.find(c => c.id === currentCorteId);
-if (corte) {
-const systemTotal = corte.ingresos || 0;
-const difference = total - systemTotal;
-const diffElement = document.getElementById('cashDifference');
-diffElement.textContent = (difference >= 0 ? '+' : '') + '$' + difference.toFixed(2);
-diffElement.className = 'text-xl font-bold ' + (difference === 0 ? 'text-emerald-600' : (difference > 0 ? 'text-amber-600' : 'text-red-600'));
-}
-};
-
-// Exportar corte a PDF
-window.exportCortePDF = function(id) {
-const c = allCortes.find(x => x.id === id);
-if (!c) return;
-const { jsPDF } = window.jspdf;
-const doc = new jsPDF();
-doc.setFontSize(18);
-doc.text(workshopSettings.workshopName, 105, 15, { align: 'center' });
-doc.setFontSize(14);
-doc.text(`Corte ${c.type === 'dia' ? 'Diario' : 'Mensual'} - ${c.dateLabel}`, 105, 25, { align: 'center' });
-doc.setFontSize(10);
-doc.text(`Generado por: ${c.createdBy}`, 105, 32, { align: 'center' });
-doc.text(`Fecha: ${new Date(c.createdAt).toLocaleString('es-MX')}`, 105, 37, { align: 'center' });
-
-let y = 50;
-doc.setFontSize(12);
-doc.text('Resumen Financiero', 14, y);
-y += 8;
-doc.setFontSize(10);
-doc.text(`Saldo Inicial: $${(c.initialCash||0).toFixed(2)}`, 14, y); y += 6;
-doc.text(`Ingresos: $${(c.ingresos||0).toFixed(2)}`, 14, y); y += 6;
-doc.text(`Costo Refacciones: -$${(c.refacciones||0).toFixed(2)}`, 14, y); y += 6;
-doc.text(`Gastos Personales: -$${(c.gastosPersonales||0).toFixed(2)}`, 14, y); y += 6;
-doc.setFont(undefined, 'bold');
-doc.text(`Ganancia Neta: $${(c.gananciaNeta||0).toFixed(2)}`, 14, y); y += 10;
-doc.setFont(undefined, 'normal');
-
-doc.setFontSize(12);
-doc.text('Métodos de Pago', 14, y); y += 8;
-doc.setFontSize(10);
-doc.text(`Efectivo: $${(c.pagosEfectivo||0).toFixed(2)}`, 14, y); y += 6;
-doc.text(`Transferencia: $${(c.pagosTransferencia||0).toFixed(2)}`, 14, y); y += 6;
-doc.text(`Tarjeta: $${(c.pagosTarjeta||0).toFixed(2)}`, 14, y); y += 10;
-
-doc.setFontSize(12);
-doc.text(`Servicios Incluidos (${c.serviciosCobrados||0})`, 14, y); y += 8;
-doc.setFontSize(9);
-(c.serviciosDetalle || []).forEach(s => {
-doc.text(`${s.folio} - ${s.cliente} - $${s.monto.toFixed(2)} - ${s.metodo}`, 14, y);
-y += 5;
-if (y > 280) { doc.addPage(); y = 20; }
-});
-
-doc.save(`Corte_${c.dateLabel.replace(/\s/g, '_')}.pdf`);
-showToast('✅ PDF exportado');
-};
-
-// Exportar corte a Excel (CSV)
-window.exportCorteExcel = function(id) {
-const c = allCortes.find(x => x.id === id);
-if (!c) return;
-let csv = 'VELOCELL REPARACIONES\n';
-csv += `Corte ${c.type === 'dia' ? 'Diario' : 'Mensual'} - ${c.dateLabel}\n`;
-csv += `Generado por: ${c.createdBy}\n`;
-csv += `Fecha: ${new Date(c.createdAt).toLocaleString('es-MX')}\n\n`;
-csv += 'RESUMEN FINANCIERO\n';
-csv += `Saldo Inicial,${(c.initialCash||0).toFixed(2)}\n`;
-csv += `Ingresos,${(c.ingresos||0).toFixed(2)}\n`;
-csv += `Costo Refacciones,-${(c.refacciones||0).toFixed(2)}\n`;
-csv += `Gastos Personales,-${(c.gastosPersonales||0).toFixed(2)}\n`;
-csv += `Ganancia Neta,${(c.gananciaNeta||0).toFixed(2)}\n\n`;
-csv += 'MÉTODOS DE PAGO\n';
-csv += `Efectivo,${(c.pagosEfectivo||0).toFixed(2)}\n`;
-csv += `Transferencia,${(c.pagosTransferencia||0).toFixed(2)}\n`;
-csv += `Tarjeta,${(c.pagosTarjeta||0).toFixed(2)}\n\n`;
-csv += 'SERVICIOS INCLUIDOS\n';
-csv += 'Folio,Cliente,Monto,Método\n';
-(c.serviciosDetalle || []).forEach(s => {
-csv += `${s.folio},${s.cliente},${s.monto.toFixed(2)},${s.metodo}\n`;
-});
-const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-const link = document.createElement('a');
-link.href = URL.createObjectURL(blob);
-link.download = `Corte_${c.dateLabel.replace(/\s/g, '_')}.csv`;
-link.click();
-showToast('✅ Excel exportado');
-};
 
 window.deleteCorte = async function(id) {
 if (!confirm('⚠️ ¿Estás seguro de eliminar este corte de caja?\n\nEsta acción no se puede deshacer y afectará tu historial de reportes.')) return;
@@ -1990,7 +1733,7 @@ const printContainer = document.getElementById('printContainer');
 printContainer.className = 'print-ticket';
 printContainer.innerHTML = `
 <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-<div><strong>🖨️ Vista previa del corte</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
+<div><strong>️ Vista previa del corte</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
 <div style="display:flex;gap:10px">
 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
 <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
@@ -2100,7 +1843,7 @@ if (servicios.length === 0) { container.innerHTML = '<p class="text-slate-400 te
 const metodos = { 'Efectivo': 0, 'Transferencia': 0, 'Tarjeta': 0, 'No especificado': 0 };
 servicios.forEach(s => { const m = s.service.paymentMethod || 'No especificado'; metodos[m] = (metodos[m] || 0) + 1; });
 const total = servicios.length;
-const icons = { 'Efectivo': '💵', 'Transferencia': '🏦', 'Tarjeta': '💳', 'No especificado': '' };
+const icons = { 'Efectivo': '💵', 'Transferencia': '🏦', 'Tarjeta': '💳', 'No especificado': '❓' };
 const colors = { 'Efectivo': 'bg-emerald-500', 'Transferencia': 'bg-blue-500', 'Tarjeta': 'bg-purple-500', 'No especificado': 'bg-slate-400' };
 container.innerHTML = Object.entries(metodos).filter(([_,v]) => v > 0).map(([metodo, count]) => {
 const pct = ((count/total)*100).toFixed(0);
@@ -2184,7 +1927,7 @@ document.getElementById('cajaBalance').textContent = '$' + (ingresos - gastoRefa
 
 window.deleteExp = async function(id) {
 if (!confirm('¿Eliminar este gasto?')) return;
-try { await deleteDoc(doc(db, "expenses", id)); showToast('🗑️ Gasto eliminado'); } catch (error) { console.error(error); }
+try { await deleteDoc(doc(db, "expenses", id)); showToast('️ Gasto eliminado'); } catch (error) { console.error(error); }
 }
 
 function refreshAll() {
@@ -2208,18 +1951,14 @@ const recent = allServices.slice(0, 5);
 const tbody = document.getElementById('recentOrdersTable');
 if (recent.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-400">Sin órdenes aún</td></tr>'; }
 else {
-tbody.innerHTML = recent.map(s => {
-const priority = s.service.priority || 'Normal';
-const priorityBadge = `<span class="priority-badge priority-${priority.toLowerCase()}">${priority}</span>`;
-return `
+tbody.innerHTML = recent.map(s => `
 <tr class="hover:bg-slate-50 cursor-pointer" onclick="openDetail('${s.id}')">
-<td class="py-3 font-semibold text-brand-600">${s.folio} ${priorityBadge}</td>
+<td class="py-3 font-semibold text-brand-600">${s.folio}</td>
 <td class="py-3">${s.client.name}</td>
 <td class="py-3"><span class="text-xs px-2 py-1 rounded-full ${STATUS_COLORS[s.service.status] || 'bg-slate-100 text-slate-700'}">${s.service.status}</span></td>
 <td class="py-3 text-right font-semibold">$${s.service.repairCost.toFixed(2)}</td>
 </tr>
-`;
-}).join('');
+`).join('');
 }
 }
 
@@ -2247,13 +1986,9 @@ const tbody = document.getElementById('servicesList');
 if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" class="py-12 text-center text-slate-400">📭 No hay servicios</td></tr>'; return; }
 tbody.innerHTML = filtered.map(s => {
 const payBadge = s.service.paymentStatus === 'Pagado' ? '<span class="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium">Pagado</span>' : '<span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700 font-medium">Pendiente</span>';
-const priority = s.service.priority || 'Normal';
-const priorityBadge = `<span class="priority-badge priority-${priority.toLowerCase()}">${priority}</span>`;
 const cobrarBtn = s.service.paymentStatus !== 'Pagado' ? `<button class="text-emerald-600 hover:text-emerald-700 p-1" onclick="event.stopPropagation();cobrarServicio('${s.id}')" title="Cobrar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>` : '';
-const whatsappBtn = `<button class="text-green-600 hover:text-green-700 p-1" onclick="event.stopPropagation();sendWhatsAppNotification('${s.client.phone}', '${s.folio}', '${s.service.status}', '${s.client.name}')" title="Enviar WhatsApp"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></button>`;
-const historyBtn = `<button class="text-purple-600 hover:text-purple-700 p-1" onclick="event.stopPropagation();showClientHistory('${s.client.phone}')" title="Historial del cliente"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>`;
 return `<tr class="hover:bg-slate-50 cursor-pointer" onclick="openDetail('${s.id}')">
-<td class="p-4 font-semibold text-brand-600">${s.folio}<br>${priorityBadge}</td>
+<td class="p-4 font-semibold text-brand-600">${s.folio}</td>
 <td class="p-4"><p class="font-medium text-slate-800">${s.client.name}</p><p class="text-xs text-slate-500">${s.client.phone}</p></td>
 <td class="p-4 text-slate-700">${s.device.brand} ${s.device.model}</td>
 <td class="p-4"><span class="text-xs px-2 py-1 rounded-full ${STATUS_COLORS[s.service.status] || 'bg-slate-100 text-slate-700'}">${s.service.status}</span></td>
@@ -2261,8 +1996,6 @@ return `<tr class="hover:bg-slate-50 cursor-pointer" onclick="openDetail('${s.id
 <td class="p-4 text-right font-semibold">$${s.service.repairCost.toFixed(2)}</td>
 <td class="p-4 text-right" onclick="event.stopPropagation()">
 <div class="flex justify-end gap-1">
-${whatsappBtn}
-${historyBtn}
 ${cobrarBtn}
 <button class="text-amber-600 hover:text-amber-700 p-1" onclick="openEdit('${s.id}')" title="Editar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
 <button class="text-blue-600 hover:text-blue-700 p-1" onclick="printTicket('${s.id}')" title="Ticket"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg></button>
