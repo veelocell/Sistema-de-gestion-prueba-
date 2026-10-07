@@ -52,106 +52,127 @@ body { font-family: 'Inter', sans-serif; }
 .ticket-thermal .t-qr { text-align: center; margin-top: 10px; }
 .ticket-thermal .t-qr img { width: 100px; height: 100px; }
 
-.letter-double { 
-  width: 190mm; 
-  max-width: 190mm;
-  margin: 0 auto; 
-  padding: 5mm; 
-  font-family: 'Inter', sans-serif; 
-  font-size: 11px; 
-  color: #000; 
-  display: block;
+.letter-double {
+width: 190mm;
+max-width: 190mm;
+margin: 0 auto;
+padding: 5mm;
+font-family: 'Inter', sans-serif;
+font-size: 11px;
+color: #000;
+display: block;
 }
-.letter-half { 
-  border: 1px solid #000; 
-  padding: 10px; 
-  margin-bottom: 10px; 
-  position: relative; 
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  page-break-inside: avoid;
-  min-height: 115mm;
+.letter-half {
+border: 1px solid #000;
+padding: 10px;
+margin-bottom: 10px;
+position: relative;
+display: block;
+width: 100%;
+box-sizing: border-box;
+page-break-inside: avoid;
+min-height: 115mm;
 }
-.letter-half::after { 
-  content: ""; 
+.letter-half::after {
+content: "";
 }
+.letter-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
+.letter-header h2 { font-size: 20px; margin: 0; font-weight: 800; text-transform: uppercase; }
+.letter-section { margin-bottom: 10px; }
+.letter-section h3 { font-size: 12px; font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 3px; margin-bottom: 5px; text-transform: uppercase; }
+.letter-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.letter-footer { margin-top: 15px; padding-top: 10px; border-top: 1px solid #000; font-size: 10px; text-align: center; white-space: pre-line; }
+.letter-sign { margin-top: 30px; display: flex; justify-content: space-between; }
+.letter-sign div { width: 40%; border-top: 1px solid #000; text-align: center; padding-top: 5px; font-size: 11px; }
 
 @media print {
-  body * { visibility: hidden !important; }
-  #printContainer, #printContainer * { visibility: visible !important; }
-  #printContainer { 
-    display: block !important; 
-    position: absolute !important; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    padding: 0; 
-    background: white; 
-  }
-  #printContainer .preview-wrapper { 
-    border: none; 
-    box-shadow: none; 
-    margin: 0; 
-    padding: 0; 
-    max-width: 100%; 
-  }
-  #printContainer .no-print { display: none !important; }
-  
-  /* Formato Ticket 80mm */
-  #printContainer.print-ticket @page { 
-    size: 80mm auto; 
-    margin: 0; 
-  }
-  #printContainer.print-ticket { 
-    width: 80mm; 
-  }
-  #printContainer.print-ticket .preview-wrapper { 
-    max-width: 80mm; 
-  }
-  
-  /* Formato Carta Doble */
-  #printContainer.print-letter @page { 
-    size: letter; 
-    margin: 5mm; 
-  }
-  #printContainer.print-letter { 
-    width: 210mm; 
-  }
-  #printContainer.print-letter .preview-wrapper { 
-    max-width: 210mm; 
-  }
-  #printContainer.print-letter .letter-double {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-  }
-  #printContainer.print-letter .letter-half {
-    border: 1px solid #000;
-    padding: 8px;
-    margin-bottom: 8px;
-    page-break-inside: avoid;
-  }
-  #printContainer.print-letter .letter-half::after {
-    content: "";
-  }
-  #printContainer.print-letter .letter-header h2 {
-    font-size: 16px;
-  }
-  #printContainer.print-letter .letter-section h3 {
-    font-size: 10px;
-  }
-  #printContainer.print-letter .letter-row,
-  #printContainer.print-letter .letter-section div {
-    font-size: 10px;
-  }
-  #printContainer.print-letter .letter-sign div {
-    font-size: 9px;
-  }
-  #printContainer.print-letter .letter-footer {
-    font-size: 8px;
-  }
+body * { visibility: hidden !important; }
+#printContainer, #printContainer * { visibility: visible !important; }
+#printContainer {
+display: block !important;
+position: absolute !important;
+top: 0;
+left: 0;
+width: 100%;
+padding: 0;
+background: white;
 }
+#printContainer .preview-wrapper {
+border: none;
+box-shadow: none;
+margin: 0;
+padding: 0;
+max-width: 100%;
+}
+#printContainer .no-print { display: none !important; }
+
+/* Formato Ticket 80mm */
+#printContainer.print-ticket @page {
+size: 80mm auto;
+margin: 0;
+}
+#printContainer.print-ticket {
+width: 80mm;
+}
+#printContainer.print-ticket .preview-wrapper {
+max-width: 80mm;
+}
+
+/* Formato Carta Doble */
+#printContainer.print-letter @page {
+size: letter portrait;
+margin: 5mm;
+}
+#printContainer.print-letter {
+width: 200mm;
+max-width: 200mm;
+}
+#printContainer.print-letter .preview-wrapper {
+max-width: 200mm;
+padding: 0;
+}
+#printContainer.print-letter .letter-double {
+width: 100%;
+max-width: 190mm;
+padding: 0;
+margin: 0 auto;
+display: block;
+}
+#printContainer.print-letter .letter-half {
+display: block;
+width: 100%;
+max-width: 190mm;
+border: 1px solid #000;
+padding: 8px;
+margin-bottom: 8px;
+box-sizing: border-box;
+page-break-inside: avoid;
+min-height: 110mm;
+}
+#printContainer.print-letter .letter-half::after {
+content: "";
+}
+#printContainer.print-letter .letter-header h2 {
+font-size: 14px;
+}
+#printContainer.print-letter .letter-header p {
+font-size: 11px;
+}
+#printContainer.print-letter .letter-section h3 {
+font-size: 10px;
+}
+#printContainer.print-letter .letter-row,
+#printContainer.print-letter .letter-section div {
+font-size: 10px;
+}
+#printContainer.print-letter .letter-sign div {
+font-size: 9px;
+}
+#printContainer.print-letter .letter-footer {
+font-size: 8px;
+}
+}
+
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.active { display: flex; }
 
@@ -178,7 +199,7 @@ body { font-family: 'Inter', sans-serif; }
 <div class="w-20 h-20 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
 <svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
 </div>
-<h1 class="text-2xl font-bold text-slate-800">📸 Registro de Evidencia</h1>
+<h1 class="text-2xl font-bold text-slate-800"> Registro de Evidencia</h1>
 <p class="text-slate-500 mt-2">Folio: <strong id="evidenceFolio">Cargando...</strong></p>
 </div>
 <div id="evidenceServiceInfo" class="bg-slate-50 rounded-xl p-4 mb-6">
@@ -233,7 +254,7 @@ Tomar/Subir Fotos
 <!-- MODAL ABRIR CAJA -->
 <div class="modal-overlay" id="openCashModal">
 <div class="bg-white rounded-2xl w-full max-w-md p-6">
-<h2 class="text-xl font-bold text-slate-800 mb-4"> Abrir Caja del Día</h2>
+<h2 class="text-xl font-bold text-slate-800 mb-4">🔓 Abrir Caja del Día</h2>
 <p class="text-sm text-slate-600 mb-4">Ingresa el saldo inicial en efectivo con el que inicia la caja hoy.</p>
 <div class="mb-4">
 <label class="block text-sm font-medium text-slate-700 mb-1">Saldo Inicial ($)</label>
@@ -304,7 +325,7 @@ Tomar/Subir Fotos
 <div class="flex items-center gap-3">
 <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
 <div>
-<h2 class="text-lg lg:text-xl font-bold text-slate-800" id="greeting">Hola 👋</h2>
+<h2 class="text-lg lg:text-xl font-bold text-slate-800" id="greeting">Hola </h2>
 <p class="text-xs text-slate-500 hidden sm:block" id="currentDate">Cargando fecha...</p>
 </div>
 </div>
@@ -441,7 +462,7 @@ Tomar/Subir Fotos
 </div>
 </section>
 <section id="cortes" class="section-content hidden fade-in">
-<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800"> Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
+<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📋 Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
 <div class="grid md:grid-cols-3 gap-4 mb-6">
 <button onclick="generarCorteDiario()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-6 rounded-2xl shadow-lg shadow-emerald-500/30 transition text-left">
 <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><h3 class="text-lg font-bold">Corte del Día</h3></div>
@@ -479,7 +500,7 @@ Tomar/Subir Fotos
 </div>
 </section>
 <section id="config" class="section-content hidden fade-in">
-<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">⚙️ Configuración del Taller</h2><p class="text-slate-500 text-sm">Personaliza los datos que aparecen en los tickets y notas.</p></div>
+<div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">️ Configuración del Taller</h2><p class="text-slate-500 text-sm">Personaliza los datos que aparecen en los tickets y notas.</p></div>
 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 max-w-2xl">
 <form id="configForm" class="space-y-5">
 <div>
@@ -534,7 +555,7 @@ Tomar/Subir Fotos
 <div id="metodosPagoList" class="space-y-3"></div>
 </div>
 <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-<h3 class="font-bold text-slate-800 mb-4">📅 Día más productivo</h3>
+<h3 class="font-bold text-slate-800 mb-4"> Día más productivo</h3>
 <div id="diaProductivo" class="text-center py-8">
 <div class="w-20 h-20 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
 <p class="text-3xl font-bold text-slate-800" id="diaProductivoNombre">—</p>
@@ -601,7 +622,7 @@ Tomar/Subir Fotos
 <div class="modal-overlay" id="addPartModal">
 <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-<h2 class="text-xl font-bold text-slate-800"> Agregar Refacción</h2>
+<h2 class="text-xl font-bold text-slate-800">🔧 Agregar Refacción</h2>
 <button onclick="closeModal('addPartModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
 </div>
 <div class="p-6">
@@ -642,7 +663,7 @@ Tomar/Subir Fotos
 <div class="modal-overlay" id="editModal">
 <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-<h2 class="text-xl font-bold text-slate-800">️ Editar <span id="editFolio"></span></h2>
+<h2 class="text-xl font-bold text-slate-800">✏️ Editar <span id="editFolio"></span></h2>
 <button onclick="closeModal('editModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
 </div>
 <div class="p-6 space-y-5">
@@ -1450,7 +1471,7 @@ const conditions = s.device.physCondition && s.device.physCondition.length > 0 ?
 const photos = servicePhotos[s.folio] || [];
 const photosHTML = photos.length > 0 ? `
 <div class="bg-slate-50 rounded-xl p-4 mb-4">
-<p class="text-xs font-semibold text-slate-500 uppercase mb-3"> Fotos de Evidencia (${photos.length})</p>
+<p class="text-xs font-semibold text-slate-500 uppercase mb-3">📷 Fotos de Evidencia (${photos.length})</p>
 <div class="photo-grid">
 ${photos.map(photo => `
 <div class="photo-item">
@@ -1460,7 +1481,7 @@ ${photos.map(photo => `
 `).join('')}
 </div>
 </div>
-` : '<div class="bg-slate-50 rounded-xl p-4 mb-4 text-center text-slate-400">📷 Sin fotos de evidencia</div>';
+` : '<div class="bg-slate-50 rounded-xl p-4 mb-4 text-center text-slate-400"> Sin fotos de evidencia</div>';
 const currentUrl = window.location.origin + window.location.pathname;
 const evidenceUrl = currentUrl + '?folio=' + s.folio;
 const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(evidenceUrl)}`;
@@ -1485,12 +1506,12 @@ ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-x
 ${s.service.technicalNotes ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-amber-700 uppercase mb-1">Notas técnicas</p><p class="text-slate-800">${s.service.technicalNotes}</p></div>` : ''}
 ${photosHTML}
 <div class="bg-brand-50 border-2 border-brand-200 rounded-xl p-4 mb-4 text-center">
-<p class="text-xs font-semibold text-brand-700 uppercase mb-2">📱 Escanea para agregar fotos de evidencia</p>
+<p class="text-xs font-semibold text-brand-700 uppercase mb-2"> Escanea para agregar fotos de evidencia</p>
 <img src="${qrUrl}" alt="QR Evidencia" class="mx-auto" style="width:120px;height:120px">
 <p class="text-xs text-brand-600 mt-2 break-all">${evidenceUrl}</p>
 </div>
 <div class="bg-slate-50 rounded-xl p-4 mb-4">
-<p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Refacciones (${parts.length}) - Registro interno</p>
+<p class="text-xs font-semibold text-slate-500 uppercase mb-2"> Refacciones (${parts.length}) - Registro interno</p>
 ${parts.length ? parts.map(p => `<div class="flex justify-between py-2 border-b border-slate-200 last:border-0"><span>${p.description}</span><span class="font-semibold">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>'}
 <div class="flex justify-between pt-3 mt-2 border-t-2 border-slate-300 font-bold"><span>Total refacciones (interno)</span><span>$${tp.toFixed(2)}</span></div>
 </div>
@@ -1504,7 +1525,7 @@ ${s.service.warranty ? `<div class="bg-purple-50 border border-purple-200 rounde
 ${cobrarBtn}
 <button onclick="printReceptionTicket('${s.id}')" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition">📄 Nota de Recepción</button>
 <button onclick="closeModal('detailModal');openEdit('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">✏️ Editar</button>
-<button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">️ Ticket de Cobro</button>
+<button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">🖨️ Ticket de Cobro</button>
 <button onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition">🗑️ Eliminar</button>
 </div>
 `;
@@ -1625,7 +1646,7 @@ document.getElementById('corteDetailContent').innerHTML = `
 </div>
 <div class="grid grid-cols-3 gap-3 mb-6">
 <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💵 Efectivo</p><p class="font-bold text-slate-800">$${(c.pagosEfectivo||0).toFixed(2)}</p></div>
-<div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1"> Transferencia</p><p class="font-bold text-slate-800">$${(c.pagosTransferencia||0).toFixed(2)}</p></div>
+<div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">🏦 Transferencia</p><p class="font-bold text-slate-800">$${(c.pagosTransferencia||0).toFixed(2)}</p></div>
 <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💳 Tarjeta</p><p class="font-bold text-slate-800">$${(c.pagosTarjeta||0).toFixed(2)}</p></div>
 </div>
 <div class="bg-slate-50 rounded-xl p-4 mb-6">
@@ -1690,9 +1711,9 @@ const ticketHTML = `
 <div class="t-row t-total"><span>GANANCIA NETA:</span><span>$${(c.gananciaNeta||0).toFixed(2)}</span></div>
 <div class="t-divider"></div>
 <p class="t-section-title">MÉTODOS DE PAGO</p>
-<div class="t-row"><span>💵 Efectivo:</span><span>$${(c.pagosEfectivo||0).toFixed(2)}</span></div>
+<div class="t-row"><span> Efectivo:</span><span>$${(c.pagosEfectivo||0).toFixed(2)}</span></div>
 <div class="t-row"><span>🏦 Transferencia:</span><span>$${(c.pagosTransferencia||0).toFixed(2)}</span></div>
-<div class="t-row"><span> Tarjeta:</span><span>$${(c.pagosTarjeta||0).toFixed(2)}</span></div>
+<div class="t-row"><span>💳 Tarjeta:</span><span>$${(c.pagosTarjeta||0).toFixed(2)}</span></div>
 <div class="t-divider"></div>
 <p class="t-section-title">ESTADÍSTICAS</p>
 <div class="t-row"><span>Servicios cobrados:</span><span>${c.serviciosCobrados||0}</span></div>
@@ -1712,7 +1733,7 @@ const printContainer = document.getElementById('printContainer');
 printContainer.className = 'print-ticket';
 printContainer.innerHTML = `
 <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-<div><strong>🖨️ Vista previa del corte</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
+<div><strong>️ Vista previa del corte</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
 <div style="display:flex;gap:10px">
 <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
 <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
@@ -1906,7 +1927,7 @@ document.getElementById('cajaBalance').textContent = '$' + (ingresos - gastoRefa
 
 window.deleteExp = async function(id) {
 if (!confirm('¿Eliminar este gasto?')) return;
-try { await deleteDoc(doc(db, "expenses", id)); showToast('🗑️ Gasto eliminado'); } catch (error) { console.error(error); }
+try { await deleteDoc(doc(db, "expenses", id)); showToast('️ Gasto eliminado'); } catch (error) { console.error(error); }
 }
 
 function refreshAll() {
