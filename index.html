@@ -1238,6 +1238,22 @@ window.printTicket = function(id) {
       <p class="t-section-title">EQUIPO</p>
       <div class="t-row"><span>Equipo:</span><span>${s.device.brand} ${s.device.model}</span></div>
       ${s.device.imei ? `<div class="t-row"><span>IMEI:</span><span>${s.device.imei}</span></div>` : ''}
+      ${s.device.accessType === 'patron' ? `
+  <div style="margin:6px 0; padding:6px; border:1px dashed #000; background:#f5f5f5;">
+    <strong style="font-size:10px; display:block; margin-bottom:6px;">🔐 Patrón (dibujar):</strong>
+    <div style="display:grid; grid-template-columns:repeat(3, 22px); grid-template-rows:repeat(3, 22px); gap:8px; margin:0 auto; width:fit-content;">
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:22px; height:22px; display:flex; align-items:center; justify-content:center;"><div style="width:8px; height:8px; background:#000; border-radius:50%;"></div></div>
+    </div>
+  </div>
+` : (s.device.password ? `<div class="t-row"><span><strong>Contraseña:</strong></span><span>${s.device.password}</span></div>` : '')}
       <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
       ${s.service.diagnosis ? `<div style="margin:4px 0"><span style="font-weight:bold">Diagnóstico:</span><br>${s.service.diagnosis}</div>` : ''}
       <div class="t-divider"></div>
@@ -1295,6 +1311,22 @@ window.printReceptionTicket = function(id) {
           <h3>Equipo Recibido</h3>
           <div class="letter-row"><span><strong>Equipo:</strong></span><strong>${s.device.brand} ${s.device.model}</strong></div>
           ${s.device.imei ? `<div class="letter-row"><span><strong>IMEI/Serie:</strong></span><span>${s.device.imei}</span></div>` : ''}
+          ${s.device.accessType === 'patron' ? `
+  <div style="margin:10px 0; padding:10px; border:1px dashed #000; border-radius:6px; background:#fafafa;">
+    <strong style="font-size:11px; display:block; margin-bottom:8px;"> Patrón de desbloqueo (dibujar abajo):</strong>
+    <div style="display:grid; grid-template-columns:repeat(3, 45px); grid-template-rows:repeat(3, 45px); gap:12px; margin:0 auto; width:fit-content;">
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+    </div>
+  </div>
+` : (s.device.password ? `<div class="letter-row"><span><strong>Contraseña:</strong></span><span class="font-bold text-amber-700">${s.device.password}</span></div>` : '')}
           ${s.device.password ? `<div class="letter-row"><span><strong>Contraseña/Patrón:</strong></span><span class="font-bold text-amber-700">${s.device.password}</span></div>` : ''}
           <div style="margin:6px 0"><strong>Problema:</strong> ${s.device.problem || '—'}</div>
           <div style="margin:6px 0"><strong>Estado físico:</strong> ${conditions}</div>
@@ -1476,7 +1508,7 @@ window.openDetail = function(id) {
       ${s.device.accessories ? `<p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Trabajo a realizar</p><p class="text-sm text-slate-700">${s.device.accessories}</p>` : ''}
       <p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Estado físico al recibir</p>
       <p class="text-sm text-slate-700">${conditions}</p>
-      ${s.device.password ? `<p class="text-xs font-semibold text-amber-600 uppercase mb-1 mt-3">🔐 Contraseña/Patrón</p><p class="text-sm text-amber-700 font-bold">${s.device.password}</p>` : ''}
+      ${s.device.accessType === 'patron' ? `   <div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">     <p class="text-xs font-semibold text-amber-700 uppercase mb-1">🔐 Patrón de desbloqueo</p>     <p class="text-sm text-slate-700">Ver en nota física impresa</p>   </div> ` : (s.device.password ? `   <div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">     <p class="text-xs font-semibold text-amber-700 uppercase mb-1">🔐 Contraseña del equipo</p>     <p class="text-sm text-slate-800 font-bold">${s.device.password}</p>   </div> ` : '')}
     </div>
     ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-slate-800">${s.service.diagnosis}</p></div>` : ''}
     ${s.service.technicalNotes ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-amber-700 uppercase mb-1">Notas técnicas</p><p class="text-slate-800">${s.service.technicalNotes}</p></div>` : ''}
