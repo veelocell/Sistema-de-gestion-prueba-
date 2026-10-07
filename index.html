@@ -504,7 +504,37 @@ body { font-family: 'Inter', sans-serif; }
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Modelo *</label><input type="text" id="deviceModel" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">IMEI / Serie</label><input type="text" id="deviceIMEI" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Entrega estimada</label><input type="date" id="estimatedDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-          <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">🔐 Contraseña / Patrón</label><input type="text" id="devicePassword" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 1234, patrón o sin contraseña"></div>
+          <<div class="md:col-span-2">
+  <label class="block text-sm font-medium text-slate-700 mb-2">🔐 Contraseña / Patrón del equipo</label>
+  <div class="flex gap-3 mb-3">
+    <label class="flex-1 cursor-pointer">
+      <input type="radio" name="accessType" value="codigo" checked class="peer hidden" onchange="toggleAccessType()">
+      <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-3 text-center text-sm font-medium transition hover:bg-slate-50">
+        🔑 Código / Contraseña
+      </div>
+    </label>
+    <label class="flex-1 cursor-pointer">
+      <input type="radio" name="accessType" value="patron" class="peer hidden" onchange="toggleAccessType()">
+      <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-3 text-center text-sm font-medium transition hover:bg-slate-50">
+        ⭕ Patrón
+      </div>
+    </label>
+  </div>
+  
+  <!-- Campo para código/contraseña -->
+  <div id="codigoField">
+    <input type="text" id="devicePassword" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 1234, abc123, o dejar vacío si no tiene">
+    <p class="text-xs text-slate-500 mt-1">Necesario para probar el equipo después de reparar</p>
+  </div>
+  
+  <!-- Aviso para patrón -->
+  <div id="patronField" class="hidden">
+    <div class="bg-amber-50 border-2 border-amber-200 rounded-lg p-4 text-center">
+      <p class="text-amber-800 font-semibold">️ El patrón se anotará en la nota física</p>
+      <p class="text-sm text-amber-700 mt-1">El cliente dibujará su patrón en la hoja impresa al momento de la recepción</p>
+    </div>
+  </div>
+</div>
         </div>
         <div class="mt-4">
           <label class="block text-sm font-medium text-slate-700 mb-2">Estado físico del equipo al recibir:</label>
