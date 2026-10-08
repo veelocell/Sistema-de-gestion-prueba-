@@ -939,6 +939,38 @@ window.confirmOpenCash = function() {
   showToast('✅ Caja abierta exitosamente');
   loadCajaHoy();
 }
+  // Registrar anticipo manualmente (por si el cliente paga anticipo después de crear la orden)
+window.registrarAnticipo = async function(serviceId) {
+  const svc = allServices.find(s => s.id === serviceId);
+  if (!svc) return;
+  
+  const monto = prompt(`¿Cuánto deja de anticipo? (Restante: $${(svc.service.remainingAmount || 0).toFixed(2)})`);
+  if (!monto || isNaN(parseFloat(monto))) return;
+  const amount = parseFloat(monto);
+  
+  const method = prompt('Método de pago (Efectivo/Transferencia/Tarjeta):', 'Efectivo');
+  if (!method) return;
+  
+  const now = new Date().toISOString();
+  const newAdvance = (svc.service.advancePayment || 0) + amount;
+  const newRemaining = svc.service.repairCost - newAdvance;
+  const payments = svc.service.payments || [];
+  payments.push({ amount: amount, date: now, type: 'anticipo', method: method });
+  
+  try {
+    await updateDoc(doc(db, "services", serviceId), {
+      'service.advancePayment': newAdvance,
+      'service.remainingAmount': newRemaining,
+      'service.paidAmount': newAdvance,
+      'service.paymentStatus': newRemaining <= 0 ? 'Pagado' : 'Parcial',
+      'service.advancePaymentDate': now,
+      'service.payments': payments
+    });
+    showToast('✅ Anticipo registrado: $' + amount.toFixed(2));
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
+};
 
 window.logout = function() {
   localStorage.removeItem('tallerSession');
@@ -1211,13 +1243,33 @@ window.confirmCheckout = async function() {
   showLoading('Procesando cobro...');
   try {
     const svc = allServices.find(s => s.id === checkoutServiceId);
-    await updateDoc(doc(db, "services", checkoutServiceId), { 'service.paymentStatus': 'Pagado', 'service.paidAmount': svc.service.repairCost, 'service.paidDate': new Date().toISOString(), 'service.paymentMethod': paymentMethod, 'service.warranty': warranty, 'service.status': 'Entregado' });
+    const now = new Date().toISOString();
+    const remaining = svc.service.remainingAmount || (svc.service.repairCost - (svc.service.advancePayment || 0));
+    
+    // Agregar el pago del resto al historial de payments
+    const payments = svc.service.payments || [];
+    payments.push({ 
+      amount: remaining, 
+      date: now, 
+      type: 'cobro_final', 
+      method: paymentMethod 
+    });
+    
+    await updateDoc(doc(db, "services", checkoutServiceId), { 
+      'service.paymentStatus': 'Pagado', 
+      'service.paidAmount': svc.service.repairCost,
+      'service.paidDate': now,
+      'service.paymentMethod': paymentMethod, 
+      'service.warranty': warranty, 
+      'service.status': 'Entregado',
+      'service.payments': payments
+    });
     hideLoading();
     closeModal('checkoutModal');
     showToast('✅ Cobro confirmado. Servicio marcado como Entregado.');
     setTimeout(() => printTicket(checkoutServiceId), 500);
   } catch (error) { hideLoading(); alert("Error: " + error.message); }
-}
+};
 
 window.printTicket = function(id) {
   const s = allServices.find(x => x.id === id);
@@ -1528,6 +1580,7 @@ ${s.device.accessType === 'patron' ? `
       ${cobrarBtn}
       <button onclick="printReceptionTicket('${s.id}')" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition">📄 Nota de Recepción</button>
       <button onclick="closeModal('detailModal');openEdit('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">✏️ Editar</button>
+      ${!isPaid && s.service.remainingAmount > 0 ? `<button onclick="closeModal('detailModal');registrarAnticipo('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">💰 Registrar Anticipo</button>` : ''}
       <button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">🖨️ Ticket de Cobro</button>
       <button onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition">🗑️ Eliminar</button>
     </div>
@@ -1782,34 +1835,51 @@ function updateCEOStats() {
   const mesFin = new Date(añoActual, mesActual + 1, 0, 23, 59, 59, 999);
   const mesAntInicio = new Date(añoAnterior, mesAnterior, 1, 0, 0, 0, 0);
   const mesAntFin = new Date(añoAnterior, mesAnterior + 1, 0, 23, 59, 59, 999);
-  const serviciosMes = allServices.filter(s => { 
-    if (!s || !s.service) return false;
-    const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; 
-    return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= mesInicio && paidDate <= mesFin; 
+  
+  // Calcular ingresos REALES del mes (pagos recibidos)
+  let ingresosMes = 0;
+  let ingresosMesAnt = 0;
+  let refaccionesMes = 0;
+  let serviciosMesCount = 0;
+  
+  allServices.forEach(s => {
+    if (!s || !s.service) return;
+    const payments = s.service.payments || [];
+    payments.forEach(p => {
+      const pDate = new Date(p.date);
+      if (pDate >= mesInicio && pDate <= mesFin) {
+        ingresosMes += p.amount;
+        serviciosMesCount++;
+      }
+      if (pDate >= mesAntInicio && pDate <= mesAntFin) {
+        ingresosMesAnt += p.amount;
+      }
+    });
+    if (s.service.paidDate) {
+      const paidDate = new Date(s.service.paidDate);
+      if (paidDate >= mesInicio && paidDate <= mesFin) {
+        refaccionesMes += (s.service.totalParts || 0);
+      }
+    }
   });
-  const serviciosMesAnt = allServices.filter(s => { 
-    if (!s || !s.service) return false;
-    const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; 
-    return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= mesAntInicio && paidDate <= mesAntFin; 
-  });
-  const ingresosMes = serviciosMes.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
-  const ingresosMesAnt = serviciosMesAnt.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
-  const refaccionesMes = serviciosMes.reduce((sum, s) => sum + (s.service.totalParts || 0), 0);
+  
   const gastosMes = allExpenses.filter(e => { const expDate = new Date(e.date); return expDate >= mesInicio && expDate <= mesFin; }).reduce((sum, e) => sum + e.amount, 0);
   const gananciaNeta = ingresosMes - refaccionesMes - gastosMes;
+  
   document.getElementById('ceoIngresosMes').textContent = '$' + ingresosMes.toFixed(2);
-  document.getElementById('ceoServiciosMes').textContent = serviciosMes.length;
+  document.getElementById('ceoServiciosMes').textContent = serviciosMesCount;
   document.getElementById('ceoGananciaMes').textContent = '$' + gananciaNeta.toFixed(2);
-  document.getElementById('ceoTicketPromedio').textContent = serviciosMes.length > 0 ? '$' + (ingresosMes / serviciosMes.length).toFixed(2) : '$0';
+  document.getElementById('ceoTicketPromedio').textContent = serviciosMesCount > 0 ? '$' + (ingresosMes / serviciosMesCount).toFixed(2) : '$0';
+  
   const trendIngresos = ingresosMesAnt > 0 ? ((ingresosMes - ingresosMesAnt) / ingresosMesAnt * 100).toFixed(1) : 0;
-  const trendServicios = serviciosMesAnt > 0 ? ((serviciosMes.length - serviciosMesAnt.length) / serviciosMesAnt * 100).toFixed(1) : 0;
   document.getElementById('ceoIngresosTrend').innerHTML = trendIngresos >= 0 ? `<span class="text-emerald-600">▲ ${trendIngresos}% vs mes anterior</span>` : `<span class="text-red-600">▼ ${Math.abs(trendIngresos)}% vs mes anterior</span>`;
-  document.getElementById('ceoServiciosTrend').innerHTML = trendServicios >= 0 ? `<span class="text-emerald-600">▲ ${trendServicios}% vs mes anterior</span>` : `<span class="text-red-600">▼ ${Math.abs(trendServicios)}% vs mes anterior</span>`;
+  document.getElementById('ceoServiciosTrend').innerHTML = '';
+  
   renderBarChart();
-  renderTopServicios(serviciosMes);
-  renderTopMarcas(serviciosMes);
-  renderMetodosPago(serviciosMes);
-  renderDiaProductivo(serviciosMes);
+  renderTopServicios(allServices.filter(s => s && s.service && s.service.paymentStatus === 'Pagado'));
+  renderTopMarcas(allServices.filter(s => s && s.service && s.service.paymentStatus === 'Pagado'));
+  renderMetodosPago(allServices.filter(s => s && s.service && s.service.paymentStatus === 'Pagado'));
+  renderDiaProductivo(allServices.filter(s => s && s.service && s.service.paymentStatus === 'Pagado'));
 }
 
 function renderBarChart() {
@@ -1819,11 +1889,18 @@ function renderBarChart() {
     const d = new Date(ahora.getFullYear(), ahora.getMonth() - i, 1);
     const mesInicio = new Date(d.getFullYear(), d.getMonth(), 1, 0, 0, 0, 0);
     const mesFin = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
-    const ingresos = allServices.filter(s => { 
-      if (!s || !s.service) return 0;
-      const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; 
-      return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= mesInicio && paidDate <= mesFin; 
-    }).reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
+    
+    let ingresos = 0;
+    allServices.forEach(s => {
+      if (!s || !s.service) return;
+      const payments = s.service.payments || [];
+      payments.forEach(p => {
+        const pDate = new Date(p.date);
+        if (pDate >= mesInicio && pDate <= mesFin) {
+          ingresos += p.amount;
+        }
+      });
+    });
     meses.push({ label: MESES[d.getMonth()].substring(0,3), value: ingresos });
   }
   const max = Math.max(...meses.map(m => m.value), 1);
@@ -1916,16 +1993,36 @@ function loadCajaHoy() {
   const initialCash = cashOpenedData ? JSON.parse(cashOpenedData).initialCash : 0;
   const hoyInicio = new Date(hoy); hoyInicio.setHours(0,0,0,0);
   const hoyFin = new Date(hoy); hoyFin.setHours(23,59,59,999);
-  const serviciosHoy = allServices.filter(s => { 
-    if (!s || !s.service) return false;
-    const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; 
-    return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= hoyInicio && paidDate <= hoyFin; 
+  
+  // Calcular ingresos REALES del día (suma de todos los pagos recibidos hoy)
+  let ingresos = 0;
+  let refacciones = 0;
+  
+  allServices.forEach(s => {
+    if (!s || !s.service) return;
+    const payments = s.service.payments || [];
+    payments.forEach(p => {
+      const pDate = new Date(p.date);
+      if (pDate >= hoyInicio && pDate <= hoyFin) {
+        ingresos += p.amount;
+      }
+    });
+    // Refacciones pagadas hoy
+    if (s.service.paidDate) {
+      const paidDate = new Date(s.service.paidDate);
+      if (paidDate >= hoyInicio && paidDate <= hoyFin) {
+        refacciones += (s.service.totalParts || 0);
+      }
+    }
   });
-  const gastosHoy = allExpenses.filter(e => { const expDate = new Date(e.date); return expDate >= hoyInicio && expDate <= hoyFin; });
-  const ingresos = serviciosHoy.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
-  const refacciones = serviciosHoy.reduce((sum, s) => sum + (s.service.totalParts || 0), 0);
+  
+  const gastosHoy = allExpenses.filter(e => { 
+    const expDate = new Date(e.date); 
+    return expDate >= hoyInicio && expDate <= hoyFin; 
+  });
   const gastos = gastosHoy.reduce((sum, e) => sum + e.amount, 0);
   const ganancia = ingresos - refacciones - gastos;
+  
   document.getElementById('cajaHoyInicial').textContent = '$' + initialCash.toFixed(2);
   document.getElementById('cajaHoyIngresos').textContent = '$' + ingresos.toFixed(2);
   document.getElementById('cajaHoyRefacciones').textContent = '$' + refacciones.toFixed(2);
@@ -1955,17 +2052,36 @@ function loadExpenses() {
     <td class="p-4 text-right font-semibold text-red-600">-$${e.amount.toFixed(2)}</td>
     <td class="p-4 text-right"><button onclick="deleteExp('${e.id}')" class="text-red-500 hover:text-red-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></td>
   </tr>`).join('') : '<tr><td colspan="5" class="py-12 text-center text-slate-400">Sin gastos registrados</td></tr>';
+  
   const now = new Date();
   const me = allExpenses.filter(e => { const d = new Date(e.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
   const te = me.reduce((s,e) => s + e.amount, 0);
   document.getElementById('cajaGastos').textContent = '$' + te.toFixed(2);
-  const ms = allServices.filter(s => { 
-    if (!s || !s.service) return false;
-    const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; 
-    return s.service.paymentStatus === 'Pagado' && paidDate && paidDate.getMonth() === now.getMonth() && paidDate.getFullYear() === now.getFullYear(); 
+  
+  // Calcular ingresos REALES del mes (todos los pagos recibidos este mes)
+  let ingresos = 0;
+  let gastoRefacciones = 0;
+  const mesInicio = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+  const mesFin = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+  
+  allServices.forEach(s => {
+    if (!s || !s.service) return;
+    const payments = s.service.payments || [];
+    payments.forEach(p => {
+      const pDate = new Date(p.date);
+      if (pDate >= mesInicio && pDate <= mesFin) {
+        ingresos += p.amount;
+      }
+    });
+    // Refacciones del servicio si se pagó este mes
+    if (s.service.paidDate) {
+      const paidDate = new Date(s.service.paidDate);
+      if (paidDate >= mesInicio && paidDate <= mesFin) {
+        gastoRefacciones += (s.service.totalParts || 0);
+      }
+    }
   });
-  const ingresos = ms.reduce((s,x) => s + (x.service.repairCost || 0), 0);
-  const gastoRefacciones = ms.reduce((s,x) => s + (x.service.totalParts || 0), 0);
+  
   document.getElementById('cajaIngresos').textContent = '$' + ingresos.toFixed(2);
   document.getElementById('cajaRefacciones').textContent = '$' + gastoRefacciones.toFixed(2);
   document.getElementById('cajaBalance').textContent = '$' + (ingresos - gastoRefacciones - te).toFixed(2);
@@ -1986,17 +2102,26 @@ function refreshAll() {
 function updateDashboard() {
   const activas = allServices.filter(s => s && s.service && s.service.status !== 'Entregado').length;
   document.getElementById('kpiActivas').textContent = activas;
+  
   const hoy = new Date().toDateString();
-  const ingresosHoy = allServices.filter(s => { 
-    if (!s || !s.service) return false;
-    const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; 
-    return s.service.paymentStatus === 'Pagado' && paidDate && paidDate.toDateString() === hoy; 
-  }).reduce((sum, x) => sum + (x.service.repairCost || 0), 0);
+  let ingresosHoy = 0;
+  allServices.forEach(s => {
+    if (!s || !s.service) return;
+    const payments = s.service.payments || [];
+    payments.forEach(p => {
+      const pDate = new Date(p.date);
+      if (pDate.toDateString() === hoy) {
+        ingresosHoy += p.amount;
+      }
+    });
+  });
   document.getElementById('kpiIngresos').textContent = '$' + ingresosHoy.toFixed(2);
+  
   const espera = allServices.filter(s => s && s.service && s.service.status === 'Reparado (en espera de que pasen por él)').length;
   document.getElementById('kpiEspera').textContent = espera;
   const entregados = allServices.filter(s => s && s.service && s.service.status === 'Entregado').length;
   document.getElementById('kpiEntregados').textContent = entregados;
+  
   const recent = allServices.filter(s => s && s.service).slice(0, 5);
   const tbody = document.getElementById('recentOrdersTable');
   if (recent.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-400">Sin órdenes aún</td></tr>'; }
