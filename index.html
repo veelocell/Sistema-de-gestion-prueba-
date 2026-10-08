@@ -1621,13 +1621,14 @@ window.generarCorteDiario = async function() {
   const pagosTarjeta = serviciosHoy.filter(s => s.service.paymentMethod === 'Tarjeta').reduce((sum, s) => sum + s.service.repairCost, 0);
   const cashOpenedData = localStorage.getItem('cashOpened_' + hoyStr);
   const initialCash = cashOpenedData ? JSON.parse(cashOpenedData).initialCash : 0;
-  const corte = {
-    type: 'dia', date: hoy.toISOString(), dateLabel: hoy.toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' }),
-    initialCash: initialCash, ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosHoy.length, serviciosNuevos: nuevosHoy.length,
-    pagosEfectivo, pagosTransferencia, pagosTarjeta,
-    serviciosDetalle: serviciosHoy.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
-    createdBy: currentUser.fullName, createdAt: new Date().toISOString()
-  };
+ const corte = {
+  type: 'dia', date: hoy.toISOString(), dateLabel: hoy.toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' }),
+  initialCash: initialCash, ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosHoy.length, serviciosNuevos: nuevosHoy.length,
+  pagosEfectivo, pagosTransferencia, pagosTarjeta,
+  serviciosDetalle: serviciosHoy.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
+  gastosDetalle: gastosHoy.map(e => ({ fecha: e.date, categoria: e.category, descripcion: e.description, monto: e.amount })),
+  createdBy: currentUser.fullName, createdAt: new Date().toISOString()
+};
   try {
     await addDoc(collection(db, "dailyCuts"), corte);
     localStorage.removeItem('cashOpened_' + hoyStr);
@@ -1666,12 +1667,13 @@ window.generarCorteMensual = async function() {
   const pagosTransferencia = serviciosMes.filter(s => s.service.paymentMethod === 'Transferencia').reduce((sum, s) => sum + s.service.repairCost, 0);
   const pagosTarjeta = serviciosMes.filter(s => s.service.paymentMethod === 'Tarjeta').reduce((sum, s) => sum + s.service.repairCost, 0);
   const corte = {
-    type: 'mes', date: ahora.toISOString(), dateLabel: `${MESES[mesActual]} ${añoActual}`, mes: mesActual, año: añoActual,
-    ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosMes.length, serviciosNuevos: nuevosMes.length,
-    pagosEfectivo, pagosTransferencia, pagosTarjeta,
-    serviciosDetalle: serviciosMes.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
-    createdBy: currentUser.fullName, createdAt: new Date().toISOString()
-  };
+  type: 'mes', date: ahora.toISOString(), dateLabel: `${MESES[mesActual]} ${añoActual}`, mes: mesActual, año: añoActual,
+  ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosMes.length, serviciosNuevos: nuevosMes.length,
+  pagosEfectivo, pagosTransferencia, pagosTarjeta,
+  serviciosDetalle: serviciosMes.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
+  gastosDetalle: gastosMes.map(e => ({ fecha: e.date, categoria: e.category, descripcion: e.description, monto: e.amount })),
+  createdBy: currentUser.fullName, createdAt: new Date().toISOString()
+};
   try { await addDoc(collection(db, "dailyCuts"), corte); hideLoading(); showToast('✅ Corte mensual generado exitosamente'); } catch (error) { hideLoading(); alert("Error: " + error.message); }
 }
 
@@ -1734,6 +1736,22 @@ window.verDetalleCorte = function(id) {
       <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Costo refacciones</span><span class="font-semibold text-amber-600">$${(c.refacciones||0).toFixed(2)}</span></div>
       <div class="flex justify-between py-2"><span class="text-slate-600">Gastos personales</span><span class="font-semibold text-red-600">$${(c.gastosPersonales||0).toFixed(2)}</span></div>
     </div>
+    ${c.gastosDetalle && c.gastosDetalle.length > 0 ? `
+  <h3 class="font-bold text-slate-800 mb-3 mt-6">💸 Gastos personales del período</h3>
+  <div class="bg-white border border-slate-200 rounded-xl p-4 max-h-60 overflow-y-auto">
+    ${c.gastosDetalle.map(g => `
+      <div class="flex justify-between py-2 border-b border-slate-100 last:border-0">
+        <div>
+          <p class="font-medium text-slate-800">${g.descripcion}</p>
+          <p class="text-xs text-slate-500">${g.categoria} • ${new Date(g.fecha).toLocaleDateString('es-MX')}</p>
+        </div>
+        <div class="text-right">
+          <p class="font-bold text-red-600">-$${parseFloat(g.monto).toFixed(2)}</p>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+` : ''}
     <h3 class="font-bold text-slate-800 mb-3">📋 Servicios incluidos</h3>
     <div class="bg-white border border-slate-200 rounded-xl p-4 max-h-60 overflow-y-auto">${serviciosHTML}</div>
     <div class="mt-4 text-xs text-slate-500 text-center">Corte generado por ${c.createdBy} el ${new Date(c.createdAt).toLocaleString('es-MX')}</div>
