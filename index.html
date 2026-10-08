@@ -29,6 +29,7 @@ body { font-family: 'Inter', sans-serif; }
 ::-webkit-scrollbar-track { background:#f1f5f9; }
 ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:4px; }
 ::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
+
 #evidencePortal { display: none; }
 #evidencePortal.active { display: block; }
 #printContainer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; overflow-y: auto; padding: 20px; }
@@ -36,6 +37,7 @@ body { font-family: 'Inter', sans-serif; }
 .preview-wrapper { max-width: 900px; margin: 20px auto; background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow-x: auto; }
 .preview-wrapper.ticket-mode { max-width: 380px; }
 .preview-wrapper.letter-mode { max-width: 850px; }
+
 .ticket-thermal { width: 80mm; margin: 0 auto; padding: 3mm; font-family: 'Courier New', monospace; font-size: 11px; color: #000; line-height: 1.4; }
 .ticket-thermal .t-header { text-align:center; border-bottom: 1px dashed #000; padding-bottom: 6px; margin-bottom: 6px; }
 .ticket-thermal .t-header h2 { font-size: 15px; margin: 0; font-weight: bold; }
@@ -46,6 +48,7 @@ body { font-family: 'Inter', sans-serif; }
 .ticket-thermal .t-footer { text-align:center; margin-top: 8px; font-size: 10px; white-space: pre-line; }
 .ticket-thermal .t-section-title { font-weight: bold; margin: 6px 0 3px 0; font-size: 11px; text-transform: uppercase; }
 .ticket-thermal .t-warranty { background: #f0f0f0; padding: 5px; border-radius: 3px; margin: 6px 0; }
+
 .letter-double { width: 190mm; max-width: 190mm; margin: 0 auto; padding: 5mm; font-family: 'Inter', sans-serif; font-size: 11px; color: #000; display: block; }
 .letter-half { border: 1px solid #000; padding: 10px; margin-bottom: 10px; position: relative; page-break-inside: avoid; }
 .letter-half::after { content: "✂ CORTAR AQUÍ ✂"; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 10px; font-weight: bold; font-size: 10px; }
@@ -57,6 +60,7 @@ body { font-family: 'Inter', sans-serif; }
 .letter-footer { margin-top: 15px; padding-top: 10px; border-top: 1px solid #000; font-size: 10px; text-align: center; white-space: pre-line; }
 .letter-sign { margin-top: 30px; display: flex; justify-content: space-between; }
 .letter-sign div { width: 40%; border-top: 1px solid #000; text-align: center; padding-top: 5px; font-size: 11px; }
+
 @media print {
   body * { visibility: hidden !important; }
   #printContainer, #printContainer * { visibility: visible !important; }
@@ -72,6 +76,7 @@ body { font-family: 'Inter', sans-serif; }
   #printContainer.print-letter .letter-double { width: 100%; max-width: 190mm; padding: 0; margin: 0 auto; display: block; }
   #printContainer.print-letter .letter-half { border: 1px solid #000; padding: 8px; margin-bottom: 8px; page-break-inside: avoid; }
 }
+
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.active { display: flex; }
 .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 200px; padding: 10px 0; }
@@ -96,7 +101,7 @@ body { font-family: 'Inter', sans-serif; }
       <div class="w-20 h-20 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
       </div>
-      <h1 class="text-2xl font-bold text-slate-800"> Registro de Evidencia</h1>
+      <h1 class="text-2xl font-bold text-slate-800">📸 Registro de Evidencia</h1>
       <p class="text-slate-500 mt-2">Folio: <strong id="evidenceFolio">Cargando...</strong></p>
     </div>
     <div id="evidenceServiceInfo" class="bg-slate-50 rounded-xl p-4 mb-6">
@@ -139,7 +144,7 @@ body { font-family: 'Inter', sans-serif; }
       <p class="text-slate-500 text-sm mb-6">Inicia sesión para continuar</p>
       <form id="loginForm" class="space-y-4">
         <div><label class="block text-sm font-medium text-slate-700 mb-1.5">Correo electrónico</label><input type="email" id="loginEmail" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="tu@correo.com"></div>
-        <div><label class="block text-sm font-medium text-slate-700 mb-1.5">Contraseña</label><input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="••••••••"></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1.5"></label><input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="••••••••"></div>
         <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-lg transition shadow-lg shadow-brand-500/30">Iniciar Sesión</button>
       </form>
       <div id="loginError" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center"></div>
@@ -158,32 +163,6 @@ body { font-family: 'Inter', sans-serif; }
       <input type="number" id="initialCash" step="0.01" value="0" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-lg font-bold text-center">
     </div>
     <button onclick="confirmOpenCash()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition">Confirmar y Entrar</button>
-  </div>
-</div>
-
-<!-- MODAL REGISTRAR ANTICIPO -->
-<div class="modal-overlay" id="anticipoModal">
-  <div class="bg-white rounded-2xl w-full max-w-md p-6">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-bold text-slate-800"> Registrar Anticipo</h2>
-      <button onclick="closeModal('anticipoModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    </div>
-    <div id="anticipoServiceInfo" class="bg-slate-50 rounded-lg p-3 mb-4 text-sm"></div>
-    <div class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Monto del anticipo ($)</label>
-        <input type="number" id="anticipoMonto" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00">
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Método de pago</label>
-        <select id="anticipoMetodo" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
-          <option value="Efectivo"> Efectivo</option>
-          <option value="Transferencia">🏦 Transferencia</option>
-          <option value="Tarjeta">💳 Tarjeta</option>
-        </select>
-      </div>
-      <button onclick="confirmarAnticipo()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition">✅ Registrar Anticipo</button>
-    </div>
   </div>
 </div>
 
@@ -268,6 +247,7 @@ body { font-family: 'Inter', sans-serif; }
         </div>
       </header>
       <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+        <!-- DASHBOARD -->
         <section id="dashboard" class="section-content fade-in">
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
@@ -276,7 +256,7 @@ body { font-family: 'Inter', sans-serif; }
             </div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
               <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xs text-slate-400">Hoy</span></div>
-              <p class="text-2xl font-bold text-slate-800" id="kpiIngresos">$0</p><p class="text-xs text-slate-500 mt-1">Ingresos del día</p>
+              <p class="text-2xl font-bold text-slate-800" id="kpiIngresos">$0</p><p class="text-xs text-slate-500 mt-1">Ingresos del día (cobrado)</p>
             </div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
               <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xs text-slate-400">Espera</span></div>
@@ -312,6 +292,8 @@ body { font-family: 'Inter', sans-serif; }
             </div>
           </div>
         </section>
+
+        <!-- ÓRDENES -->
         <section id="ordenes" class="section-content hidden fade-in">
           <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">Órdenes de Servicio</h2><p class="text-slate-500 text-sm">Gestiona todas las órdenes de reparación</p></div>
           <div class="flex flex-wrap gap-3 mb-6">
@@ -334,6 +316,8 @@ body { font-family: 'Inter', sans-serif; }
             </div>
           </div>
         </section>
+
+        <!-- INVENTARIO -->
         <section id="inventario" class="section-content hidden fade-in">
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-12 text-center">
             <div class="w-20 h-20 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
@@ -342,6 +326,8 @@ body { font-family: 'Inter', sans-serif; }
             <span class="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">En desarrollo</span>
           </div>
         </section>
+
+        <!-- CAJA -->
         <section id="caja" class="section-content hidden fade-in">
           <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
             <div><h2 class="text-2xl font-bold text-slate-800">Caja / Finanzas</h2><p class="text-slate-500 text-sm">Resumen financiero y cortes de caja</p></div>
@@ -384,6 +370,8 @@ body { font-family: 'Inter', sans-serif; }
             </div>
           </div>
         </section>
+
+        <!-- CORTES DE CAJA -->
         <section id="cortes" class="section-content hidden fade-in">
           <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📋 Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
           <div class="grid md:grid-cols-3 gap-4 mb-6">
@@ -422,20 +410,40 @@ body { font-family: 'Inter', sans-serif; }
             </div>
           </div>
         </section>
+
+        <!-- CONFIGURACIÓN -->
         <section id="config" class="section-content hidden fade-in">
           <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">⚙️ Configuración del Taller</h2><p class="text-slate-500 text-sm">Personaliza los datos que aparecen en los tickets y notas.</p></div>
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 max-w-2xl">
             <form id="configForm" class="space-y-5">
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">Nombre del Taller</label><input type="text" id="cfgWorkshopName" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: VELOCELL REPARACIONES"></div>
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">Teléfono de Contacto</label><input type="text" id="cfgPhone" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 8681596881"></div>
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">Formato de Impresión</label><select id="cfgPrintFormat" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="ticket80mm">Ticket Térmico (80mm)</option><option value="letter_double">Hoja Carta (Doble copia en una hoja)</option></select><p class="text-xs text-slate-500 mt-1">"Hoja Carta" imprimirá dos medias hojas (una para el cliente, otra para ti) en una sola hoja.</p></div>
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">Políticas / Pie de Ticket</label><textarea id="cfgPolicies" rows="4" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: • 30 días de garantía.&#10;• No nos hacemos responsables por datos.&#10;• Equipo no reclamado en 60 días se considera abandonado."></textarea></div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Nombre del Taller</label>
+                <input type="text" id="cfgWorkshopName" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: VELOCELL REPARACIONES">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Teléfono de Contacto</label>
+                <input type="text" id="cfgPhone" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 8681596881">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Formato de Impresión</label>
+                <select id="cfgPrintFormat" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
+                  <option value="ticket80mm">Ticket Térmico (80mm)</option>
+                  <option value="letter_double">Hoja Carta (Doble copia en una hoja)</option>
+                </select>
+                <p class="text-xs text-slate-500 mt-1">"Hoja Carta" imprimirá dos medias hojas (una para el cliente, otra para ti) en una sola hoja.</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Políticas / Pie de Ticket</label>
+                <textarea id="cfgPolicies" rows="4" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: • 30 días de garantía.&#10;• No nos hacemos responsables por datos.&#10;• Equipo no reclamado en 60 días se considera abandonado."></textarea>
+              </div>
               <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar Configuración</button>
             </form>
           </div>
         </section>
+
+        <!-- CEO / ESTADÍSTICAS -->
         <section id="ceo" class="section-content hidden fade-in">
-          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800"> CEO Dashboard</h2><p class="text-slate-500 text-sm">Estadísticas y métricas clave del negocio</p></div>
+          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📊 CEO Dashboard</h2><p class="text-slate-500 text-sm">Estadísticas y métricas clave del negocio</p></div>
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ingresos este mes</p><p class="text-2xl font-bold text-slate-800" id="ceoIngresosMes">$0</p><p class="text-xs mt-2" id="ceoIngresosTrend"></p></div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Servicios este mes</p><p class="text-2xl font-bold text-slate-800" id="ceoServiciosMes">0</p><p class="text-xs mt-2" id="ceoServiciosTrend"></p></div>
@@ -447,12 +455,28 @@ body { font-family: 'Inter', sans-serif; }
             <div class="bar-chart" id="barChartIngresos"></div>
           </div>
           <div class="grid lg:grid-cols-2 gap-6 mb-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6"><h3 class="font-bold text-slate-800 mb-4">🔧 Top servicios del mes</h3><div id="topServiciosList" class="space-y-3"></div></div>
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6"><h3 class="font-bold text-slate-800 mb-4">📱 Marcas más atendidas</h3><div id="topMarcasList" class="space-y-3"></div></div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+              <h3 class="font-bold text-slate-800 mb-4">🔧 Top servicios del mes</h3>
+              <div id="topServiciosList" class="space-y-3"></div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+              <h3 class="font-bold text-slate-800 mb-4">📱 Marcas más atendidas</h3>
+              <div id="topMarcasList" class="space-y-3"></div>
+            </div>
           </div>
           <div class="grid lg:grid-cols-2 gap-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6"><h3 class="font-bold text-slate-800 mb-4">💳 Métodos de pago</h3><div id="metodosPagoList" class="space-y-3"></div></div>
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6"><h3 class="font-bold text-slate-800 mb-4">📅 Día más productivo</h3><div id="diaProductivo" class="text-center py-8"><div class="w-20 h-20 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><p class="text-3xl font-bold text-slate-800" id="diaProductivoNombre">—</p><p class="text-sm text-slate-500 mt-2" id="diaProductivoDetalle">Calculando...</p></div></div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+              <h3 class="font-bold text-slate-800 mb-4">💳 Métodos de pago</h3>
+              <div id="metodosPagoList" class="space-y-3"></div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+              <h3 class="font-bold text-slate-800 mb-4">📅 Día más productivo</h3>
+              <div id="diaProductivo" class="text-center py-8">
+                <div class="w-20 h-20 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+                <p class="text-3xl font-bold text-slate-800" id="diaProductivoNombre">—</p>
+                <p class="text-sm text-slate-500 mt-2" id="diaProductivoDetalle">Calculando...</p>
+              </div>
+            </div>
           </div>
         </section>
       </main>
@@ -480,29 +504,37 @@ body { font-family: 'Inter', sans-serif; }
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Modelo *</label><input type="text" id="deviceModel" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">IMEI / Serie</label><input type="text" id="deviceIMEI" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Entrega estimada</label><input type="date" id="estimatedDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-          <div class="md:col-span-2">
-            <label class="block text-sm font-medium text-slate-700 mb-2">🔐 Contraseña / Patrón del equipo</label>
-            <div class="flex gap-3 mb-3">
-              <label class="flex-1 cursor-pointer">
-                <input type="radio" name="accessType" value="codigo" checked class="peer hidden" onchange="toggleAccessType()">
-                <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-3 text-center text-sm font-medium transition hover:bg-slate-50">🔑 Código / Contraseña</div>
-              </label>
-              <label class="flex-1 cursor-pointer">
-                <input type="radio" name="accessType" value="patron" class="peer hidden" onchange="toggleAccessType()">
-                <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-3 text-center text-sm font-medium transition hover:bg-slate-50">⭕ Patrón</div>
-              </label>
-            </div>
-            <div id="codigoField">
-              <input type="text" id="devicePassword" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 1234, abc123, o dejar vacío si no tiene">
-              <p class="text-xs text-slate-500 mt-1">Necesario para probar el equipo después de reparar</p>
-            </div>
-            <div id="patronField" class="hidden">
-              <div class="bg-amber-50 border-2 border-amber-200 rounded-lg p-4 text-center">
-                <p class="text-amber-800 font-semibold">️ El patrón se anotará en la nota física</p>
-                <p class="text-sm text-amber-700 mt-1">El cliente dibujará su patrón en la hoja impresa al momento de la recepción</p>
-              </div>
-            </div>
-          </div>
+          <<div class="md:col-span-2">
+  <label class="block text-sm font-medium text-slate-700 mb-2">🔐  / Patrón del equipo</label>
+  <div class="flex gap-3 mb-3">
+    <label class="flex-1 cursor-pointer">
+      <input type="radio" name="accessType" value="codigo" checked class="peer hidden" onchange="toggleAccessType()">
+      <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-3 text-center text-sm font-medium transition hover:bg-slate-50">
+        🔑 Código / 
+      </div>
+    </label>
+    <label class="flex-1 cursor-pointer">
+      <input type="radio" name="accessType" value="patron" class="peer hidden" onchange="toggleAccessType()">
+      <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-3 text-center text-sm font-medium transition hover:bg-slate-50">
+        ⭕ Patrón
+      </div>
+    </label>
+  </div>
+  
+  <!-- Campo para código/ -->
+  <div id="codigoField">
+    <input type="text" id="devicePassword" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 1234, abc123, o dejar vacío si no tiene">
+    <p class="text-xs text-slate-500 mt-1">Necesario para probar el equipo después de reparar</p>
+  </div>
+  
+  <!-- Aviso para patrón -->
+  <div id="patronField" class="hidden">
+    <div class="bg-amber-50 border-2 border-amber-200 rounded-lg p-4 text-center">
+      <p class="text-amber-800 font-semibold">️ El patrón se anotará en la nota física</p>
+      <p class="text-sm text-amber-700 mt-1">El cliente dibujará su patrón en la hoja impresa al momento de la recepción</p>
+    </div>
+  </div>
+</div>
         </div>
         <div class="mt-4">
           <label class="block text-sm font-medium text-slate-700 mb-2">Estado físico del equipo al recibir:</label>
@@ -511,7 +543,7 @@ body { font-family: 'Inter', sans-serif; }
             <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Encendido" class="rounded text-brand-600 w-4 h-4"> Encendido</label>
             <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Mojado" class="rounded text-brand-600 w-4 h-4"> Mojado</label>
             <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Golpeado" class="rounded text-brand-600 w-4 h-4"> Golpeado</label>
-            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Pantalla rota" class="rounded text-brand-600 w-4 h-4"> Pantalla rota</label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Manipulado" class="rounded text-brand-600 w-4 h-4"> Manipulado</label>
           </div>
         </div>
         <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Problema reportado por el cliente *</label><textarea id="problemDescription" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
@@ -582,7 +614,10 @@ body { font-family: 'Inter', sans-serif; }
     </div>
     <div class="p-6 space-y-5">
       <div><label class="block text-sm font-semibold text-slate-700 mb-2">Estado del servicio</label><div class="flex flex-wrap gap-2" id="statusFlow"></div></div>
-      <div><label class="block text-sm font-semibold text-slate-700 mb-1">Diagnóstico técnico</label><textarea id="editDiagnosis" rows="3" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Descripción del diagnóstico realizado..."></textarea></div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Diagnóstico técnico</label>
+        <textarea id="editDiagnosis" rows="3" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Descripción del diagnóstico realizado..."></textarea>
+      </div>
       <div><label class="block text-sm font-semibold text-slate-700 mb-1">Notas técnicas</label><textarea id="editTechnicalNotes" rows="2" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Observaciones, detalles técnicos..."></textarea></div>
       <div class="grid grid-cols-2 gap-4">
         <div><label class="block text-sm font-semibold text-slate-700 mb-1">Precio total al cliente</label><input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
@@ -624,6 +659,7 @@ body { font-family: 'Inter', sans-serif; }
 </div>
 
 <div id="printContainer"></div>
+
 <div id="loading" class="hidden fixed inset-0 bg-white/95 z-[100] flex items-center justify-center flex-col gap-3">
   <div class="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
   <p class="text-slate-600 font-medium" id="loadingText">Procesando...</p>
@@ -632,7 +668,6 @@ body { font-family: 'Inter', sans-serif; }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy, setDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAkvNPt0K_OheECcYVFnH_IHeQlEBdTrCg",
@@ -645,12 +680,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
 const USERS = [
   { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez", role: "admin" },
   { email: "demo@demo.com", password: "demo2024", fullName: "DEMO", role: "recepcion" }
 ];
+
 const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
 const STATUS_COLORS = {
   'En diagnóstico': 'bg-blue-100 text-blue-700',
@@ -674,10 +709,10 @@ let editStatus = '';
 let statusFilter = '';
 let selectedServiceForPart = null;
 let checkoutServiceId = null;
-let anticipoServiceId = null;
 let corteFilter = 'todos';
 let unsubscribeServices = null, unsubscribeExpenses = null, unsubscribeCortes = null, unsubscribeSettings = null, unsubscribePhotos = null;
 let currentEvidenceFolio = null;
+
 let workshopSettings = {
   workshopName: "VELOCELL REPARACIONES",
   phone: "8681596881",
@@ -817,7 +852,7 @@ window.deleteEvidencePhoto = async function(photoId, storagePath) {
     const photoRef = ref(storage, storagePath);
     await deleteObject(photoRef);
     await deleteDoc(doc(db, "servicePhotos", photoId));
-    showToast('️ Foto eliminada');
+    showToast('🗑️ Foto eliminada');
   } catch (error) {
     alert('Error: ' + error.message);
   }
@@ -961,71 +996,46 @@ window.toggleSidebar = function(forceState) {
 window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
 window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
 
-// Función para alternar entre Código y Patrón
-window.toggleAccessType = function() {
-  const accessType = document.querySelector('input[name="accessType"]:checked').value;
-  const codigoField = document.getElementById('codigoField');
-  const patronField = document.getElementById('patronField');
-  const passwordInput = document.getElementById('devicePassword');
-  if (accessType === 'codigo') {
-    codigoField.classList.remove('hidden');
-    patronField.classList.add('hidden');
-  } else {
-    codigoField.classList.add('hidden');
-    patronField.classList.remove('hidden');
-    passwordInput.value = '';
-  }
-};
-
 document.getElementById('serviceForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   showLoading('Guardando orden...');
   const rc = parseFloat(document.getElementById('repairCost').value);
   const advance = parseFloat(document.getElementById('advancePayment').value) || 0;
   const physConditions = Array.from(document.querySelectorAll('input[name="physCondition"]:checked')).map(cb => cb.value);
-  const accessType = document.querySelector('input[name="accessType"]:checked').value;
-  const devicePassword = document.getElementById('devicePassword').value || '';
-  const now = new Date().toISOString();
-  
-  // Crear historial de pagos si hay anticipo
-  const payments = advance > 0 ? [{ amount: advance, date: now, type: 'anticipo', method: document.getElementById('paymentMethod').value }] : [];
-  
   const svc = {
     folio: 'SRV-' + Date.now().toString().slice(-6),
     client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
-    device: {
-      brand: document.getElementById('deviceBrand').value,
-      model: document.getElementById('deviceModel').value,
-      imei: document.getElementById('deviceIMEI').value,
-      problem: document.getElementById('problemDescription').value,
-      accessories: document.getElementById('accessories').value,
+    device: { 
+      brand: document.getElementById('deviceBrand').value, 
+      model: document.getElementById('deviceModel').value, 
+      imei: document.getElementById('deviceIMEI').value, 
+      problem: document.getElementById('problemDescription').value, 
+      accessories: document.getElementById('accessories').value, 
       physCondition: physConditions,
-      password: devicePassword,
-      accessType: accessType
+      password: document.getElementById('devicePassword').value || '',
+      physCondition: physConditions, password: document.getElementById('devicePassword').value || '', accessType: document.querySelector('input[name="accessType"]:checked').value
     },
-    service: {
-      status: document.getElementById('serviceStatus').value,
-      repairCost: rc,
-      paymentStatus: advance > 0 ? 'Parcial' : 'Pendiente',
-      paymentMethod: document.getElementById('paymentMethod').value,
-      estimatedDelivery: document.getElementById('estimatedDelivery').value,
-      parts: [],
-      totalParts: 0,
-      netProfit: rc,
-      paidAmount: advance,
-      paidDate: advance > 0 ? now : null,
-      diagnosis: '',
-      technicalNotes: '',
-      warranty: '',
-      advancePayment: advance,
-      remainingAmount: rc - advance,
-      payments: payments
+    service: { 
+      status: document.getElementById('serviceStatus').value, 
+      repairCost: rc, 
+      paymentStatus: 'Pendiente', 
+      paymentMethod: document.getElementById('paymentMethod').value, 
+      estimatedDelivery: document.getElementById('estimatedDelivery').value, 
+      parts: [], 
+      totalParts: 0, 
+      netProfit: rc, 
+      paidAmount: 0, 
+      paidDate: null, 
+      diagnosis: '', 
+      technicalNotes: '', 
+      warranty: '', 
+      advancePayment: advance, 
+      remainingAmount: rc - advance 
     },
-    date: now,
+    date: new Date().toISOString(),
     userEmail: currentUser.email,
     technician: currentUser.fullName
   };
-  
   try {
     const docRef = await addDoc(collection(db, "services"), svc);
     hideLoading();
@@ -1037,58 +1047,24 @@ document.getElementById('serviceForm').addEventListener('submit', async function
   } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
 
-// Función para registrar anticipo manualmente
-window.registrarAnticipo = function(serviceId) {
-  const svc = allServices.find(s => s.id === serviceId);
-  if (!svc) return;
-  anticipoServiceId = serviceId;
-  document.getElementById('anticipoServiceInfo').innerHTML = `
-    <div class="flex justify-between">
-      <span class="font-semibold">${svc.folio}</span>
-      <span class="text-slate-600">${svc.client.name}</span>
-    </div>
-    <div class="flex justify-between mt-1 text-xs">
-      <span>Total: $${svc.service.repairCost.toFixed(2)}</span>
-      <span>Restante: $${(svc.service.remainingAmount || 0).toFixed(2)}</span>
-    </div>
-  `;
-  document.getElementById('anticipoMonto').value = '';
-  document.getElementById('anticipoMonto').max = svc.service.remainingAmount || 0;
-  openModal('anticipoModal');
-};
-
-window.confirmarAnticipo = async function() {
-  const monto = parseFloat(document.getElementById('anticipoMonto').value);
-  const metodo = document.getElementById('anticipoMetodo').value;
-  if (!monto || monto <= 0) { alert('Ingresa un monto válido'); return; }
+  // Función para alternar entre Código y Patrón
+window.toggleAccessType = function() {
+  const accessType = document.querySelector('input[name="accessType"]:checked').value;
+  const codigoField = document.getElementById('codigoField');
+  const patronField = document.getElementById('patronField');
+  const passwordInput = document.getElementById('devicePassword');
   
-  const svc = allServices.find(s => s.id === anticipoServiceId);
-  if (!svc) return;
-  
-  const newAdvance = (svc.service.advancePayment || 0) + monto;
-  const newRemaining = svc.service.repairCost - newAdvance;
-  const now = new Date().toISOString();
-  const payments = svc.service.payments || [];
-  payments.push({ amount: monto, date: now, type: 'anticipo', method: metodo });
-  
-  showLoading('Registrando anticipo...');
-  try {
-    await updateDoc(doc(db, "services", anticipoServiceId), {
-      'service.advancePayment': newAdvance,
-      'service.remainingAmount': newRemaining,
-      'service.paidAmount': newAdvance,
-      'service.paymentStatus': newRemaining <= 0 ? 'Pagado' : 'Parcial',
-      'service.payments': payments
-    });
-    hideLoading();
-    closeModal('anticipoModal');
-    showToast('✅ Anticipo registrado: $' + monto.toFixed(2));
-  } catch (error) {
-    hideLoading();
-    alert('Error: ' + error.message);
+  if (accessType === 'codigo') {
+    codigoField.classList.remove('hidden');
+    patronField.classList.add('hidden');
+    passwordInput.removeAttribute('required');
+  } else {
+    codigoField.classList.add('hidden');
+    patronField.classList.remove('hidden');
+    passwordInput.value = '';
   }
 };
-
+  
 window.openAddPartModal = function() {
   selectedServiceForPart = null;
   document.getElementById('addPartStep1').classList.remove('hidden');
@@ -1104,7 +1080,7 @@ function renderServicesForPartList(filter = '') {
   const active = allServices.filter(s => s && s.service && s.service.status !== 'Entregado');
   const filtered = filter ? active.filter(s => s.client.name.toLowerCase().includes(filter.toLowerCase()) || s.client.phone.includes(filter) || s.folio.toLowerCase().includes(filter.toLowerCase())) : active;
   const container = document.getElementById('servicesForPartList');
-  if (filtered.length === 0) { container.innerHTML = '<p class="text-center text-slate-400 py-8"> No hay servicios activos</p>'; return; }
+  if (filtered.length === 0) { container.innerHTML = '<p class="text-center text-slate-400 py-8">📭 No hay servicios activos</p>'; return; }
   container.innerHTML = filtered.map(s => `
     <div class="p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50 transition" onclick="selectServiceForPart('${s.id}')">
       <div class="flex justify-between items-start gap-3">
@@ -1231,22 +1207,7 @@ window.confirmCheckout = async function() {
   showLoading('Procesando cobro...');
   try {
     const svc = allServices.find(s => s.id === checkoutServiceId);
-    const now = new Date().toISOString();
-    const remaining = svc.service.remainingAmount || (svc.service.repairCost - (svc.service.advancePayment || 0));
-    
-    // Agregar el pago del resto al historial de payments
-    const payments = svc.service.payments || [];
-    payments.push({ amount: remaining, date: now, type: 'cobro_final', method: paymentMethod });
-    
-    await updateDoc(doc(db, "services", checkoutServiceId), { 
-      'service.paymentStatus': 'Pagado', 
-      'service.paidAmount': svc.service.repairCost,
-      'service.paidDate': now,
-      'service.paymentMethod': paymentMethod, 
-      'service.warranty': warranty, 
-      'service.status': 'Entregado',
-      'service.payments': payments
-    });
+    await updateDoc(doc(db, "services", checkoutServiceId), { 'service.paymentStatus': 'Pagado', 'service.paidAmount': svc.service.repairCost, 'service.paidDate': new Date().toISOString(), 'service.paymentMethod': paymentMethod, 'service.warranty': warranty, 'service.status': 'Entregado' });
     hideLoading();
     closeModal('checkoutModal');
     showToast('✅ Cobro confirmado. Servicio marcado como Entregado.');
@@ -1297,7 +1258,7 @@ window.printTicket = function(id) {
   printContainer.className = 'print-ticket';
   printContainer.innerHTML = `
     <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-      <div><strong>️ Vista previa del ticket</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
+      <div><strong>🖨️ Vista previa del ticket</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
       <div style="display:flex;gap:10px">
         <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
         <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
@@ -1334,15 +1295,15 @@ window.printReceptionTicket = function(id) {
           <div class="letter-row"><span><strong>Equipo:</strong></span><strong>${s.device.brand} ${s.device.model}</strong></div>
           ${s.device.imei ? `<div class="letter-row"><span><strong>IMEI/Serie:</strong></span><span>${s.device.imei}</span></div>` : ''}
           ${s.device.accessType === 'patron' ? `
-            <div style="margin:10px 0; padding:10px; border:1px dashed #000; border-radius:6px; background:#fafafa;">
-              <strong style="font-size:11px; display:block; margin-bottom:8px;">🔐 Patrón de desbloqueo (dibujar abajo):</strong>
-              <div style="display:grid; grid-template-columns:repeat(3, 45px); grid-template-rows:repeat(3, 45px); gap:12px; margin:0 auto; width:fit-content;">
-                <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-                <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-                <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-                <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-                <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-                <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>......
+  <div style="margin:10px 0; padding:10px; border:1px dashed #000; border-radius:6px; background:#fafafa;">
+    <strong style="font-size:11px; display:block; margin-bottom:8px;"> Patrón de desbloqueo (dibujar abajo):</strong>
+    <div style="display:grid; grid-template-columns:repeat(3, 45px); grid-template-rows:repeat(3, 45px); gap:12px; margin:0 auto; width:fit-content;">
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
+      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
       <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
       <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
       <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
