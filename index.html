@@ -1002,37 +1002,41 @@ document.getElementById('serviceForm').addEventListener('submit', async function
   const rc = parseFloat(document.getElementById('repairCost').value);
   const advance = parseFloat(document.getElementById('advancePayment').value) || 0;
   const physConditions = Array.from(document.querySelectorAll('input[name="physCondition"]:checked')).map(cb => cb.value);
+  const now = new Date().toISOString();
+  
   const svc = {
     folio: 'SRV-' + Date.now().toString().slice(-6),
     client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
-    device: { 
-      brand: document.getElementById('deviceBrand').value, 
-      model: document.getElementById('deviceModel').value, 
-      imei: document.getElementById('deviceIMEI').value, 
-      problem: document.getElementById('problemDescription').value, 
-      accessories: document.getElementById('accessories').value, 
+    device: {
+      brand: document.getElementById('deviceBrand').value,
+      model: document.getElementById('deviceModel').value,
+      imei: document.getElementById('deviceIMEI').value,
+      problem: document.getElementById('problemDescription').value,
+      accessories: document.getElementById('accessories').value,
       physCondition: physConditions,
       password: document.getElementById('devicePassword').value || '',
-      physCondition: physConditions, password: document.getElementById('devicePassword').value || '', accessType: document.querySelector('input[name="accessType"]:checked').value
+      accessType: document.querySelector('input[name="accessType"]:checked').value
     },
-    service: { 
-      status: document.getElementById('serviceStatus').value, 
-      repairCost: rc, 
-      paymentStatus: 'Pendiente', 
-      paymentMethod: document.getElementById('paymentMethod').value, 
-      estimatedDelivery: document.getElementById('estimatedDelivery').value, 
-      parts: [], 
-      totalParts: 0, 
-      netProfit: rc, 
-      paidAmount: 0, 
-      paidDate: null, 
-      diagnosis: '', 
-      technicalNotes: '', 
-      warranty: '', 
-      advancePayment: advance, 
-      remainingAmount: rc - advance 
+    service: {
+      status: document.getElementById('serviceStatus').value,
+      repairCost: rc,
+      paymentStatus: advance > 0 ? 'Parcial' : 'Pendiente',
+      paymentMethod: document.getElementById('paymentMethod').value,
+      estimatedDelivery: document.getElementById('estimatedDelivery').value,
+      parts: [],
+      totalParts: 0,
+      netProfit: rc,
+      paidAmount: advance,
+      paidDate: advance > 0 ? now : null,
+      advancePayment: advance,
+      advancePaymentDate: advance > 0 ? now : null,
+      remainingAmount: rc - advance,
+      diagnosis: '',
+      technicalNotes: '',
+      warranty: '',
+      payments: advance > 0 ? [{ amount: advance, date: now, type: 'anticipo', method: document.getElementById('paymentMethod').value }] : []
     },
-    date: new Date().toISOString(),
+    date: now,
     userEmail: currentUser.email,
     technician: currentUser.fullName
   };
