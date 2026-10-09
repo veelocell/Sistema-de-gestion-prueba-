@@ -187,7 +187,7 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
       <div class="w-20 h-20 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
       </div>
-      <h1 class="text-2xl font-bold text-slate-800">📸 Registro de Evidencia</h1>
+      <h1 id="evidenceTitle" class="text-2xl font-bold text-slate-800">📸 Registro de Evidencia</h1>
       <p class="text-slate-500 mt-2">Folio: <strong id="evidenceFolio">Cargando...</strong></p>
     </div>
     <div id="evidenceServiceInfo" class="bg-slate-50 rounded-xl p-4 mb-6">
@@ -710,7 +710,7 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
   <div class="bg-white rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
       <h2 class="text-xl font-bold text-slate-800"><svg class="w-5 h-5 inline-block -mt-1 mr-1.5 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg> Diagnóstico <span id="diagFolio" class="text-slate-400 text-base"></span></h2>
-      <button onclick="closeModal('diagModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center">✕</button>
+      <button onclick="closeDiag()" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center">✕</button>
     </div>
     <div class="p-6 space-y-4">
       <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
@@ -719,6 +719,7 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
       </div>
       <div><label class="block text-sm font-semibold text-slate-700 mb-1">Diagnóstico</label><textarea id="editDiagnosis" rows="5" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none" placeholder="¿Qué falla tiene el equipo?"></textarea></div>
       <div><label class="block text-sm font-semibold text-slate-700 mb-1">Solución</label><textarea id="editSolution" rows="5" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none" placeholder="¿Qué se hizo para repararlo?"></textarea></div>
+      <div id="diagEvidenceBox"></div>
       <p class="text-xs text-slate-500">Ambos textos aparecen en la nota que se imprime al cobrar y entregar el equipo.</p>
       <button onclick="saveDiag()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">Guardar diagnóstico</button>
     </div>
@@ -760,7 +761,7 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
 <div class="modal-overlay" id="evidenceModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-      <h2 class="text-xl font-bold text-slate-800"><svg class="w-5 h-5 inline-block -mt-1 mr-1.5 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Evidencias</h2>
+      <h2 class="text-xl font-bold text-slate-800"><svg class="w-5 h-5 inline-block -mt-1 mr-1.5 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Evidencias<span class="block text-xs font-normal text-slate-400 mt-0.5" style="margin-left:26px">Recepción y Entrega</span></h2>
       <button onclick="closeEvidence()" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center">✕</button>
     </div>
     <div id="evidenceModalContent" class="p-6"></div>
@@ -840,6 +841,7 @@ let checkoutServiceId = null;
 let corteFilter = 'todos';
 let unsubscribeServices = null, unsubscribeExpenses = null, unsubscribeCortes = null, unsubscribeSettings = null, unsubscribePhotos = null;
 let currentEvidenceFolio = null;
+let currentEvidenceKind = 'recepcion';
 
 let workshopSettings = {
   workshopName: "VELOCELL REPARACIONES",
@@ -851,6 +853,8 @@ let workshopSettings = {
 function checkEvidenceMode() {
   const urlParams = new URLSearchParams(window.location.search);
   const folio = urlParams.get('folio');
+  currentEvidenceKind = urlParams.get('tipo') === 'diag' ? 'diagnostico' : 'recepcion';
+  if (folio && currentEvidenceKind === 'diagnostico') { const t = document.getElementById('evidenceTitle'); if (t) t.textContent = '🩺 Evidencia de diagnóstico'; }
   if (folio) {
     currentEvidenceFolio = folio;
     document.getElementById('loginScreen').classList.add('hidden');
@@ -2668,11 +2672,11 @@ function evCompress(file) {
     img.src = u;
   });
 }
-async function evSaveFiles(files, folio, onProgress) {
+async function evSaveFiles(files, folio, onProgress, kind) {
   let n = 0;
   for (const f of files) {
     const url = await evCompress(f);
-    await addDoc(collection(db, "servicePhotos"), { folio, url, uploadedAt: new Date().toISOString(), uploadedBy: currentUser ? currentUser.fullName : 'Portal evidencia', fileName: f.name });
+    await addDoc(collection(db, "servicePhotos"), { folio, kind: kind || (currentEvidenceFolio ? currentEvidenceKind : 'recepcion'), url, uploadedAt: new Date().toISOString(), uploadedBy: currentUser ? currentUser.fullName : 'Portal evidencia', fileName: f.name });
     n++;
     if (onProgress) onProgress(n, files.length);
   }
@@ -2723,7 +2727,7 @@ window.openEvidence = function(id) {
       <p class="text-xs text-brand-600 mt-2 break-all">${url}</p>
     </div>`;
   if (evUnsub) evUnsub();
-  evUnsub = evSubscribe(s.folio, photos => { const g = byId('evModalGallery'); if (g) g.innerHTML = evGalleryHTML(photos); });
+  evUnsub = evSubscribe(s.folio, photos => { const g = byId('evModalGallery'); if (g) g.innerHTML = evGalleryHTML(photos.filter(p => (p.kind || 'recepcion') !== 'diagnostico')); });
   openModal('evidenceModal');
 };
 window.closeEvidence = function() {
@@ -2816,9 +2820,82 @@ window.saveCosts = async function() {
   } catch (error) { hideLoading(); alert("Error: " + error.message); }
 };
 
+/* DIAG-FOTOS-V5: evidencia exclusiva de diagnóstico (QR + galería propia) */
+let diagUnsub = null, diagEvFolio = null;
+
+function renderDiagEvidence(folio) {
+  const box = byId('diagEvidenceBox');
+  if (!box) return;
+  const url = window.location.origin + window.location.pathname + '?folio=' + folio + '&tipo=diag';
+  const qr = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(url)}`;
+  box.innerHTML = `
+    <div class="border border-slate-200 rounded-xl p-4">
+      <div class="flex items-start justify-between gap-3 mb-3">
+        <div>
+          <p class="text-sm font-semibold text-slate-700">Evidencia del diagnóstico y la reparación</p>
+          <p class="text-xs text-slate-500 mt-0.5">Solo fotos de esta etapa. No se mezclan con las de recepción y entrega.</p>
+        </div>
+        <label class="shrink-0 cursor-pointer inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">${ico('cam', 'w-4 h-4')} Agregar<input type="file" accept="image/*" multiple class="hidden" onchange="evUploadDiag(event)"></label>
+      </div>
+      <p id="diagEvStatus" class="text-xs text-slate-500 mb-2 empty:hidden"></p>
+      <div id="diagGallery" class="photo-grid mb-4"></div>
+      <div class="flex items-center gap-4 bg-brand-50 border border-brand-100 rounded-lg p-3">
+        <img src="${qr}" alt="QR diagnóstico" style="width:96px;height:96px" class="rounded bg-white p-1">
+        <div class="min-w-0">
+          <p class="text-xs font-semibold text-brand-700 uppercase">Escanea con el celular</p>
+          <p class="text-xs text-slate-600 mt-1">Sube fotos del diagnóstico o de la reparación y aparecerán aquí al instante.</p>
+        </div>
+      </div>
+    </div>`;
+  if (diagUnsub) diagUnsub();
+  diagEvFolio = folio;
+  diagUnsub = evSubscribe(folio, photos => {
+    const g = byId('diagGallery');
+    if (g) g.innerHTML = evGalleryHTML(photos.filter(p => p.kind === 'diagnostico'));
+  });
+}
+
+window.closeDiag = function() {
+  if (diagUnsub) { diagUnsub(); diagUnsub = null; }
+  closeModal('diagModal');
+};
+
+window.evUploadDiag = async function(event) {
+  const files = Array.from(event.target.files || []);
+  if (!files.length) return;
+  const st = byId('diagEvStatus');
+  try {
+    await evSaveFiles(files, diagEvFolio, (n, t) => { st.textContent = `Subiendo ${n} de ${t}...`; }, 'diagnostico');
+    st.textContent = 'Fotos guardadas';
+  } catch (error) { st.textContent = ''; alert('Error: ' + error.message); }
+  event.target.value = '';
+};
+
+window.openDiag = function(id) {
+  const s = allServices.find(x => x.id === id);
+  if (!s) return;
+  editId = id;
+  editStatus = s.service.status;
+  byId('diagFolio').textContent = s.folio;
+  byId('editDiagnosis').value = s.service.diagnosis || '';
+  byId('editSolution').value = s.service.solution || '';
+  renderEditStatus();
+  renderDiagEvidence(s.folio);
+  openModal('diagModal');
+};
+
+window.saveDiag = async function() {
+  const id = editId;
+  showLoading('Guardando...');
+  try {
+    await updateDoc(doc(db, "services", id), { 'service.status': editStatus, 'service.diagnosis': byId('editDiagnosis').value, 'service.solution': byId('editSolution').value });
+    hideLoading(); closeDiag(); showToast('✅ Diagnóstico y estado guardados'); reopenDetail(id);
+  } catch (error) { hideLoading(); alert("Error: " + error.message); }
+};
+
 /* Portal de evidencia (celular): mismo almacenamiento, sin Storage */
 loadEvidencePhotos = function(folio) {
-  unsubscribePhotos = evSubscribe(folio, photos => renderEvidencePhotos(photos));
+  unsubscribePhotos = evSubscribe(folio, photos => renderEvidencePhotos(photos.filter(p => (p.kind || 'recepcion') === currentEvidenceKind)));
 };
 renderEvidencePhotos = function(photos) {
   byId('evidencePhotos').innerHTML = evGalleryHTML(photos);
