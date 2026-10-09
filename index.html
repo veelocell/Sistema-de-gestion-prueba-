@@ -373,7 +373,7 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
           <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">Órdenes de Servicio</h2><p class="text-slate-500 text-sm">Gestiona todas las órdenes de reparación</p></div>
           <div class="flex flex-wrap gap-3 mb-6">
             <button onclick="openModal('newOrderModal')" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Nueva Orden</button>
-            <button onclick="openAddPartModal()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Agregar Refacción</button>
+            
           </div>
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-6"><div class="flex items-center gap-2 overflow-x-auto pb-2" id="statusFilters"></div></div>
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
@@ -415,7 +415,7 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Saldo Inicial</p><p class="text-2xl font-bold" id="cajaHoyInicial">$0</p></div>
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Ingresos</p><p class="text-2xl font-bold" id="cajaHoyIngresos">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Gastos</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Gastos</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Ganancia neta</p><p class="text-2xl font-bold" id="cajaHoyGanancia">$0</p></div>
             </div>
           </div>
@@ -683,36 +683,69 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
 
 <div class="modal-overlay" id="editModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-      <h2 class="text-xl font-bold text-slate-800">✏️ Editar <span id="editFolio"></span></h2>
-      <button onclick="closeModal('editModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    <div class="sticky top-0 bg-white border-b border-slate-100 px-6 pt-5 pb-4 z-10">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-slate-800">✏️ Editar <span id="editFolio"></span></h2>
+        <button onclick="closeModal('editModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" id="tabBtnDatos" onclick="setEditTab('datos')" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-brand-600 text-white">📝 Datos y costos</button>
+        <button type="button" id="tabBtnDiag" onclick="setEditTab('diag')" class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700">🩺 Diagnóstico</button>
+      </div>
     </div>
     <div class="p-6 space-y-5">
-      <div><label class="block text-sm font-semibold text-slate-700 mb-2">Estado del servicio</label><div class="flex flex-wrap gap-2" id="statusFlow"></div></div>
-      <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-1">Diagnóstico técnico</label>
-        <textarea id="editDiagnosis" rows="3" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Descripción del diagnóstico realizado..."></textarea>
+      <div id="editTabDatos" class="space-y-5">
+        <div><label class="block text-sm font-semibold text-slate-700 mb-2">Estado del servicio</label><div class="flex flex-wrap gap-2" id="statusFlow"></div></div>
+        <div>
+          <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Datos del cliente</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Nombre</label><input type="text" id="editClientName" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Teléfono</label><input type="tel" id="editClientPhone" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Datos del equipo</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Marca</label><select id="editBrand" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"><option>Samsung</option><option>iPhone</option><option>Xiaomi</option><option>Huawei</option><option>Motorola</option><option>OPPO</option><option>LG</option></select></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Modelo</label><input type="text" id="editModel" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"></div>
+            <div class="col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">IMEI / Serie</label><input type="text" id="editIMEI" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"></div>
+            <div class="col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">Problema reportado</label><textarea id="editProblem" rows="2" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"></textarea></div>
+            <div class="col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">Trabajo a realizar</label><textarea id="editWork" rows="2" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"></textarea></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Costos y pago</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Precio total al cliente</label><input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Anticipo recibido</label><input type="number" id="editAdvancePayment" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Método de pago</label><select id="editPaymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Entrega estimada</label><input type="date" id="editDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none"></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">🔧 Refacciones (editables)</h3>
+          <div id="editPartsList" class="space-y-2 mb-3"></div>
+          <div class="flex gap-2">
+            <input type="text" id="editNewPartDesc" placeholder="Nueva refacción..." class="flex-1 min-w-0 px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none">
+            <input type="number" id="editNewPartCost" step="0.01" placeholder="Costo" class="w-28 px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none">
+            <button type="button" onclick="addEditPart()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-sm font-semibold">+ Agregar</button>
+          </div>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 space-y-1 text-sm">
+          <div class="flex justify-between"><span class="text-slate-600">Costo refacciones:</span><span class="font-semibold">$<span id="editTotalParts">0.00</span></span></div>
+          <div class="flex justify-between"><span class="text-slate-600">Precio al cliente:</span><span class="font-semibold">$<span id="editRepairCostDisplay">0.00</span></span></div>
+          <div class="flex justify-between pt-2 border-t border-slate-200"><span class="font-semibold text-slate-800">Ganancia neta estimada:</span><span class="font-bold text-emerald-600">$<span id="editNetProfit">0.00</span></span></div>
+        </div>
       </div>
-      <div><label class="block text-sm font-semibold text-slate-700 mb-1">Notas técnicas</label><textarea id="editTechnicalNotes" rows="2" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Observaciones, detalles técnicos..."></textarea></div>
-      <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Precio total al cliente</label><input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Método de pago</label><select id="editPaymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Entrega estimada</label><input type="date" id="editDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Anticipo recibido</label><input type="number" id="editAdvancePayment" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-      </div>
-      <div><label class="block text-sm font-semibold text-slate-700 mb-2">Refacciones</label><div id="editPartsList" class="space-y-2"></div></div>
-      <div class="bg-slate-50 rounded-xl p-4 space-y-1 text-sm">
-        <div class="flex justify-between"><span class="text-slate-600">Costo refacciones:</span><span class="font-semibold">$<span id="editTotalParts">0.00</span></span></div>
-        <div class="flex justify-between"><span class="text-slate-600">Precio al cliente:</span><span class="font-semibold">$<span id="editRepairCostDisplay">0.00</span></span></div>
-        <div class="flex justify-between pt-2 border-t border-slate-200"><span class="font-semibold text-slate-800">Ganancia neta estimada:</span><span class="font-bold text-emerald-600">$<span id="editNetProfit">0.00</span></span></div>
+      <div id="editTabDiag" class="hidden space-y-5">
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">🩺 Diagnóstico</label><textarea id="editDiagnosis" rows="5" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none" placeholder="¿Qué falla tiene el equipo?"></textarea></div>
+        <div><label class="block text-sm font-semibold text-slate-700 mb-1">✅ Solución</label><textarea id="editSolution" rows="5" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg outline-none" placeholder="¿Qué se hizo para repararlo?"></textarea></div>
+        <p class="text-xs text-slate-500">Ambos textos aparecen en la nota que se imprime al cobrar y entregar el equipo.</p>
       </div>
       <button onclick="saveEdit()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar Cambios</button>
     </div>
   </div>
 </div>
-
 <div class="modal-overlay" id="checkoutModal">
   <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
     <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
@@ -1262,7 +1295,8 @@ function renderCheckout(s) {
       <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="font-semibold text-slate-800">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
       <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">Problema</p><p class="text-sm text-slate-800">${s.device.problem || '—'}</p></div>
     </div>
-    ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-sm text-slate-800">${s.service.diagnosis}</p></div>` : ''}
+    ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico</p><p class="text-sm text-slate-800 whitespace-pre-line">${s.service.diagnosis}</p></div>` : ''}
+    ${s.service.solution ? `<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-emerald-700 uppercase mb-1">Solución</p><p class="text-sm text-slate-800 whitespace-pre-line">${s.service.solution}</p></div>` : ''}
     <div class="bg-slate-50 rounded-xl p-4 mb-6">
       <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Refacciones (registro interno)</p>
       ${parts.length ? parts.map(p => `<div class="flex justify-between py-1 text-sm"><span>${p.description}</span><span class="font-medium">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>'}
@@ -1369,7 +1403,8 @@ window.printTicket = function(id) {
       <div class="t-row"><span>Equipo:</span><span>${s.device.brand} ${s.device.model}</span></div>
       ${s.device.imei ? `<div class="t-row"><span>IMEI:</span><span>${s.device.imei}</span></div>` : ''}
       <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
-      ${s.service.diagnosis ? `<div style="margin:4px 0"><span style="font-weight:bold">Diagnóstico:</span><br>${s.service.diagnosis}</div>` : ''}
+      ${s.service.diagnosis ? `<div style="margin:4px 0;white-space:pre-line"><span style="font-weight:bold">Diagnóstico:</span><br>${s.service.diagnosis}</div>` : ''}
+      ${s.service.solution ? `<div style="margin:4px 0;white-space:pre-line"><span style="font-weight:bold">Solución:</span><br>${s.service.solution}</div>` : ''}
       <div class="t-divider"></div>
       <div class="t-row t-total"><span>TOTAL A PAGAR:</span><span>$${s.service.repairCost.toFixed(2)}</span></div>
       ${s.service.advancePayment > 0 ? `<div class="t-row"><span>Anticipo:</span><span>-$${s.service.advancePayment.toFixed(2)}</span></div><div class="t-row t-total"><span>RESTANTE:</span><span>$${(s.service.remainingAmount !== undefined ? s.service.remainingAmount : s.service.repairCost - s.service.advancePayment).toFixed(2)}</span></div>` : ''}
@@ -1546,7 +1581,7 @@ function renderEditParts() {
   document.getElementById('editNetProfit').textContent = (rc - t).toFixed(2);
 }
 window.removeEditPart = function(i) { editParts.splice(i,1); renderEditParts(); }
-document.getElementById('editRepairCost').addEventListener('input', renderEditParts);
+document.getElementById('editRepairCost').addEventListener('input', () => updateEditTotals());
 
 window.saveEdit = async function() {
   showLoading('Guardando cambios...');
@@ -1633,7 +1668,7 @@ ${s.device.accessType === 'patron' ? `
   </div>
 ` : '')}    </div>
     ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-slate-800">${s.service.diagnosis}</p></div>` : ''}
-    ${s.service.technicalNotes ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-amber-700 uppercase mb-1">Notas técnicas</p><p class="text-slate-800">${s.service.technicalNotes}</p></div>` : ''}
+    ${s.service.solution ? `<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-emerald-700 uppercase mb-1">Solución</p><p class="text-slate-800 whitespace-pre-line">${s.service.solution}</p></div>` : ''}
     ${photosHTML}
     <div class="bg-brand-50 border-2 border-brand-200 rounded-xl p-4 mb-4 text-center">
       <p class="text-xs font-semibold text-brand-700 uppercase mb-2">📱 Escanea para agregar fotos de evidencia</p>
@@ -1654,6 +1689,7 @@ ${s.device.accessType === 'patron' ? `
     <div class="flex flex-wrap gap-2">
       ${cobrarBtn}
       <button onclick="printReceptionTicket('${s.id}')" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition">📄 Nota de Recepción</button>
+      <button onclick="closeModal('detailModal');openAddPartFor('${s.id}')" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-lg font-medium transition">🔧 Agregar refacción</button>
       <button onclick="closeModal('detailModal');openEdit('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">✏️ Editar</button>
       ${!isPaid && s.service.remainingAmount > 0 ? `<button onclick="closeModal('detailModal');registrarAnticipo('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">💰 Registrar Anticipo</button>` : ''}
       <button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">🖨️ Ticket de Cobro</button>
@@ -2266,6 +2302,7 @@ function loadServices() {
       <td class="p-4 text-right" onclick="event.stopPropagation()">
         <div class="flex justify-end gap-1">
           ${cobrarBtn}
+          <button class="text-sky-600 hover:text-sky-700 p-1 text-lg leading-none" onclick="openAddPartFor('${s.id}')" title="Agregar refacción">🔧</button>
           <button class="text-amber-600 hover:text-amber-700 p-1" onclick="openEdit('${s.id}')" title="Editar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
           <button class="text-blue-600 hover:text-blue-700 p-1" onclick="printTicket('${s.id}')" title="Ticket"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg></button>
           <button class="text-red-600 hover:text-red-700 p-1" onclick="deleteSvc('${s.id}')" title="Eliminar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
@@ -2308,6 +2345,135 @@ function showToast(msg) {
 }
 
 document.getElementById('expenseDate').valueAsDate = new Date();
+
+/* DIAG-SOLUCION: edición completa + refacciones por orden */
+function updateEditTotals() {
+  const t = editParts.reduce((a, p) => a + (parseFloat(p.cost) || 0), 0);
+  const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
+  document.getElementById('editTotalParts').textContent = t.toFixed(2);
+  document.getElementById('editRepairCostDisplay').textContent = rc.toFixed(2);
+  document.getElementById('editNetProfit').textContent = (rc - t).toFixed(2);
+}
+
+function renderEditPartsPro() {
+  const esc = v => String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  document.getElementById('editPartsList').innerHTML = editParts.length ? editParts.map((p, i) => `
+    <div class="flex items-center gap-2 p-3 bg-slate-50 rounded-lg">
+      <input type="text" value="${esc(p.description)}" oninput="updateEditPart(${i},'description',this.value)" class="flex-1 min-w-0 px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none">
+      <input type="number" step="0.01" value="${p.cost}" oninput="updateEditPart(${i},'cost',this.value)" class="w-28 px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none">
+      <button type="button" onclick="removeEditPart(${i})" class="text-red-500 hover:text-red-700 p-1" title="Quitar refacción">✕</button>
+    </div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>';
+  updateEditTotals();
+}
+
+window.updateEditPart = function(i, field, value) {
+  if (!editParts[i]) return;
+  editParts[i][field] = field === 'cost' ? (parseFloat(value) || 0) : value;
+  updateEditTotals();
+};
+window.removeEditPart = function(i) { editParts.splice(i, 1); renderEditPartsPro(); };
+window.addEditPart = function() {
+  const d = document.getElementById('editNewPartDesc'), c = document.getElementById('editNewPartCost');
+  const desc = d.value.trim(), cost = parseFloat(c.value);
+  if (!desc || isNaN(cost)) { alert('Escribe la descripción y el costo de la refacción'); return; }
+  editParts.push({ description: desc, cost: cost });
+  d.value = ''; c.value = '';
+  renderEditPartsPro();
+};
+
+window.setEditTab = function(tab) {
+  const diag = tab === 'diag';
+  document.getElementById('editTabDatos').classList.toggle('hidden', diag);
+  document.getElementById('editTabDiag').classList.toggle('hidden', !diag);
+  const on = ['bg-brand-600', 'text-white'], off = ['bg-slate-100', 'text-slate-700'];
+  const a = document.getElementById('tabBtnDatos'), b = document.getElementById('tabBtnDiag');
+  [[a, !diag], [b, diag]].forEach(([el, active]) => {
+    on.forEach(c => el.classList.toggle(c, active));
+    off.forEach(c => el.classList.toggle(c, !active));
+  });
+};
+
+window.openEdit = function(id) {
+  const s = allServices.find(x => x.id === id);
+  if (!s) return;
+  const $ = x => document.getElementById(x);
+  editId = id;
+  editParts = (s.service.parts || []).map(p => ({ description: p.description, cost: p.cost }));
+  editStatus = s.service.status;
+  $('editFolio').textContent = s.folio;
+  $('editClientName').value = s.client.name || '';
+  $('editClientPhone').value = s.client.phone || '';
+  const sel = $('editBrand');
+  if (s.device.brand && ![...sel.options].some(o => o.value === s.device.brand)) sel.add(new Option(s.device.brand, s.device.brand));
+  sel.value = s.device.brand || '';
+  $('editModel').value = s.device.model || '';
+  $('editIMEI').value = s.device.imei || '';
+  $('editProblem').value = s.device.problem || '';
+  $('editWork').value = s.device.accessories || '';
+  $('editRepairCost').value = s.service.repairCost;
+  $('editAdvancePayment').value = s.service.advancePayment || 0;
+  $('editPaymentMethod').value = s.service.paymentMethod || '';
+  $('editDelivery').value = s.service.estimatedDelivery || '';
+  $('editDiagnosis').value = s.service.diagnosis || '';
+  $('editSolution').value = s.service.solution || '';
+  renderEditStatus();
+  renderEditPartsPro();
+  setEditTab('datos');
+  openModal('editModal');
+};
+
+window.saveEdit = async function() {
+  const $ = x => document.getElementById(x);
+  const name = $('editClientName').value.trim(), phone = $('editClientPhone').value.trim();
+  if (!name || !phone) { alert('El nombre y el teléfono del cliente son obligatorios'); return; }
+  const svc = allServices.find(x => x.id === editId);
+  if (!svc) return;
+  showLoading('Guardando cambios...');
+  const rc = parseFloat($('editRepairCost').value) || 0;
+  const advance = parseFloat($('editAdvancePayment').value) || 0;
+  const parts = editParts.filter(p => String(p.description || '').trim()).map(p => ({ description: String(p.description).trim(), cost: parseFloat(p.cost) || 0 }));
+  const tp = parts.reduce((s, p) => s + p.cost, 0);
+  const isPaid = svc.service.paymentStatus === 'Pagado';
+  try {
+    await updateDoc(doc(db, "services", editId), {
+      'client.name': name,
+      'client.phone': phone,
+      'device.brand': $('editBrand').value,
+      'device.model': $('editModel').value.trim(),
+      'device.imei': $('editIMEI').value.trim(),
+      'device.problem': $('editProblem').value,
+      'device.accessories': $('editWork').value,
+      'service.status': editStatus,
+      'service.repairCost': rc,
+      'service.paymentMethod': $('editPaymentMethod').value,
+      'service.estimatedDelivery': $('editDelivery').value,
+      'service.diagnosis': $('editDiagnosis').value,
+      'service.solution': $('editSolution').value,
+      'service.advancePayment': advance,
+      'service.remainingAmount': isPaid ? 0 : Math.max(rc - advance, 0),
+      'service.parts': parts,
+      'service.totalParts': tp,
+      'service.netProfit': rc - tp
+    });
+    hideLoading();
+    closeModal('editModal');
+    showToast('✅ Servicio actualizado');
+  } catch (error) { hideLoading(); alert("Error: " + error.message); }
+};
+
+window.openAddPartFor = function(id) {
+  const s = allServices.find(x => x.id === id);
+  if (!s) return;
+  selectedServiceForPart = s;
+  document.getElementById('selectedServiceInfo').textContent = `${s.folio} - ${s.client.name} (${s.device.brand} ${s.device.model})`;
+  document.getElementById('newPartDesc').value = '';
+  document.getElementById('newPartCost').value = '';
+  document.getElementById('addPartStep1').classList.add('hidden');
+  document.getElementById('addPartStep2').classList.remove('hidden');
+  const back = document.querySelector('#addPartStep2 button[onclick="backToServiceSelection()"]');
+  if (back) back.style.display = 'none';
+  openModal('addPartModal');
+};
 </script>
 <script>
 (function(){
