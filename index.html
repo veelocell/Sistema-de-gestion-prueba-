@@ -12,7 +12,8 @@ tailwind.config = {
       colors: {
         brand: { 50:'#f8fafc', 100:'#f1f5f9', 500:'#0f172a', 600:'#020617', 700:'#000000' },
         accent: { 50:'#eff6ff', 100:'#dbeafe', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8' },
-        surface: { 50:'#f8fafc', 100:'#f1f5f9', 200:'#e2e8f0' }
+        surface: { 50:'#f8fafc', 100:'#f1f5f9', 200:'#e2e8f0' },
+        marine: { 900: '#0b132b', 800: '#1c2541', 700: '#3a506b', 600: '#5bc0be' }
       }
     }
   }
@@ -21,13 +22,19 @@ tailwind.config = {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 body { font-family: 'Inter', sans-serif; }
-.sidebar-transition { transition: transform 0.3s ease; }
+/* Transición fluida para el ancho del sidebar */
+.sidebar-expand { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); width: 76px; }
+.sidebar-expand:hover { width: 260px; }
+.sidebar-expand:hover .nav-text, 
+.sidebar-expand:hover .sidebar-title,
+.sidebar-expand:hover .user-details { opacity: 1; pointer-events: auto; }
+.nav-text, .sidebar-title, .user-details { opacity: 0; pointer-events: none; transition: opacity 0.2s ease; white-space: nowrap; }
+
 .fade-in { animation: fadeIn 0.25s ease; }
 @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
 ::-webkit-scrollbar { width:6px; height:6px; }
 ::-webkit-scrollbar-track { background:#f8fafc; }
 ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
-::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.active { display: flex; }
 </style>
@@ -42,7 +49,7 @@ body { font-family: 'Inter', sans-serif; }
     <p class="text-sm text-slate-500 mb-6">Ingresa el saldo inicial en efectivo con el que inicias caja hoy.</p>
     <div class="mb-6">
       <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Saldo Inicial ($)</label>
-      <input type="number" id="initialCashInput" step="0.01" value="0" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-transparent outline-none text-xl font-bold text-center text-slate-900 bg-slate-50">
+      <input type="number" id="initialCashInput" step="0.01" value="0" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-accent-500 outline-none text-xl font-bold text-center text-slate-900 bg-slate-50">
     </div>
     <button onclick="confirmOpenCash()" class="w-full bg-accent-600 hover:bg-accent-700 text-white font-semibold py-3 rounded-xl transition shadow-sm">Confirmar y Entrar</button>
   </div>
@@ -114,26 +121,41 @@ body { font-family: 'Inter', sans-serif; }
 
 <!-- MAIN APP -->
 <div id="mainApp" class="flex h-screen overflow-hidden">
-  <!-- SIDEBAR -->
-  <aside class="w-64 bg-white border-r border-slate-200 flex flex-col hidden lg:flex">
-    <div class="p-6 border-b border-slate-100 flex items-center gap-3">
-      <div class="w-9 h-9 bg-accent-600 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-sm">V</div>
-      <div>
-        <h1 class="font-bold text-slate-900 text-sm tracking-tight">VELOCELL</h1>
-        <p class="text-xs text-slate-500">Gestión de Taller</p>
+  
+  <!-- SIDEBAR AZUL MARINO (Desplegable al pasar el cursor) -->
+  <aside class="sidebar-expand bg-marine-900 border-r border-marine-800 flex flex-col z-30 select-none overflow-hidden hidden lg:flex shadow-xl">
+    <!-- Header Sidebar -->
+    <div class="p-4 border-b border-marine-800 flex items-center gap-3 h-20">
+      <div class="w-11 h-11 min-w-[44px] bg-accent-600 rounded-xl flex items-center justify-center text-white font-bold text-base shadow-md">V</div>
+      <div class="sidebar-title overflow-hidden">
+        <h1 class="font-bold text-white text-sm tracking-wide">VELOCELL</h1>
+        <p class="text-[11px] text-marine-600 font-medium">Gestión de Taller</p>
       </div>
     </div>
-    <nav class="flex-1 p-4 space-y-1">
-      <button onclick="showSection('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition">📊 Dashboard</button>
-      <button onclick="showSection('ordenes')" id="nav-ordenes" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition">📋 Órdenes</button>
-      <button onclick="showSection('caja')" id="nav-caja" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-accent-600 bg-accent-50 transition">💰 Caja y Finanzas</button>
+
+    <!-- Navegación -->
+    <nav class="flex-1 p-3 space-y-2 overflow-y-auto overflow-x-hidden">
+      <button onclick="showSection('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-marine-800 hover:text-white transition group">
+        <span class="text-lg min-w-[24px] text-center">📊</span>
+        <span class="nav-text">Dashboard</span>
+      </button>
+      <button onclick="showSection('ordenes')" id="nav-ordenes" class="w-full flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-marine-800 hover:text-white transition group">
+        <span class="text-lg min-w-[24px] text-center">📋</span>
+        <span class="nav-text">Órdenes</span>
+      </button>
+      <button onclick="showSection('caja')" id="nav-caja" class="w-full flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-sm font-semibold text-white bg-marine-800 shadow-inner border border-marine-700/50 transition group">
+        <span class="text-lg min-w-[24px] text-center">💰</span>
+        <span class="nav-text">Caja y Finanzas</span>
+      </button>
     </nav>
-    <div class="p-4 border-t border-slate-100">
-      <div class="flex items-center gap-3 px-2">
-        <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs">IR</div>
-        <div class="overflow-hidden">
-          <p class="text-xs font-semibold text-slate-900 truncate">Ismael Rodríguez</p>
-          <p class="text-[11px] text-slate-500 truncate">Técnico Administrador</p>
+
+    <!-- Usuario Footer -->
+    <div class="p-3 border-t border-marine-800 bg-marine-900/50">
+      <div class="flex items-center gap-3 px-1 py-1">
+        <div class="w-10 h-10 min-w-[40px] rounded-full bg-accent-600 text-white flex items-center justify-center font-bold text-xs shadow-md">IR</div>
+        <div class="user-details overflow-hidden">
+          <p class="text-xs font-semibold text-white truncate">Ismael Rodríguez</p>
+          <p class="text-[11px] text-marine-600 truncate">Técnico Admin</p>
         </div>
       </div>
     </div>
@@ -141,7 +163,7 @@ body { font-family: 'Inter', sans-serif; }
 
   <!-- CONTENT AREA -->
   <div class="flex-1 flex flex-col overflow-hidden">
-    <header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center">
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shadow-xs">
       <h2 id="sectionTitle" class="text-lg font-bold text-slate-900">Caja / Finanzas</h2>
       <div class="flex items-center gap-3">
         <span class="text-xs px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/60 rounded-full font-medium flex items-center gap-1.5">
@@ -297,11 +319,6 @@ function updateCajaUI() {
     const paidSoFar = o.advance; 
     totalIncome += paidSoFar;
 
-    // Sumar al efectivo físico solo si el anticipo o cobro fue en Efectivo
-    if (o.advanceMethod === 'Efectivo') {
-      // Para efectos prácticos del ejemplo sumamos el anticipo en efectivo
-    }
-
     const badgeClass = o.pending === 0 
       ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
       : 'bg-amber-50 text-amber-700 border-amber-200';
@@ -333,7 +350,6 @@ function updateCajaUI() {
     }
   });
 
-  // Cálculo de efectivo esperado y ganancia neta real
   document.getElementById('boxTotalIncome').innerText = `$${totalIncome.toFixed(2)}`;
   document.getElementById('boxExpectedCash').innerText = `$${totalCash.toFixed(2)}`;
   
