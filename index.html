@@ -404,7 +404,7 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Saldo Inicial</p><p class="text-2xl font-bold" id="cajaHoyInicial">$0</p></div>
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Ingresos</p><p class="text-2xl font-bold" id="cajaHoyIngresos">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Gastos</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Gastos</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Ganancia neta</p><p class="text-2xl font-bold" id="cajaHoyGanancia">$0</p></div>
             </div>
           </div>
@@ -744,8 +744,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
-const storage = getStorage(app);
 
 const USERS = [
   { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez", role: "admin" },
