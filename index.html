@@ -121,6 +121,39 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
 .section-content.fade-in>*:nth-child(4){animation-delay:.18s}
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== SIDEBAR PRO ===== */
+#sidebar{background:#0b2a6b!important;border-right:0!important;box-shadow:none!important;backdrop-filter:none!important}
+#sidebar .text-slate-800{color:#fff!important}
+#sidebar .text-slate-600{color:#c7d6f5!important}
+#sidebar .text-slate-500{color:#9db4e3!important}
+#sidebar .text-slate-400{color:#7f9bd6!important}
+#sidebar .border-slate-100{border-color:rgba(255,255,255,.12)!important}
+#sidebar .hover\:bg-slate-50:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}
+#sidebar .text-red-600{color:#fca5a5!important}
+#sidebar .hover\:bg-red-50:hover{background:rgba(239,68,68,.2)!important}
+#sidebar .nav-btn.bg-brand-50{background:rgba(255,255,255,.15)!important;color:#fff!important}
+#sidebar .nav-btn.bg-brand-50::before{background:#60a5fa!important}
+#sidebar nav{overflow-x:hidden}
+#sidebar .nav-btn,#sidebar nav p{white-space:nowrap}
+#sbPin{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:9px;border:0;cursor:pointer;
+  background:rgba(255,255,255,.12);color:#fff;font-size:15px;line-height:1;z-index:5;display:flex;align-items:center;justify-content:center}
+#sbPin:hover{background:rgba(255,255,255,.25)}
+#sidebar.pinned #sbPin{background:#2563eb}
+#sidebar>div:first-child{padding-top:54px!important}
+@media (min-width:1024px){
+  #sidebar{position:fixed!important;top:0;bottom:0;left:0;width:72px!important;transform:none!important;overflow:hidden;
+    transition:width .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;z-index:45}
+  #sidebar:hover,#sidebar.pinned{width:256px!important}
+  #sidebar:hover:not(.pinned){box-shadow:8px 0 30px -10px rgba(8,20,50,.55)!important}
+  #sidebarOverlay+div{margin-left:72px;transition:margin-left .3s cubic-bezier(.2,.8,.2,1)}
+  body.sb-pinned #sidebarOverlay+div{margin-left:256px}
+  #sidebar:not(:hover):not(.pinned) nav p,#sidebar:not(:hover):not(.pinned) .nav-btn span,
+  #sidebar:not(:hover):not(.pinned) #sbPin{opacity:0;pointer-events:none}
+  #sidebar nav p,#sidebar .nav-btn span,#sbPin{transition:opacity .2s}
+  #sidebar>div:first-child{padding-left:16px!important;padding-right:16px!important}
+}
+@media (max-width:1023px){#sbPin{display:none}}
 </style>
 </head>
 <body class="bg-surface-50 text-slate-800">
@@ -371,7 +404,7 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Saldo Inicial</p><p class="text-2xl font-bold" id="cajaHoyInicial">$0</p></div>
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Ingresos</p><p class="text-2xl font-bold" id="cajaHoyIngresos">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Gastos</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Gastos</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
               <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Ganancia neta</p><p class="text-2xl font-bold" id="cajaHoyGanancia">$0</p></div>
             </div>
           </div>
@@ -699,6 +732,7 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy, setDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -712,6 +746,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 const storage = getStorage(app);
 
 const USERS = [
@@ -2285,6 +2320,21 @@ document.getElementById('expenseDate').valueAsDate = new Date();
       })(t0);
     }).observe(el,{childList:true,characterData:true,subtree:true});
   });
+})();
+</script>
+<script>
+(function(){
+  var sb=document.getElementById('sidebar'); if(!sb||document.getElementById('sbPin')) return;
+  var b=document.createElement('button'); b.id='sbPin'; b.type='button'; sb.appendChild(b);
+  function set(p){
+    sb.classList.toggle('pinned',p); document.body.classList.toggle('sb-pinned',p);
+    b.textContent=p?'🔒':'🔓';
+    b.title=p?'Barra fija: clic para liberar':'Clic para fijar la barra';
+    try{localStorage.setItem('sbPinned',p?'1':'0')}catch(e){}
+  }
+  b.onclick=function(e){e.stopPropagation();set(!sb.classList.contains('pinned'));};
+  var s=false; try{s=localStorage.getItem('sbPinned')==='1'}catch(e){}
+  set(s);
 })();
 </script>
 </body>
