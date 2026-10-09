@@ -10,7 +10,7 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        brand: { 50:'#eef2ff', 100:'#e0e7ff', 500:'#6366f1', 600:'#4f46e5', 700:'#4338ca' },
+        brand: { 50:'#eff6ff', 100:'#dbeafe', 200:'#bfdbfe', 300:'#93c5fd', 400:'#60a5fa', 500:'#2563eb', 600:'#1d4ed8', 700:'#1e40af', 800:'#1e3a8a', 900:'#0b1e4a' },
         surface: { 50:'#f8fafc', 100:'#f1f5f9', 200:'#e2e8f0' }
       }
     }
@@ -81,7 +81,7 @@ body { font-family: 'Inter', sans-serif; }
 .modal-overlay.active { display: flex; }
 .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 200px; padding: 10px 0; }
 .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.bar { width: 100%; max-width: 50px; background: linear-gradient(to top, #6366f1, #8b5cf6); border-radius: 6px 6px 0 0; transition: all 0.3s; position: relative; min-height: 4px; }
+.bar { width: 100%; max-width: 50px; background: linear-gradient(to top, #2563eb, #1e3a8a); border-radius: 6px 6px 0 0; transition: all 0.3s; position: relative; min-height: 4px; }
 .bar:hover { opacity: 0.8; }
 .bar-label { font-size: 10px; color: #64748b; text-align: center; }
 .bar-value { font-size: 11px; font-weight: 600; color: #1e293b; }
@@ -90,12 +90,43 @@ body { font-family: 'Inter', sans-serif; }
 .photo-item img { width: 100%; height: 150px; object-fit: cover; cursor: pointer; }
 .photo-item .delete-photo { position: absolute; top: 5px; right: 5px; background: rgba(239,68,68,0.9); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 16px; }
 .photo-item .delete-photo:hover { background: rgba(220,38,38,1); }
+
+/* ===== TEMA AZUL PROFUNDO ===== */
+body{background:#f4f7fb;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar-thumb{background:#93a9d1}
+.modal-overlay{backdrop-filter:blur(4px);background:rgba(8,20,50,.55)}
+.modal-overlay.active>div{animation:modalIn .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.toast-pro{animation:toastIn .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.nav-btn{position:relative}
+.nav-btn.bg-brand-50{font-weight:600}
+.nav-btn.bg-brand-50::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;border-radius:0 4px 4px 0;background:#1d4ed8}
+#sidebar{box-shadow:1px 0 0 #e2e8f0}
+.rounded-2xl{transition:box-shadow .25s ease,transform .25s ease}
+#dashboard .grid>.rounded-2xl:hover{transform:translateY(-3px);box-shadow:0 12px 28px -12px rgba(30,58,138,.35)}
+button{transition:background-color .2s,transform .12s,box-shadow .2s,opacity .2s}
+button:active{transform:scale(.97)}
+.shadow-lg{box-shadow:0 10px 25px -10px rgba(30,58,138,.45)}
+tbody tr{transition:background-color .15s}
+input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shadow:0 0 0 3px rgba(37,99,235,.18)!important}
+.bar{background:linear-gradient(to top,#1e3a8a,#3b82f6);transform-origin:bottom;animation:barGrow .8s cubic-bezier(.2,.8,.2,1) both}
+.bar-item:nth-child(2) .bar{animation-delay:.05s}.bar-item:nth-child(3) .bar{animation-delay:.1s}
+.bar-item:nth-child(4) .bar{animation-delay:.15s}.bar-item:nth-child(5) .bar{animation-delay:.2s}
+.bar-item:nth-child(6) .bar{animation-delay:.25s}
+@keyframes barGrow{from{transform:scaleY(0)}}
+.section-content.fade-in>*{animation:rise .5s ease both}
+.section-content.fade-in>*:nth-child(2){animation-delay:.06s}
+.section-content.fade-in>*:nth-child(3){animation-delay:.12s}
+.section-content.fade-in>*:nth-child(4){animation-delay:.18s}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body class="bg-surface-50 text-slate-800">
 
 <!-- PORTAL DE EVIDENCIA -->
-<div id="evidencePortal" class="min-h-screen bg-gradient-to-br from-brand-600 to-purple-700 p-4">
+<div id="evidencePortal" class="min-h-screen bg-gradient-to-br from-brand-900 to-brand-600 p-4">
   <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-6 mt-8">
     <div class="text-center mb-6">
       <div class="w-20 h-20 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -130,21 +161,21 @@ body { font-family: 'Inter', sans-serif; }
 </div>
 
 <!-- LOGIN -->
-<div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-brand-600 via-indigo-600 to-purple-700">
+<div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-600">
   <div class="w-full max-w-md fade-in">
     <div class="text-center mb-8">
       <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur rounded-2xl mb-4">
         <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
       </div>
-      <h1 class="text-3xl font-bold text-white mb-2">MiTallerPro</h1>
-      <p class="text-indigo-100">Sistema de gestión</p>
+      <h1 class="text-3xl font-bold text-white mb-2">VELOCELL</h1>
+      <p class="text-blue-100">Sistema de gestión</p>
     </div>
     <div class="bg-white rounded-2xl shadow-2xl p-8">
       <h2 class="text-xl font-semibold text-slate-800 mb-1">Bienvenido</h2>
       <p class="text-slate-500 text-sm mb-6">Inicia sesión para continuar</p>
       <form id="loginForm" class="space-y-4">
         <div><label class="block text-sm font-medium text-slate-700 mb-1.5">Correo electrónico</label><input type="email" id="loginEmail" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="tu@correo.com"></div>
-        <div><label class="block text-sm font-medium text-slate-700 mb-1.5"></label><input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="••••••••"></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1.5">Contraseña</label><input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="••••••••"></div>
         <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-lg transition shadow-lg shadow-brand-500/30">Iniciar Sesión</button>
       </form>
       <div id="loginError" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center"></div>
@@ -172,7 +203,7 @@ body { font-family: 'Inter', sans-serif; }
     <aside id="sidebar" class="sidebar-transition fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 flex flex-col -translate-x-full lg:translate-x-0">
       <div class="p-6 border-b border-slate-100">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/30">
+          <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-brand-800 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/30">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           </div>
           <div><h1 class="font-bold text-slate-800">VELOCELL REPARACIONES</h1><p class="text-xs text-slate-500">Sistema de gestión</p></div>
@@ -212,7 +243,7 @@ body { font-family: 'Inter', sans-serif; }
       </nav>
       <div class="p-4 border-t border-slate-100">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold" id="userAvatar">U</div>
+          <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-brand-800 rounded-full flex items-center justify-center text-white font-semibold" id="userAvatar">U</div>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold text-slate-800 truncate" id="sidebarUserName">Usuario</p>
             <p class="text-xs text-slate-500 truncate" id="sidebarUserEmail">email@ejemplo.com</p>
@@ -237,7 +268,7 @@ body { font-family: 'Inter', sans-serif; }
               <span class="text-xs font-medium text-emerald-700">En línea</span>
             </div>
             <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
-              <div class="w-9 h-9 bg-gradient-to-br from-brand-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm" id="navAvatar">U</div>
+              <div class="w-9 h-9 bg-gradient-to-br from-brand-500 to-brand-800 rounded-full flex items-center justify-center text-white font-semibold text-sm" id="navAvatar">U</div>
               <div class="hidden md:block">
                 <p class="text-sm font-semibold text-slate-800" id="navUserName">Usuario</p>
                 <p class="text-xs text-slate-500" id="navUserEmail">email@ejemplo.com</p>
@@ -263,19 +294,19 @@ body { font-family: 'Inter', sans-serif; }
               <p class="text-2xl font-bold text-slate-800" id="kpiEspera">0</p><p class="text-xs text-slate-500 mt-1">Equipos en espera</p>
             </div>
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
-              <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xs text-slate-400">Total</span></div>
+              <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xs text-slate-400">Total</span></div>
               <p class="text-2xl font-bold text-slate-800" id="kpiEntregados">0</p><p class="text-xs text-slate-500 mt-1">Entregados</p>
             </div>
           </div>
           <div class="grid lg:grid-cols-3 gap-6">
             <div class="lg:col-span-1">
-              <div class="bg-gradient-to-br from-brand-600 to-purple-700 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30 h-full flex flex-col justify-between">
+              <div class="bg-gradient-to-br from-brand-900 to-brand-600 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30 h-full flex flex-col justify-between">
                 <div>
                   <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg></div>
                   <h3 class="text-xl font-bold mb-2">Nueva Orden</h3>
-                  <p class="text-indigo-100 text-sm">Registra un nuevo servicio de reparación</p>
+                  <p class="text-blue-100 text-sm">Registra un nuevo servicio de reparación</p>
                 </div>
-                <button onclick="openModal('newOrderModal')" class="mt-6 w-full bg-white text-brand-600 font-semibold py-3 rounded-xl hover:bg-indigo-50 transition shadow-lg">Crear orden</button>
+                <button onclick="openModal('newOrderModal')" class="mt-6 w-full bg-white text-brand-600 font-semibold py-3 rounded-xl hover:bg-blue-50 transition shadow-lg">Crear orden</button>
               </div>
             </div>
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
@@ -335,20 +366,20 @@ body { font-family: 'Inter', sans-serif; }
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> Generar Corte del Día
             </button>
           </div>
-          <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl p-6 text-white mb-6 shadow-lg">
+          <div class="bg-gradient-to-br from-brand-500 to-brand-800 rounded-2xl p-6 text-white mb-6 shadow-lg">
             <h3 class="text-lg font-bold mb-4">📊 Resumen de hoy</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Saldo Inicial</p><p class="text-2xl font-bold" id="cajaHoyInicial">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Ingresos</p><p class="text-2xl font-bold" id="cajaHoyIngresos">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Gastos</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Ganancia neta</p><p class="text-2xl font-bold" id="cajaHoyGanancia">$0</p></div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Saldo Inicial</p><p class="text-2xl font-bold" id="cajaHoyInicial">$0</p></div>
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Ingresos</p><p class="text-2xl font-bold" id="cajaHoyIngresos">$0</p></div>
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Refacciones</p><p class="text-2xl font-bold" id="cajaHoyRefacciones">$0</p></div><div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Gastos</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
+              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-blue-100 mb-1">Ganancia neta</p><p class="text-2xl font-bold" id="cajaHoyGanancia">$0</p></div>
             </div>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg shadow-emerald-500/30"><p class="text-emerald-100 text-sm mb-1">Ingresos del mes</p><p class="text-3xl font-bold" id="cajaIngresos">$0</p><p class="text-xs text-emerald-100 mt-1">(cobrado a clientes)</p></div>
             <div class="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg shadow-amber-500/30"><p class="text-amber-100 text-sm mb-1">Gasto en refacciones</p><p class="text-3xl font-bold" id="cajaRefacciones">$0</p><p class="text-xs text-amber-100 mt-1">(costo interno)</p></div>
             <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6 text-white shadow-lg shadow-red-500/30"><p class="text-red-100 text-sm mb-1">Gastos personales</p><p class="text-3xl font-bold" id="cajaGastos">$0</p></div>
-            <div class="bg-gradient-to-br from-brand-500 to-brand-600 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30"><p class="text-indigo-100 text-sm mb-1">Ganancia neta</p><p class="text-3xl font-bold" id="cajaBalance">$0</p><p class="text-xs text-indigo-100 mt-1">(ingresos - gastos)</p></div>
+            <div class="bg-gradient-to-br from-brand-500 to-brand-600 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30"><p class="text-blue-100 text-sm mb-1">Ganancia neta</p><p class="text-3xl font-bold" id="cajaBalance">$0</p><p class="text-xs text-blue-100 mt-1">(ingresos - gastos)</p></div>
           </div>
           <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
             <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Registrar gasto personal</h3>
@@ -381,7 +412,7 @@ body { font-family: 'Inter', sans-serif; }
             </button>
             <button onclick="generarCorteMensual()" class="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white p-6 rounded-2xl shadow-lg shadow-brand-500/30 transition text-left">
               <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><h3 class="text-lg font-bold">Corte del Mes</h3></div>
-              <p class="text-indigo-100 text-sm">Resumen completo del mes en curso</p>
+              <p class="text-blue-100 text-sm">Resumen completo del mes en curso</p>
             </button>
             <div class="bg-white border border-slate-200 p-6 rounded-2xl">
               <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><h3 class="text-lg font-bold text-slate-800">Total de cortes</h3></div>
@@ -504,7 +535,7 @@ body { font-family: 'Inter', sans-serif; }
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Modelo *</label><input type="text" id="deviceModel" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">IMEI / Serie</label><input type="text" id="deviceIMEI" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
           <div><label class="block text-sm font-medium text-slate-700 mb-1">Entrega estimada</label><input type="date" id="estimatedDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-          <<div class="md:col-span-2">
+          <div class="md:col-span-2">
   <label class="block text-sm font-medium text-slate-700 mb-2">🔐  / Patrón del equipo</label>
   <div class="flex gap-3 mb-3">
     <label class="flex-1 cursor-pointer">
@@ -667,6 +698,7 @@ body { font-family: 'Inter', sans-serif; }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy, setDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -680,6 +712,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const USERS = [
   { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez", role: "admin" },
@@ -690,7 +723,7 @@ const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autor
 const STATUS_COLORS = {
   'En diagnóstico': 'bg-blue-100 text-blue-700',
   'Por revisar': 'bg-amber-100 text-amber-700',
-  'Revisado': 'bg-indigo-100 text-indigo-700',
+  'Revisado': 'bg-cyan-100 text-cyan-700',
   'En espera de autorización': 'bg-orange-100 text-orange-700',
   'Reparado (en espera de que pasen por él)': 'bg-emerald-100 text-emerald-700',
   'Entregado': 'bg-slate-100 text-slate-700'
@@ -1178,10 +1211,10 @@ function renderCheckout(s) {
   const advance = s.service.advancePayment || 0;
   const remaining = s.service.remainingAmount !== undefined ? s.service.remainingAmount : (s.service.repairCost - advance);
   document.getElementById('checkoutContent').innerHTML = `
-    <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
-      <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
+    <div class="bg-gradient-to-br from-brand-500 to-brand-800 rounded-xl p-6 text-white mb-6">
+      <p class="text-blue-100 text-sm">Folio: ${s.folio}</p>
       <h3 class="text-2xl font-bold mt-1">${s.client.name}</h3>
-      <p class="text-indigo-100 text-sm mt-1">📞 ${s.client.phone}</p>
+      <p class="text-blue-100 text-sm mt-1">📞 ${s.client.phone}</p>
     </div>
     <div class="grid md:grid-cols-2 gap-4 mb-6">
       <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="font-semibold text-slate-800">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
@@ -1531,8 +1564,8 @@ window.openDetail = function(id) {
   const evidenceUrl = currentUrl + '?folio=' + s.folio;
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(evidenceUrl)}`;
   document.getElementById('detailContent').innerHTML = `
-    <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
-      <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
+    <div class="bg-gradient-to-br from-brand-500 to-brand-800 rounded-xl p-6 text-white mb-6">
+      <p class="text-blue-100 text-sm">Folio: ${s.folio}</p>
       <h3 class="text-2xl font-bold mt-1">${s.client.name}</h3>
       <div class="mt-3">${payBadge}</div>
     </div>
@@ -1574,7 +1607,7 @@ ${s.device.accessType === 'patron' ? `
       <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center"><p class="text-xs text-emerald-700 uppercase font-semibold">Precio al cliente</p><p class="text-2xl font-bold text-emerald-700">$${s.service.repairCost.toFixed(2)}</p></div>
       <div class="bg-brand-50 border border-brand-200 rounded-xl p-4 text-center"><p class="text-xs text-brand-700 uppercase font-semibold">Ganancia neta</p><p class="text-2xl font-bold text-brand-700">$${(s.service.repairCost - tp).toFixed(2)}</p></div>
     </div>
-    ${s.service.warranty ? `<div class="bg-purple-50 border border-purple-200 rounded-xl p-3 mb-4 text-center"><p class="text-xs text-purple-700 uppercase font-semibold">Garantía</p><p class="font-bold text-purple-800">${s.service.warranty}</p></div>` : ''}
+    ${s.service.warranty ? `<div class="bg-sky-50 border border-sky-200 rounded-xl p-3 mb-4 text-center"><p class="text-xs text-sky-700 uppercase font-semibold">Garantía</p><p class="font-bold text-sky-800">${s.service.warranty}</p></div>` : ''}
     <div class="bg-slate-50 rounded-xl p-3 mb-4 text-center"><p class="text-xs text-slate-600">Atendido por: <strong>${tech}</strong></p></div>
     <div class="flex flex-wrap gap-2">
       ${cobrarBtn}
@@ -1686,7 +1719,7 @@ function renderCortes() {
   if (filtered.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
   tbody.innerHTML = filtered.map(c => {
-    const tipoBadge = c.type === 'dia' ? '<span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 font-medium">Diario</span>' : '<span class="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-700 font-medium">Mensual</span>';
+    const tipoBadge = c.type === 'dia' ? '<span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 font-medium">Diario</span>' : '<span class="text-xs px-2 py-1 rounded-full bg-sky-100 text-sky-700 font-medium">Mensual</span>';
     const fecha = new Date(c.date).toLocaleDateString('es-MX', { year:'numeric', month:'short', day:'numeric' });
     return `<tr class="hover:bg-slate-50 cursor-pointer" onclick="verDetalleCorte('${c.id}')">
       <td class="p-4 font-medium text-slate-800">${fecha}</td>
@@ -1945,7 +1978,7 @@ function renderTopServicios(servicios) {
   container.innerHTML = top.map(([nombre, data], i) => `
     <div>
       <div class="flex justify-between items-center mb-1"><span class="text-sm font-medium text-slate-800">${i+1}. ${nombre}</span><span class="text-xs font-semibold text-brand-600">${data.count} servicios • $${data.total.toFixed(0)}</span></div>
-      <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-gradient-to-r from-brand-500 to-purple-600 h-2 rounded-full" style="width:${(data.count/maxCount)*100}%"></div></div>
+      <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-gradient-to-r from-brand-500 to-brand-800 h-2 rounded-full" style="width:${(data.count/maxCount)*100}%"></div></div>
     </div>
   `).join('');
 }
@@ -1957,7 +1990,7 @@ function renderTopMarcas(servicios) {
   servicios.forEach(s => { const m = s.device.brand || 'Otro'; if (!marcas[m]) marcas[m] = 0; marcas[m]++; });
   const top = Object.entries(marcas).sort((a,b) => b[1] - a[1]);
   const max = top[0]?.[1] || 1;
-  const colors = ['from-blue-500 to-blue-600','from-emerald-500 to-emerald-600','from-amber-500 to-amber-600','from-red-500 to-red-600','from-purple-500 to-purple-600'];
+  const colors = ['from-blue-500 to-blue-600','from-emerald-500 to-emerald-600','from-amber-500 to-amber-600','from-red-500 to-red-600','from-sky-500 to-sky-600'];
   container.innerHTML = top.map(([marca, count], i) => `
     <div class="flex items-center gap-3">
       <div class="w-8 h-8 bg-gradient-to-br ${colors[i % colors.length]} rounded-lg flex items-center justify-center text-white font-bold text-sm">${i+1}</div>
@@ -1976,7 +2009,7 @@ function renderMetodosPago(servicios) {
   servicios.forEach(s => { const m = s.service.paymentMethod || 'No especificado'; metodos[m] = (metodos[m] || 0) + 1; });
   const total = servicios.length;
   const icons = { 'Efectivo': '💵', 'Transferencia': '🏦', 'Tarjeta': '💳', 'No especificado': '❓' };
-  const colors = { 'Efectivo': 'bg-emerald-500', 'Transferencia': 'bg-blue-500', 'Tarjeta': 'bg-purple-500', 'No especificado': 'bg-slate-400' };
+  const colors = { 'Efectivo': 'bg-emerald-500', 'Transferencia': 'bg-blue-500', 'Tarjeta': 'bg-sky-500', 'No especificado': 'bg-slate-400' };
   container.innerHTML = Object.entries(metodos).filter(([_,v]) => v > 0).map(([metodo, count]) => {
     const pct = ((count/total)*100).toFixed(0);
     return `<div>
@@ -2226,13 +2259,33 @@ function showLoading(text) { document.getElementById('loadingText').textContent 
 function hideLoading() { document.getElementById('loading').classList.add('hidden'); }
 function showToast(msg) {
   const toast = document.createElement('div');
-  toast.className = 'fixed bottom-6 right-6 bg-slate-800 text-white px-6 py-3 rounded-xl shadow-2xl z-[200] fade-in';
+  toast.className = 'toast-pro fixed bottom-6 right-6 bg-brand-900 text-white px-6 py-3 rounded-xl shadow-2xl z-[200]';
   toast.textContent = msg;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
 }
 
 document.getElementById('expenseDate').valueAsDate = new Date();
+</script>
+<script>
+(function(){
+  ['kpiActivas','kpiIngresos','kpiEspera','kpiEntregados'].forEach(function(id){
+    var el=document.getElementById(id); if(!el) return;
+    var last=0,busy=false;
+    new MutationObserver(function(){
+      if(busy) return;
+      var txt=el.textContent,m=txt.match(/-?[\d,.]+/); if(!m) return;
+      var target=parseFloat(m[0].replace(/,/g,'')),pre=txt.charAt(0)==='$'?'$':'',dec=pre?2:0;
+      if(target===last) return;
+      var from=last,t0=performance.now(); last=target; busy=true;
+      (function step(t){
+        var p=Math.min((t-t0)/700,1),e=1-Math.pow(1-p,3);
+        el.textContent=pre+(from+(target-from)*e).toFixed(dec);
+        if(p<1) requestAnimationFrame(step); else busy=false;
+      })(t0);
+    }).observe(el,{childList:true,characterData:true,subtree:true});
+  });
+})();
 </script>
 </body>
 </html>
