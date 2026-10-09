@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VELOCELL REPARACIONES</title>
+<title>VELOCELL REPARACIONES — Sistema de Gestión</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
   theme: {
     extend: {
       colors: {
-        brand: { 50:'#eef2ff', 100:'#e0e7ff', 500:'#6366f1', 600:'#4f46e5', 700:'#4338ca' },
+        brand: { 50:'#f8fafc', 100:'#f1f5f9', 500:'#0f172a', 600:'#020617', 700:'#000000' },
+        accent: { 50:'#eff6ff', 100:'#dbeafe', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8' },
         surface: { 50:'#f8fafc', 100:'#f1f5f9', 200:'#e2e8f0' }
       }
     }
@@ -18,2221 +19,333 @@ tailwind.config = {
 }
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 body { font-family: 'Inter', sans-serif; }
 .sidebar-transition { transition: transform 0.3s ease; }
-.fade-in { animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-.pulse-dot { animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
-::-webkit-scrollbar { width:8px; height:8px; }
-::-webkit-scrollbar-track { background:#f1f5f9; }
-::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:4px; }
+.fade-in { animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:#f8fafc; }
+::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
 ::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
-
-#evidencePortal { display: none; }
-#evidencePortal.active { display: block; }
-#printContainer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; overflow-y: auto; padding: 20px; }
-#printContainer.active { display: block; }
-.preview-wrapper { max-width: 900px; margin: 20px auto; background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow-x: auto; }
-.preview-wrapper.ticket-mode { max-width: 380px; }
-.preview-wrapper.letter-mode { max-width: 850px; }
-
-.ticket-thermal { width: 80mm; margin: 0 auto; padding: 3mm; font-family: 'Courier New', monospace; font-size: 11px; color: #000; line-height: 1.4; }
-.ticket-thermal .t-header { text-align:center; border-bottom: 1px dashed #000; padding-bottom: 6px; margin-bottom: 6px; }
-.ticket-thermal .t-header h2 { font-size: 15px; margin: 0; font-weight: bold; }
-.ticket-thermal .t-header p { margin: 2px 0; font-size: 11px; }
-.ticket-thermal .t-row { display:flex; justify-content:space-between; margin: 2px 0; gap: 8px; }
-.ticket-thermal .t-divider { border-top: 1px dashed #000; margin: 6px 0; }
-.ticket-thermal .t-total { font-size: 13px; font-weight: bold; margin-top: 4px; }
-.ticket-thermal .t-footer { text-align:center; margin-top: 8px; font-size: 10px; white-space: pre-line; }
-.ticket-thermal .t-section-title { font-weight: bold; margin: 6px 0 3px 0; font-size: 11px; text-transform: uppercase; }
-.ticket-thermal .t-warranty { background: #f0f0f0; padding: 5px; border-radius: 3px; margin: 6px 0; }
-
-.letter-double { width: 190mm; max-width: 190mm; margin: 0 auto; padding: 5mm; font-family: 'Inter', sans-serif; font-size: 11px; color: #000; display: block; }
-.letter-half { border: 1px solid #000; padding: 10px; margin-bottom: 10px; position: relative; page-break-inside: avoid; }
-.letter-half::after { content: "✂ CORTAR AQUÍ ✂"; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 10px; font-weight: bold; font-size: 10px; }
-.letter-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
-.letter-header h2 { font-size: 20px; margin: 0; font-weight: 800; text-transform: uppercase; }
-.letter-section { margin-bottom: 10px; }
-.letter-section h3 { font-size: 12px; font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 3px; margin-bottom: 5px; text-transform: uppercase; }
-.letter-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
-.letter-footer { margin-top: 15px; padding-top: 10px; border-top: 1px solid #000; font-size: 10px; text-align: center; white-space: pre-line; }
-.letter-sign { margin-top: 30px; display: flex; justify-content: space-between; }
-.letter-sign div { width: 40%; border-top: 1px solid #000; text-align: center; padding-top: 5px; font-size: 11px; }
-
-@media print {
-  body * { visibility: hidden !important; }
-  #printContainer, #printContainer * { visibility: visible !important; }
-  #printContainer { display: block !important; position: absolute !important; top: 0; left: 0; width: 100%; padding: 0; background: white; }
-  #printContainer .preview-wrapper { border: none; box-shadow: none; margin: 0; padding: 0; max-width: 100%; }
-  #printContainer .no-print { display: none !important; }
-  #printContainer.print-ticket @page { size: 80mm auto; margin: 0; }
-  #printContainer.print-ticket { width: 80mm; }
-  #printContainer.print-ticket .preview-wrapper { max-width: 80mm; }
-  #printContainer.print-letter @page { size: letter portrait; margin: 10mm; }
-  #printContainer.print-letter { width: 210mm; }
-  #printContainer.print-letter .preview-wrapper { max-width: 210mm; }
-  #printContainer.print-letter .letter-double { width: 100%; max-width: 190mm; padding: 0; margin: 0 auto; display: block; }
-  #printContainer.print-letter .letter-half { border: 1px solid #000; padding: 8px; margin-bottom: 8px; page-break-inside: avoid; }
-}
-
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.active { display: flex; }
-.bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 200px; padding: 10px 0; }
-.bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.bar { width: 100%; max-width: 50px; background: linear-gradient(to top, #6366f1, #8b5cf6); border-radius: 6px 6px 0 0; transition: all 0.3s; position: relative; min-height: 4px; }
-.bar:hover { opacity: 0.8; }
-.bar-label { font-size: 10px; color: #64748b; text-align: center; }
-.bar-value { font-size: 11px; font-weight: 600; color: #1e293b; }
-.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-.photo-item { position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-.photo-item img { width: 100%; height: 150px; object-fit: cover; cursor: pointer; }
-.photo-item .delete-photo { position: absolute; top: 5px; right: 5px; background: rgba(239,68,68,0.9); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 16px; }
-.photo-item .delete-photo:hover { background: rgba(220,38,38,1); }
 </style>
 </head>
-<body class="bg-surface-50 text-slate-800">
-
-<!-- PORTAL DE EVIDENCIA -->
-<div id="evidencePortal" class="min-h-screen bg-gradient-to-br from-brand-600 to-purple-700 p-4">
-  <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-6 mt-8">
-    <div class="text-center mb-6">
-      <div class="w-20 h-20 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-      </div>
-      <h1 class="text-2xl font-bold text-slate-800">📸 Registro de Evidencia</h1>
-      <p class="text-slate-500 mt-2">Folio: <strong id="evidenceFolio">Cargando...</strong></p>
-    </div>
-    <div id="evidenceServiceInfo" class="bg-slate-50 rounded-xl p-4 mb-6">
-      <p class="text-sm text-slate-600">Cargando información del servicio...</p>
-    </div>
-    <div class="mb-6">
-      <label class="block text-sm font-semibold text-slate-700 mb-2">📷 Subir fotos del equipo</label>
-      <input type="file" id="photoInput" accept="image/*" capture="environment" multiple class="hidden" onchange="handlePhotoUpload(event)">
-      <button onclick="document.getElementById('photoInput').click()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-4 rounded-xl transition flex items-center justify-center gap-2">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        Tomar/Subir Fotos
-      </button>
-      <p class="text-xs text-slate-500 mt-2 text-center">Puedes tomar fotos con la cámara o seleccionar de la galería</p>
-    </div>
-    <div id="uploadProgress" class="hidden mb-4">
-      <div class="bg-slate-100 rounded-full h-2 overflow-hidden">
-        <div id="progressBar" class="bg-brand-600 h-full transition-all duration-300" style="width: 0%"></div>
-      </div>
-      <p class="text-xs text-slate-600 mt-1 text-center" id="progressText">Subiendo 0%</p>
-    </div>
-    <div id="evidencePhotos" class="photo-grid mb-6"></div>
-    <div class="text-center">
-      <button onclick="window.location.href = window.location.pathname" class="text-sm text-slate-500 hover:text-slate-700">← Volver al sistema</button>
-    </div>
-  </div>
-</div>
-
-<!-- LOGIN -->
-<div id="loginScreen" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-brand-600 via-indigo-600 to-purple-700">
-  <div class="w-full max-w-md fade-in">
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur rounded-2xl mb-4">
-        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-      </div>
-      <h1 class="text-3xl font-bold text-white mb-2">MiTallerPro</h1>
-      <p class="text-indigo-100">Sistema de gestión</p>
-    </div>
-    <div class="bg-white rounded-2xl shadow-2xl p-8">
-      <h2 class="text-xl font-semibold text-slate-800 mb-1">Bienvenido</h2>
-      <p class="text-slate-500 text-sm mb-6">Inicia sesión para continuar</p>
-      <form id="loginForm" class="space-y-4">
-        <div><label class="block text-sm font-medium text-slate-700 mb-1.5">Correo electrónico</label><input type="email" id="loginEmail" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="tu@correo.com"></div>
-        <div><label class="block text-sm font-medium text-slate-700 mb-1.5"></label><input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition" placeholder="••••••••"></div>
-        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-lg transition shadow-lg shadow-brand-500/30">Iniciar Sesión</button>
-      </form>
-      <div id="loginError" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center"></div>
-      <p class="text-center text-xs text-slate-400 mt-6">🔒 Conexión segura</p>
-    </div>
-  </div>
-</div>
+<body class="bg-surface-50 text-slate-900 antialiased">
 
 <!-- MODAL ABRIR CAJA -->
 <div class="modal-overlay" id="openCashModal">
-  <div class="bg-white rounded-2xl w-full max-w-md p-6">
-    <h2 class="text-xl font-bold text-slate-800 mb-4">🔓 Abrir Caja del Día</h2>
-    <p class="text-sm text-slate-600 mb-4">Ingresa el saldo inicial en efectivo con el que inicia la caja hoy.</p>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-slate-700 mb-1">Saldo Inicial ($)</label>
-      <input type="number" id="initialCash" step="0.01" value="0" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none text-lg font-bold text-center">
+  <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl border border-slate-100">
+    <div class="w-12 h-12 bg-accent-50 text-accent-600 rounded-xl flex items-center justify-center font-bold text-xl mb-4">🔓</div>
+    <h2 class="text-xl font-bold text-slate-900 mb-1">Abrir Caja del Día</h2>
+    <p class="text-sm text-slate-500 mb-6">Ingresa el saldo inicial en efectivo con el que inicias caja hoy.</p>
+    <div class="mb-6">
+      <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Saldo Inicial ($)</label>
+      <input type="number" id="initialCashInput" step="0.01" value="0" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-transparent outline-none text-xl font-bold text-center text-slate-900 bg-slate-50">
     </div>
-    <button onclick="confirmOpenCash()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition">Confirmar y Entrar</button>
+    <button onclick="confirmOpenCash()" class="w-full bg-accent-600 hover:bg-accent-700 text-white font-semibold py-3 rounded-xl transition shadow-sm">Confirmar y Entrar</button>
   </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="mainApp" class="hidden">
-  <div class="flex h-screen overflow-hidden">
-    <aside id="sidebar" class="sidebar-transition fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 flex flex-col -translate-x-full lg:translate-x-0">
-      <div class="p-6 border-b border-slate-100">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/30">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          </div>
-          <div><h1 class="font-bold text-slate-800">VELOCELL REPARACIONES</h1><p class="text-xs text-slate-500">Sistema de gestión</p></div>
-        </div>
-      </div>
-      <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-3">Operación</p>
-        <button onclick="showSection('dashboard', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition" data-section="dashboard">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg> Dashboard
-        </button>
-        <button onclick="showSection('ordenes', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="ordenes">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg> Órdenes
-        </button>
-        <button onclick="showSection('inventario', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="inventario">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg> Inventario <span class="ml-auto text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Pronto</span>
-        </button>
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-4 px-3">Finanzas</p>
-        <button onclick="showSection('caja', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="caja">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Caja
-        </button>
-        <button onclick="showSection('cortes', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="cortes">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg> Cortes de Caja
-        </button>
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-4 px-3">Sistema</p>
-        <button id="btnConfig" onclick="showSection('config', this)" class="nav-btn hidden w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="config">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Configuración
-        </button>
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-4 px-3">Dirección</p>
-        <button onclick="showSection('ceo', this)" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition" data-section="ceo">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> CEO / Estadísticas
-        </button>
-        <div class="pt-4 mt-4 border-t border-slate-100">
-          <button onclick="logout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg> Cerrar Sesión
-          </button>
-        </div>
-      </nav>
-      <div class="p-4 border-t border-slate-100">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold" id="userAvatar">U</div>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-slate-800 truncate" id="sidebarUserName">Usuario</p>
-            <p class="text-xs text-slate-500 truncate" id="sidebarUserEmail">email@ejemplo.com</p>
-          </div>
-        </div>
-      </div>
-    </aside>
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
-    <div class="flex-1 flex flex-col overflow-hidden">
-      <header class="bg-white border-b border-slate-200 px-4 lg:px-8 py-4">
-        <div class="flex items-center justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
-            <div>
-              <h2 class="text-lg lg:text-xl font-bold text-slate-800" id="greeting">Hola 👋</h2>
-              <p class="text-xs text-slate-500 hidden sm:block" id="currentDate">Cargando fecha...</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-full">
-              <span class="w-2 h-2 bg-emerald-500 rounded-full pulse-dot"></span>
-              <span class="text-xs font-medium text-emerald-700">En línea</span>
-            </div>
-            <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
-              <div class="w-9 h-9 bg-gradient-to-br from-brand-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm" id="navAvatar">U</div>
-              <div class="hidden md:block">
-                <p class="text-sm font-semibold text-slate-800" id="navUserName">Usuario</p>
-                <p class="text-xs text-slate-500" id="navUserEmail">email@ejemplo.com</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-      <main class="flex-1 overflow-y-auto p-4 lg:p-8">
-        <!-- DASHBOARD -->
-        <section id="dashboard" class="section-content fade-in">
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
-              <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><span class="text-xs text-slate-400">Activas</span></div>
-              <p class="text-2xl font-bold text-slate-800" id="kpiActivas">0</p><p class="text-xs text-slate-500 mt-1">Órdenes en proceso</p>
-            </div>
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
-              <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xs text-slate-400">Hoy</span></div>
-              <p class="text-2xl font-bold text-slate-800" id="kpiIngresos">$0</p><p class="text-xs text-slate-500 mt-1">Ingresos del día (cobrado)</p>
-            </div>
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
-              <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xs text-slate-400">Espera</span></div>
-              <p class="text-2xl font-bold text-slate-800" id="kpiEspera">0</p><p class="text-xs text-slate-500 mt-1">Equipos en espera</p>
-            </div>
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition">
-              <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center"><svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xs text-slate-400">Total</span></div>
-              <p class="text-2xl font-bold text-slate-800" id="kpiEntregados">0</p><p class="text-xs text-slate-500 mt-1">Entregados</p>
-            </div>
-          </div>
-          <div class="grid lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-1">
-              <div class="bg-gradient-to-br from-brand-600 to-purple-700 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30 h-full flex flex-col justify-between">
-                <div>
-                  <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg></div>
-                  <h3 class="text-xl font-bold mb-2">Nueva Orden</h3>
-                  <p class="text-indigo-100 text-sm">Registra un nuevo servicio de reparación</p>
-                </div>
-                <button onclick="openModal('newOrderModal')" class="mt-6 w-full bg-white text-brand-600 font-semibold py-3 rounded-xl hover:bg-indigo-50 transition shadow-lg">Crear orden</button>
-              </div>
-            </div>
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold text-slate-800">Últimas órdenes</h3>
-                <button onclick="showSection('ordenes', document.querySelector('[data-section=ordenes]'))" class="text-sm text-brand-600 hover:text-brand-700 font-medium">Ver todas →</button>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full">
-                  <thead><tr class="text-xs text-slate-500 border-b border-slate-100"><th class="text-left py-2 font-medium">Folio</th><th class="text-left py-2 font-medium">Cliente</th><th class="text-left py-2 font-medium">Estado</th><th class="text-right py-2 font-medium">Monto</th></tr></thead>
-                  <tbody id="recentOrdersTable" class="text-sm"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ÓRDENES -->
-        <section id="ordenes" class="section-content hidden fade-in">
-          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">Órdenes de Servicio</h2><p class="text-slate-500 text-sm">Gestiona todas las órdenes de reparación</p></div>
-          <div class="flex flex-wrap gap-3 mb-6">
-            <button onclick="openModal('newOrderModal')" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Nueva Orden</button>
-            <button onclick="openAddPartModal()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Agregar Refacción</button>
-          </div>
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-6"><div class="flex items-center gap-2 overflow-x-auto pb-2" id="statusFilters"></div></div>
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div class="p-4 border-b border-slate-100">
-              <div class="relative">
-                <svg class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <input type="text" id="searchClient" placeholder="Buscar por nombre, teléfono o folio..." oninput="loadServices()" class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none">
-              </div>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="w-full">
-                <thead class="bg-slate-50"><tr class="text-xs text-slate-600 uppercase"><th class="text-left p-4 font-semibold">Folio</th><th class="text-left p-4 font-semibold">Cliente</th><th class="text-left p-4 font-semibold">Equipo</th><th class="text-left p-4 font-semibold">Estado</th><th class="text-left p-4 font-semibold">Pago</th><th class="text-right p-4 font-semibold">Costo</th><th class="text-right p-4 font-semibold">Acciones</th></tr></thead>
-                <tbody id="servicesList" class="text-sm divide-y divide-slate-100"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- INVENTARIO -->
-        <section id="inventario" class="section-content hidden fade-in">
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-12 text-center">
-            <div class="w-20 h-20 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
-            <h2 class="text-2xl font-bold text-slate-800 mb-2">Módulo de Inventario</h2>
-            <p class="text-slate-500 mb-6">Próximamente disponible.</p>
-            <span class="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">En desarrollo</span>
-          </div>
-        </section>
-
-        <!-- CAJA -->
-        <section id="caja" class="section-content hidden fade-in">
-          <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <div><h2 class="text-2xl font-bold text-slate-800">Caja / Finanzas</h2><p class="text-slate-500 text-sm">Resumen financiero y cortes de caja</p></div>
-            <button onclick="generarCorteDiario()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition shadow-lg shadow-emerald-500/30 flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> Generar Corte del Día
-            </button>
-          </div>
-          <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-2xl p-6 text-white mb-6 shadow-lg">
-            <h3 class="text-lg font-bold mb-4">📊 Resumen de hoy</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Saldo Inicial</p><p class="text-2xl font-bold" id="cajaHoyInicial">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Ingresos</p><p class="text-2xl font-bold" id="cajaHoyIngresos">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Gastos</p><p class="text-2xl font-bold" id="cajaHoyGastos">$0</p></div>
-              <div class="bg-white/10 backdrop-blur rounded-xl p-4"><p class="text-xs text-indigo-100 mb-1">Ganancia neta</p><p class="text-2xl font-bold" id="cajaHoyGanancia">$0</p></div>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg shadow-emerald-500/30"><p class="text-emerald-100 text-sm mb-1">Ingresos del mes</p><p class="text-3xl font-bold" id="cajaIngresos">$0</p><p class="text-xs text-emerald-100 mt-1">(cobrado a clientes)</p></div>
-            <div class="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg shadow-amber-500/30"><p class="text-amber-100 text-sm mb-1">Gasto en refacciones</p><p class="text-3xl font-bold" id="cajaRefacciones">$0</p><p class="text-xs text-amber-100 mt-1">(costo interno)</p></div>
-            <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6 text-white shadow-lg shadow-red-500/30"><p class="text-red-100 text-sm mb-1">Gastos personales</p><p class="text-3xl font-bold" id="cajaGastos">$0</p></div>
-            <div class="bg-gradient-to-br from-brand-500 to-brand-600 rounded-2xl p-6 text-white shadow-lg shadow-brand-500/30"><p class="text-indigo-100 text-sm mb-1">Ganancia neta</p><p class="text-3xl font-bold" id="cajaBalance">$0</p><p class="text-xs text-indigo-100 mt-1">(ingresos - gastos)</p></div>
-          </div>
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
-            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Registrar gasto personal</h3>
-            <form id="expenseForm" class="grid md:grid-cols-2 gap-4">
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">Fecha</label><input type="date" id="expenseDate" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">Monto</label><input type="number" id="expenseAmount" step="0.01" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"></div>
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">Categoría</label><select id="expenseCategory" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Comida</option><option>Transporte</option><option>Servicios</option><option>Entretenimiento</option><option>Salud</option><option>Educación</option><option>Otros</option></select></div>
-              <div><label class="block text-sm font-medium text-slate-700 mb-1">Descripción</label><input type="text" id="expenseDescription" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Concepto del gasto"></div>
-              <div class="md:col-span-2"><button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2.5 rounded-lg font-medium transition">Registrar gasto</button></div>
-            </form>
-          </div>
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div class="p-6 border-b border-slate-100"><h3 class="font-bold text-slate-800">Historial de gastos personales</h3></div>
-            <div class="overflow-x-auto">
-              <table class="w-full">
-                <thead class="bg-slate-50"><tr class="text-xs text-slate-600 uppercase"><th class="text-left p-4 font-semibold">Fecha</th><th class="text-left p-4 font-semibold">Categoría</th><th class="text-left p-4 font-semibold">Descripción</th><th class="text-right p-4 font-semibold">Monto</th><th class="text-right p-4 font-semibold"></th></tr></thead>
-                <tbody id="expensesList" class="text-sm divide-y divide-slate-100"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- CORTES DE CAJA -->
-        <section id="cortes" class="section-content hidden fade-in">
-          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📋 Cortes de Caja</h2><p class="text-slate-500 text-sm">Historial de cierres de caja diarios y mensuales</p></div>
-          <div class="grid md:grid-cols-3 gap-4 mb-6">
-            <button onclick="generarCorteDiario()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-6 rounded-2xl shadow-lg shadow-emerald-500/30 transition text-left">
-              <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><h3 class="text-lg font-bold">Corte del Día</h3></div>
-              <p class="text-emerald-100 text-sm">Cierra la caja del día actual y genera el resumen</p>
-            </button>
-            <button onclick="generarCorteMensual()" class="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white p-6 rounded-2xl shadow-lg shadow-brand-500/30 transition text-left">
-              <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><h3 class="text-lg font-bold">Corte del Mes</h3></div>
-              <p class="text-indigo-100 text-sm">Resumen completo del mes en curso</p>
-            </button>
-            <div class="bg-white border border-slate-200 p-6 rounded-2xl">
-              <div class="flex items-center gap-3 mb-2"><svg class="w-8 h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><h3 class="text-lg font-bold text-slate-800">Total de cortes</h3></div>
-              <p class="text-3xl font-bold text-slate-800" id="totalCortesCount">0</p>
-              <p class="text-sm text-slate-500 mt-1">Cortes registrados</p>
-            </div>
-          </div>
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div class="p-6 border-b border-slate-100 flex items-center justify-between flex-wrap gap-2">
-              <h3 class="font-bold text-slate-800">Historial de cortes</h3>
-              <div class="flex gap-2">
-                <button onclick="filtrarCortes('todos')" class="corte-filter-btn px-3 py-1.5 rounded-lg text-sm font-medium bg-brand-600 text-white" data-filter="todos">Todos</button>
-                <button onclick="filtrarCortes('dia')" class="corte-filter-btn px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-700" data-filter="dia">Diarios</button>
-                <button onclick="filtrarCortes('mes')" class="corte-filter-btn px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-700" data-filter="mes">Mensuales</button>
-              </div>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="w-full">
-                <thead class="bg-slate-50"><tr class="text-xs text-slate-600 uppercase"><th class="text-left p-4 font-semibold">Fecha</th><th class="text-left p-4 font-semibold">Tipo</th><th class="text-right p-4 font-semibold">Ingresos</th><th class="text-right p-4 font-semibold">Gastos</th><th class="text-right p-4 font-semibold">Ganancia</th><th class="text-right p-4 font-semibold">Servicios</th><th class="text-right p-4 font-semibold">Acciones</th></tr></thead>
-                <tbody id="cortesList" class="text-sm divide-y divide-slate-100"></tbody>
-              </table>
-            </div>
-            <div id="cortesEmpty" class="hidden p-12 text-center text-slate-400">
-              <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
-              <p class="font-semibold">Aún no hay cortes registrados</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- CONFIGURACIÓN -->
-        <section id="config" class="section-content hidden fade-in">
-          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">⚙️ Configuración del Taller</h2><p class="text-slate-500 text-sm">Personaliza los datos que aparecen en los tickets y notas.</p></div>
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 max-w-2xl">
-            <form id="configForm" class="space-y-5">
-              <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">Nombre del Taller</label>
-                <input type="text" id="cfgWorkshopName" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: VELOCELL REPARACIONES">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">Teléfono de Contacto</label>
-                <input type="text" id="cfgPhone" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 8681596881">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">Formato de Impresión</label>
-                <select id="cfgPrintFormat" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
-                  <option value="ticket80mm">Ticket Térmico (80mm)</option>
-                  <option value="letter_double">Hoja Carta (Doble copia en una hoja)</option>
-                </select>
-                <p class="text-xs text-slate-500 mt-1">"Hoja Carta" imprimirá dos medias hojas (una para el cliente, otra para ti) en una sola hoja.</p>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">Políticas / Pie de Ticket</label>
-                <textarea id="cfgPolicies" rows="4" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: • 30 días de garantía.&#10;• No nos hacemos responsables por datos.&#10;• Equipo no reclamado en 60 días se considera abandonado."></textarea>
-              </div>
-              <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar Configuración</button>
-            </form>
-          </div>
-        </section>
-
-        <!-- CEO / ESTADÍSTICAS -->
-        <section id="ceo" class="section-content hidden fade-in">
-          <div class="mb-6"><h2 class="text-2xl font-bold text-slate-800">📊 CEO Dashboard</h2><p class="text-slate-500 text-sm">Estadísticas y métricas clave del negocio</p></div>
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ingresos este mes</p><p class="text-2xl font-bold text-slate-800" id="ceoIngresosMes">$0</p><p class="text-xs mt-2" id="ceoIngresosTrend"></p></div>
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Servicios este mes</p><p class="text-2xl font-bold text-slate-800" id="ceoServiciosMes">0</p><p class="text-xs mt-2" id="ceoServiciosTrend"></p></div>
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ticket promedio</p><p class="text-2xl font-bold text-slate-800" id="ceoTicketPromedio">$0</p><p class="text-xs text-slate-500 mt-2">Por servicio</p></div>
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"><p class="text-xs text-slate-500 uppercase font-semibold mb-1">Ganancia neta mes</p><p class="text-2xl font-bold text-emerald-600" id="ceoGananciaMes">$0</p><p class="text-xs text-slate-500 mt-2">Después de gastos</p></div>
-          </div>
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
-            <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-800">📈 Ingresos últimos 6 meses</h3><span class="text-xs text-slate-500">Cobros realizados</span></div>
-            <div class="bar-chart" id="barChartIngresos"></div>
-          </div>
-          <div class="grid lg:grid-cols-2 gap-6 mb-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-              <h3 class="font-bold text-slate-800 mb-4">🔧 Top servicios del mes</h3>
-              <div id="topServiciosList" class="space-y-3"></div>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-              <h3 class="font-bold text-slate-800 mb-4">📱 Marcas más atendidas</h3>
-              <div id="topMarcasList" class="space-y-3"></div>
-            </div>
-          </div>
-          <div class="grid lg:grid-cols-2 gap-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-              <h3 class="font-bold text-slate-800 mb-4">💳 Métodos de pago</h3>
-              <div id="metodosPagoList" class="space-y-3"></div>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-              <h3 class="font-bold text-slate-800 mb-4">📅 Día más productivo</h3>
-              <div id="diaProductivo" class="text-center py-8">
-                <div class="w-20 h-20 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
-                <p class="text-3xl font-bold text-slate-800" id="diaProductivoNombre">—</p>
-                <p class="text-sm text-slate-500 mt-2" id="diaProductivoDetalle">Calculando...</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-  </div>
-</div>
-
-<!-- MODALES -->
+<!-- MODAL NUEVA ORDEN -->
 <div class="modal-overlay" id="newOrderModal">
-  <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-      <h2 class="text-xl font-bold text-slate-800">📝 Nueva Orden de Servicio</h2>
-      <button onclick="closeModal('newOrderModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+  <div class="bg-white rounded-2xl w-full max-w-xl p-6 max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100">
+    <div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
+      <div>
+        <h2 class="text-lg font-bold text-slate-900">Nueva Orden de Servicio</h2>
+        <p class="text-xs text-slate-500">Registra los datos del equipo y costos</p>
+      </div>
+      <button onclick="closeModal('newOrderModal')" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center font-bold">&times;</button>
     </div>
-    <form id="serviceForm" class="p-6 space-y-5">
-      <div><h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Datos del Cliente</h3>
-        <div class="grid md:grid-cols-2 gap-4">
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Nombre *</label><input type="text" id="clientName" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Teléfono *</label><input type="tel" id="clientPhone" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
+    <form id="newOrderForm" onsubmit="saveNewOrder(event)" class="space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Nombre del Cliente</label>
+          <input type="text" id="orderClientName" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-accent-500 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono</label>
+          <input type="text" id="orderClientPhone" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-accent-500 text-sm">
         </div>
       </div>
-      <div><h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Datos del Equipo</h3>
-        <div class="grid md:grid-cols-2 gap-4">
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Marca *</label><select id="deviceBrand" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Samsung</option><option>iPhone</option><option>Xiaomi</option><option>Huawei</option><option>Motorola</option><option>OPPO</option><option>LG</option></select></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Modelo *</label><input type="text" id="deviceModel" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">IMEI / Serie</label><input type="text" id="deviceIMEI" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Entrega estimada</label><input type="date" id="estimatedDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-          <<div class="md:col-span-2">
-  <label class="block text-sm font-medium text-slate-700 mb-2">🔐  / Patrón del equipo</label>
-  <div class="flex gap-3 mb-3">
-    <label class="flex-1 cursor-pointer">
-      <input type="radio" name="accessType" value="codigo" checked class="peer hidden" onchange="toggleAccessType()">
-      <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-3 text-center text-sm font-medium transition hover:bg-slate-50">
-        🔑 Código / 
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Equipo / Modelo</label>
+        <input type="text" id="orderDevice" placeholder="Ej. iPhone 13 Pro" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-accent-500 text-sm">
       </div>
-    </label>
-    <label class="flex-1 cursor-pointer">
-      <input type="radio" name="accessType" value="patron" class="peer hidden" onchange="toggleAccessType()">
-      <div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-lg p-3 text-center text-sm font-medium transition hover:bg-slate-50">
-        ⭕ Patrón
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Falla / Servicio a realizar</label>
+        <textarea id="orderProblem" rows="2" required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-accent-500 text-sm"></textarea>
       </div>
-    </label>
-  </div>
-  
-  <!-- Campo para código/ -->
-  <div id="codigoField">
-    <input type="text" id="devicePassword" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 1234, abc123, o dejar vacío si no tiene">
-    <p class="text-xs text-slate-500 mt-1">Necesario para probar el equipo después de reparar</p>
-  </div>
-  
-  <!-- Aviso para patrón -->
-  <div id="patronField" class="hidden">
-    <div class="bg-amber-50 border-2 border-amber-200 rounded-lg p-4 text-center">
-      <p class="text-amber-800 font-semibold">️ El patrón se anotará en la nota física</p>
-      <p class="text-sm text-amber-700 mt-1">El cliente dibujará su patrón en la hoja impresa al momento de la recepción</p>
-    </div>
-  </div>
-</div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Costo Refacción ($)</label>
+          <input type="number" id="orderPartCost" step="0.01" value="0" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg outline-none text-sm font-medium">
         </div>
-        <div class="mt-4">
-          <label class="block text-sm font-medium text-slate-700 mb-2">Estado físico del equipo al recibir:</label>
-          <div class="flex flex-wrap gap-3">
-            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Apagado" class="rounded text-brand-600 w-4 h-4"> Apagado</label>
-            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Encendido" class="rounded text-brand-600 w-4 h-4"> Encendido</label>
-            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Mojado" class="rounded text-brand-600 w-4 h-4"> Mojado</label>
-            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Golpeado" class="rounded text-brand-600 w-4 h-4"> Golpeado</label>
-            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" name="physCondition" value="Manipulado" class="rounded text-brand-600 w-4 h-4"> Manipulado</label>
-          </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Precio Total ($)</label>
+          <input type="number" id="orderTotalPrice" step="0.01" value="0" oninput="calculatePending()" required class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg outline-none text-sm font-bold text-accent-600">
         </div>
-        <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Problema reportado por el cliente *</label><textarea id="problemDescription" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
-        <div class="mt-4"><label class="block text-sm font-medium text-slate-700 mb-1">Trabajo a realizar</label><textarea id="accessories" placeholder="Revision, cambio de pantalla, etc..." class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" rows="2"></textarea></div>
-      </div>
-      <div><h3 class="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Servicio</h3>
-        <div class="grid md:grid-cols-2 gap-4">
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Estado *</label><select id="serviceStatus" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option>En diagnóstico</option><option>Por revisar</option><option>Revisado</option><option>En espera de autorización</option><option>Reparado (en espera de que pasen por él)</option><option>Entregado</option></select></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Precio total al cliente *</label><input type="number" id="repairCost" step="0.01" required class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">💰 Anticipo (opcional)</label><input type="number" id="advancePayment" step="0.01" value="0" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"><p class="text-xs text-slate-500 mt-1">Lo que el cliente deja al entregar el equipo</p></div>
-          <div class="md:col-span-2"><label class="block text-sm font-medium text-slate-700 mb-1">Método de pago esperado</label><select id="paymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Anticipo ($)</label>
+          <input type="number" id="orderAdvance" step="0.01" value="0" oninput="calculatePending()" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg outline-none text-sm font-medium">
         </div>
       </div>
-      <div class="flex gap-3 pt-4 border-t border-slate-100">
-        <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar e Imprimir Nota</button>
-        <button type="button" onclick="closeModal('newOrderModal')" class="px-6 py-3 border border-slate-200 rounded-xl font-medium hover:bg-slate-50 transition">Cancelar</button>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Método de Pago Anticipo</label>
+          <select id="orderAdvanceMethod" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl outline-none bg-white text-sm">
+            <option value="Efectivo">Efectivo</option>
+            <option value="Transferencia">Transferencia</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Saldo Pendiente</label>
+          <input type="text" id="orderPendingDisplay" readonly value="$0.00" class="w-full px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-slate-700 font-bold text-sm">
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+        <button type="button" onclick="closeModal('newOrderModal')" class="px-4 py-2.5 bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 font-medium text-sm">Cancelar</button>
+        <button type="submit" class="px-5 py-2.5 bg-accent-600 hover:bg-accent-700 text-white rounded-xl font-semibold text-sm shadow-sm transition">Guardar Orden</button>
       </div>
     </form>
   </div>
 </div>
 
-<div class="modal-overlay" id="addPartModal">
-  <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-    <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-      <h2 class="text-xl font-bold text-slate-800">🔧 Agregar Refacción</h2>
-      <button onclick="closeModal('addPartModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    </div>
-    <div class="p-6">
-      <div id="addPartStep1">
-        <p class="text-slate-600 mb-4">Selecciona el servicio al que agregarás la refacción:</p>
-        <div class="relative mb-4">
-          <svg class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input type="text" id="searchServiceForPart" placeholder="Buscar servicio..." oninput="filterServicesForPart()" class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
-        </div>
-        <div id="servicesForPartList" class="space-y-2 max-h-80 overflow-y-auto"></div>
-      </div>
-      <div id="addPartStep2" class="hidden">
-        <div class="bg-brand-50 border border-brand-200 rounded-xl p-4 mb-4">
-          <p class="text-xs text-brand-600 font-semibold uppercase mb-1">Servicio seleccionado</p>
-          <p id="selectedServiceInfo" class="font-semibold text-slate-800"></p>
-          <button onclick="backToServiceSelection()" class="mt-2 text-sm text-brand-600 hover:text-brand-700 font-medium">← Cambiar servicio</button>
-        </div>
-        <div class="space-y-4">
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Descripción *</label><input type="text" id="newPartDesc" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: Pantalla, batería..."></div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Costo interno de la refacción *</label><input type="number" id="newPartCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="0.00"></div>
-          <button onclick="confirmAddPart()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Agregar Refacción</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="detailModal">
-  <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-      <h2 class="text-xl font-bold text-slate-800">📄 Detalle del Servicio</h2>
-      <button onclick="closeModal('detailModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    </div>
-    <div id="detailContent" class="p-6"></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="editModal">
-  <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-      <h2 class="text-xl font-bold text-slate-800">✏️ Editar <span id="editFolio"></span></h2>
-      <button onclick="closeModal('editModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    </div>
-    <div class="p-6 space-y-5">
-      <div><label class="block text-sm font-semibold text-slate-700 mb-2">Estado del servicio</label><div class="flex flex-wrap gap-2" id="statusFlow"></div></div>
+<!-- MAIN APP -->
+<div id="mainApp" class="flex h-screen overflow-hidden">
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-white border-r border-slate-200 flex flex-col hidden lg:flex">
+    <div class="p-6 border-b border-slate-100 flex items-center gap-3">
+      <div class="w-9 h-9 bg-accent-600 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-sm">V</div>
       <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-1">Diagnóstico técnico</label>
-        <textarea id="editDiagnosis" rows="3" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Descripción del diagnóstico realizado..."></textarea>
-      </div>
-      <div><label class="block text-sm font-semibold text-slate-700 mb-1">Notas técnicas</label><textarea id="editTechnicalNotes" rows="2" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Observaciones, detalles técnicos..."></textarea></div>
-      <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Precio total al cliente</label><input type="number" id="editRepairCost" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Método de pago</label><select id="editPaymentMethod" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"><option value="">Seleccionar...</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option></select></div>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Entrega estimada</label><input type="date" id="editDelivery" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Anticipo recibido</label><input type="number" id="editAdvancePayment" step="0.01" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></div>
-      </div>
-      <div><label class="block text-sm font-semibold text-slate-700 mb-2">Refacciones</label><div id="editPartsList" class="space-y-2"></div></div>
-      <div class="bg-slate-50 rounded-xl p-4 space-y-1 text-sm">
-        <div class="flex justify-between"><span class="text-slate-600">Costo refacciones:</span><span class="font-semibold">$<span id="editTotalParts">0.00</span></span></div>
-        <div class="flex justify-between"><span class="text-slate-600">Precio al cliente:</span><span class="font-semibold">$<span id="editRepairCostDisplay">0.00</span></span></div>
-        <div class="flex justify-between pt-2 border-t border-slate-200"><span class="font-semibold text-slate-800">Ganancia neta estimada:</span><span class="font-bold text-emerald-600">$<span id="editNetProfit">0.00</span></span></div>
-      </div>
-      <button onclick="saveEdit()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl transition">💾 Guardar Cambios</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="checkoutModal">
-  <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-      <h2 class="text-xl font-bold text-slate-800">💰 Cobrar Servicio</h2>
-      <button onclick="closeModal('checkoutModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    </div>
-    <div class="p-6" id="checkoutContent"></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="corteDetailModal">
-  <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-    <div class="sticky top-0 bg-white border-b border-slate-100 p-6 flex items-center justify-between z-10">
-      <h2 class="text-xl font-bold text-slate-800" id="corteDetailTitle">Detalle del Corte</h2>
-      <button onclick="closeModal('corteDetailModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    </div>
-    <div id="corteDetailContent" class="p-6"></div>
-  </div>
-</div>
-
-<div id="printContainer"></div>
-
-<div id="loading" class="hidden fixed inset-0 bg-white/95 z-[100] flex items-center justify-center flex-col gap-3">
-  <div class="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
-  <p class="text-slate-600 font-medium" id="loadingText">Procesando...</p>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy, setDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAkvNPt0K_OheECcYVFnH_IHeQlEBdTrCg",
-  authDomain: "tallerreparaciones.firebaseapp.com",
-  projectId: "tallerreparaciones",
-  storageBucket: "tallerreparaciones.firebasestorage.app",
-  messagingSenderId: "510483960568",
-  appId: "1:510483960568:web:3e87fa3819a7d2bdf2210d"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const USERS = [
-  { email: "ismaelrh@velocell.com", password: "ROHI981115HTSDNS07", fullName: "Ismael Rodríguez", role: "admin" },
-  { email: "demo@demo.com", password: "demo2024", fullName: "DEMO", role: "recepcion" }
-];
-
-const STATUSES = ['En diagnóstico','Por revisar','Revisado','En espera de autorización','Reparado (en espera de que pasen por él)','Entregado'];
-const STATUS_COLORS = {
-  'En diagnóstico': 'bg-blue-100 text-blue-700',
-  'Por revisar': 'bg-amber-100 text-amber-700',
-  'Revisado': 'bg-indigo-100 text-indigo-700',
-  'En espera de autorización': 'bg-orange-100 text-orange-700',
-  'Reparado (en espera de que pasen por él)': 'bg-emerald-100 text-emerald-700',
-  'Entregado': 'bg-slate-100 text-slate-700'
-};
-const DIAS_SEMANA = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-
-let currentUser = null;
-let allServices = [];
-let allExpenses = [];
-let allCortes = [];
-let servicePhotos = {};
-let editParts = [];
-let editId = null;
-let editStatus = '';
-let statusFilter = '';
-let selectedServiceForPart = null;
-let checkoutServiceId = null;
-let corteFilter = 'todos';
-let unsubscribeServices = null, unsubscribeExpenses = null, unsubscribeCortes = null, unsubscribeSettings = null, unsubscribePhotos = null;
-let currentEvidenceFolio = null;
-
-let workshopSettings = {
-  workshopName: "VELOCELL REPARACIONES",
-  phone: "8681596881",
-  printFormat: "letter_double",
-  policies: "• Ticket obligatorio: La garantía aplica únicamente con la presentación de este ticket. Su pérdida la invalida.\n• Abandono (90 días): Equipos no retirados en 90 días naturales se consideran abandonados, perdiendo el cliente sus derechos sobre el mismo.\n• Equipos mojados: Los equipos con antecedentes o daño por líquidos no cuentan con garantía.\n• Manipulación externa: Cualquier apertura, alteración o intervención por terceros anula automáticamente la garantía.\n• Pantallas económicas: En pantallas de calidad baja y media no hay garantía."
-};
-
-function checkEvidenceMode() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const folio = urlParams.get('folio');
-  if (folio) {
-    currentEvidenceFolio = folio;
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('mainApp').classList.add('hidden');
-    document.getElementById('evidencePortal').classList.add('active');
-    loadEvidenceService(folio);
-    return true;
-  }
-  return false;
-}
-
-async function loadEvidenceService(folio) {
-  document.getElementById('evidenceFolio').textContent = folio;
-  try {
-    const q = query(collection(db, "services"), where("folio", "==", folio));
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) {
-      document.getElementById('evidenceServiceInfo').innerHTML = '<p class="text-red-600">❌ Servicio no encontrado</p>';
-      return;
-    }
-    const service = snapshot.docs[0].data();
-    document.getElementById('evidenceServiceInfo').innerHTML = `
-      <div class="grid grid-cols-2 gap-2 text-sm">
-        <div><strong>Cliente:</strong> ${service.client.name}</div>
-        <div><strong>Teléfono:</strong> ${service.client.phone}</div>
-        <div><strong>Equipo:</strong> ${service.device.brand} ${service.device.model}</div>
-        <div><strong>Estado:</strong> ${service.service.status}</div>
-      </div>
-      <div class="mt-2 text-sm"><strong>Problema:</strong> ${service.device.problem}</div>
-    `;
-    loadEvidencePhotos(folio);
-  } catch (error) {
-    console.error('Error:', error);
-    document.getElementById('evidenceServiceInfo').innerHTML = '<p class="text-red-600">❌ Error al cargar: ' + error.message + '</p>';
-  }
-}
-
-function loadEvidencePhotos(folio) {
-  const photosRef = collection(db, "servicePhotos");
-  const q = query(photosRef, where("folio", "==", folio), orderBy("uploadedAt", "desc"));
-  unsubscribePhotos = onSnapshot(q, (snapshot) => {
-    const photos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    servicePhotos[folio] = photos;
-    renderEvidencePhotos(photos);
-  }, (error) => {
-    console.error('Error loading photos:', error);
-  });
-}
-
-function renderEvidencePhotos(photos) {
-  const container = document.getElementById('evidencePhotos');
-  if (photos.length === 0) {
-    container.innerHTML = '<p class="text-center text-slate-400 col-span-full py-8">📷 Aún no hay fotos registradas</p>';
-    return;
-  }
-  container.innerHTML = photos.map(photo => `
-    <div class="photo-item">
-      <img src="${photo.url}" onclick="window.open('${photo.url}', '_blank')" alt="Evidencia">
-      <button class="delete-photo" onclick="deleteEvidencePhoto('${photo.id}', '${photo.storagePath}')">×</button>
-    </div>
-  `).join('');
-}
-
-window.handlePhotoUpload = async function(event) {
-  const files = event.target.files;
-  if (!files || files.length === 0) return;
-  const progressDiv = document.getElementById('uploadProgress');
-  const progressBar = document.getElementById('progressBar');
-  const progressText = document.getElementById('progressText');
-  progressDiv.classList.remove('hidden');
-  let uploaded = 0;
-  const totalFiles = files.length;
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const timestamp = Date.now();
-    const randomId = Math.random().toString(36).substring(7);
-    const fileName = `${timestamp}_${randomId}_${file.name}`;
-    const storagePath = `evidence/${currentEvidenceFolio}/${fileName}`;
-    try {
-      const storageRef = ref(storage, storagePath);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on('state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          const totalProgress = ((uploaded + (i * (progress/100))) / totalFiles) * 100;
-          progressBar.style.width = totalProgress + '%';
-          progressText.textContent = `Subiendo ${Math.round(totalProgress)}%`;
-        },
-        (error) => {
-          console.error('Upload error:', error);
-          alert('Error al subir la foto: ' + error.message);
-          progressDiv.classList.add('hidden');
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          await addDoc(collection(db, "servicePhotos"), {
-            folio: currentEvidenceFolio,
-            url: downloadURL,
-            storagePath: storagePath,
-            uploadedAt: new Date().toISOString(),
-            uploadedBy: 'Evidencia Portal',
-            fileName: file.name
-          });
-          uploaded++;
-          const totalProgress = (uploaded / totalFiles) * 100;
-          progressBar.style.width = totalProgress + '%';
-          progressText.textContent = `Subidas ${uploaded} de ${totalFiles}`;
-          if (uploaded === totalFiles) {
-            setTimeout(() => {
-              progressDiv.classList.add('hidden');
-              progressBar.style.width = '0%';
-            }, 1500);
-          }
-        }
-      );
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error al procesar la foto: ' + error.message);
-    }
-  }
-  event.target.value = '';
-}
-
-window.deleteEvidencePhoto = async function(photoId, storagePath) {
-  if (!confirm('¿Eliminar esta foto de evidencia?')) return;
-  try {
-    const photoRef = ref(storage, storagePath);
-    await deleteObject(photoRef);
-    await deleteDoc(doc(db, "servicePhotos", photoId));
-    showToast('🗑️ Foto eliminada');
-  } catch (error) {
-    alert('Error: ' + error.message);
-  }
-}
-
-async function loadSettings() {
-  const docRef = doc(db, "settings", "general");
-  unsubscribeSettings = onSnapshot(docRef, (docSnap) => {
-    if (docSnap.exists()) {
-      workshopSettings = { ...workshopSettings, ...docSnap.data() };
-    }
-  });
-}
-
-function enterApp(user) {
-  currentUser = { email: user.email, fullName: user.fullName, role: user.role };
-  document.getElementById('loginScreen').classList.add('hidden');
-  if (currentUser.role === 'admin') document.getElementById('btnConfig').classList.remove('hidden');
-  document.getElementById('mainApp').classList.remove('hidden');
-  const initial = currentUser.fullName.charAt(0).toUpperCase();
-  document.getElementById('userAvatar').textContent = initial;
-  document.getElementById('navAvatar').textContent = initial;
-  document.getElementById('sidebarUserName').textContent = currentUser.fullName;
-  document.getElementById('navUserName').textContent = currentUser.fullName;
-  document.getElementById('sidebarUserEmail').textContent = currentUser.email + (currentUser.role === 'recepcion' ? ' (Recepción)' : '');
-  document.getElementById('navUserEmail').textContent = currentUser.email;
-  const hour = new Date().getHours();
-  let greeting = hour < 12 ? 'Buenos días' : (hour < 19 ? 'Buenas tardes' : 'Buenas noches');
-  document.getElementById('greeting').textContent = `${greeting}, ${currentUser.fullName.split(' ')[0]} 👋`;
-  document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-  document.querySelector('[data-section="dashboard"]').classList.add('bg-brand-50','text-brand-600');
-  loadSettings();
-  startRealtimeSync();
-  checkOpenCash();
-}
-
-const savedSession = localStorage.getItem('tallerSession');
-if (!checkEvidenceMode() && savedSession) {
-  try {
-    const session = JSON.parse(savedSession);
-    const hoursSinceLogin = (Date.now() - session.timestamp) / (1000 * 60 * 60);
-    if (hoursSinceLogin < 24) {
-      const user = USERS.find(u => u.email === session.email);
-      if (user) {
-        enterApp(user);
-      } else { localStorage.removeItem('tallerSession'); }
-    } else { localStorage.removeItem('tallerSession'); }
-  } catch (e) { localStorage.removeItem('tallerSession'); }
-}
-
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass = document.getElementById('loginPassword').value;
-  const errorDiv = document.getElementById('loginError');
-  const validUser = USERS.find(u => u.email === email && u.password === pass);
-  if (validUser) {
-    localStorage.setItem('tallerSession', JSON.stringify({ email: validUser.email, fullName: validUser.fullName, role: validUser.role, timestamp: Date.now() }));
-    errorDiv.classList.add('hidden');
-    enterApp(validUser);
-  } else {
-    errorDiv.textContent = '❌ Correo o contraseña incorrectos';
-    errorDiv.classList.remove('hidden');
-  }
-});
-
-function checkOpenCash() {
-  const hoyStr = new Date().toDateString();
-  const cashOpenedToday = localStorage.getItem('cashOpened_' + hoyStr);
-  if (!cashOpenedToday && currentUser.role === 'admin') {
-    setTimeout(() => openModal('openCashModal'), 1000);
-  }
-}
-
-window.confirmOpenCash = function() {
-  const initialCash = parseFloat(document.getElementById('initialCash').value) || 0;
-  const hoyStr = new Date().toDateString();
-  localStorage.setItem('cashOpened_' + hoyStr, JSON.stringify({
-    initialCash: initialCash,
-    openedAt: new Date().toISOString(),
-    openedBy: currentUser.fullName
-  }));
-  closeModal('openCashModal');
-  showToast('✅ Caja abierta exitosamente');
-  loadCajaHoy();
-}
-  // Registrar anticipo manualmente (por si el cliente paga anticipo después de crear la orden)
-window.registrarAnticipo = async function(serviceId) {
-  const svc = allServices.find(s => s.id === serviceId);
-  if (!svc) return;
-  
-  const monto = prompt(`¿Cuánto deja de anticipo? (Restante: $${(svc.service.remainingAmount || 0).toFixed(2)})`);
-  if (!monto || isNaN(parseFloat(monto))) return;
-  const amount = parseFloat(monto);
-  
-  const method = prompt('Método de pago (Efectivo/Transferencia/Tarjeta):', 'Efectivo');
-  if (!method) return;
-  
-  const now = new Date().toISOString();
-  const newAdvance = (svc.service.advancePayment || 0) + amount;
-  const newRemaining = svc.service.repairCost - newAdvance;
-  const payments = svc.service.payments || [];
-  payments.push({ amount: amount, date: now, type: 'anticipo', method: method });
-  
-  try {
-    await updateDoc(doc(db, "services", serviceId), {
-      'service.advancePayment': newAdvance,
-      'service.remainingAmount': newRemaining,
-      'service.paidAmount': newAdvance,
-      'service.paymentStatus': newRemaining <= 0 ? 'Pagado' : 'Parcial',
-      'service.advancePaymentDate': now,
-      'service.payments': payments
-    });
-    showToast('✅ Anticipo registrado: $' + amount.toFixed(2));
-  } catch (error) {
-    alert('Error: ' + error.message);
-  }
-};
-
-window.logout = function() {
-  localStorage.removeItem('tallerSession');
-  if (unsubscribeServices) unsubscribeServices();
-  if (unsubscribeExpenses) unsubscribeExpenses();
-  if (unsubscribeCortes) unsubscribeCortes();
-  if (unsubscribeSettings) unsubscribeSettings();
-  if (unsubscribePhotos) unsubscribePhotos();
-  currentUser = null;
-  location.reload();
-}
-
-function startRealtimeSync() {
-  const qServices = query(collection(db, "services"), orderBy("date", "desc"));
-  unsubscribeServices = onSnapshot(qServices, (snapshot) => {
-    allServices = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    refreshAll();
-  });
-  const qExpenses = query(collection(db, "expenses"), orderBy("date", "desc"));
-  unsubscribeExpenses = onSnapshot(qExpenses, (snapshot) => {
-    allExpenses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    loadExpenses();
-    loadCajaHoy();
-  });
-  const qCortes = query(collection(db, "dailyCuts"), orderBy("createdAt", "desc"));
-  unsubscribeCortes = onSnapshot(qCortes, (snapshot) => {
-    allCortes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    renderCortes();
-    updateCorteCount();
-  });
-}
-
-window.showSection = function(id, btn) {
-  document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-  document.querySelectorAll('.nav-btn').forEach(b => {
-    b.classList.remove('bg-brand-50','text-brand-600');
-    b.classList.add('text-slate-600');
-  });
-  if (btn) { btn.classList.add('bg-brand-50','text-brand-600'); btn.classList.remove('text-slate-600'); }
-  if (window.innerWidth < 1024) toggleSidebar(false);
-  if (id === 'ceo') updateCEOStats();
-  if (id === 'config') loadConfigForm();
-}
-
-window.toggleSidebar = function(forceState) {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebarOverlay');
-  const isOpen = !sidebar.classList.contains('-translate-x-full');
-  const shouldOpen = forceState !== undefined ? forceState : !isOpen;
-  if (shouldOpen) { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); }
-  else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
-}
-
-window.openModal = function(id) { document.getElementById(id).classList.add('active'); }
-window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
-
-document.getElementById('serviceForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  showLoading('Guardando orden...');
-  const rc = parseFloat(document.getElementById('repairCost').value);
-  const advance = parseFloat(document.getElementById('advancePayment').value) || 0;
-  const physConditions = Array.from(document.querySelectorAll('input[name="physCondition"]:checked')).map(cb => cb.value);
-  const now = new Date().toISOString();
-  
-  const svc = {
-    folio: 'SRV-' + Date.now().toString().slice(-6),
-    client: { name: document.getElementById('clientName').value, phone: document.getElementById('clientPhone').value },
-    device: {
-      brand: document.getElementById('deviceBrand').value,
-      model: document.getElementById('deviceModel').value,
-      imei: document.getElementById('deviceIMEI').value,
-      problem: document.getElementById('problemDescription').value,
-      accessories: document.getElementById('accessories').value,
-      physCondition: physConditions,
-      password: document.getElementById('devicePassword').value || '',
-      accessType: document.querySelector('input[name="accessType"]:checked').value
-    },
-    service: {
-      status: document.getElementById('serviceStatus').value,
-      repairCost: rc,
-      paymentStatus: advance > 0 ? 'Parcial' : 'Pendiente',
-      paymentMethod: document.getElementById('paymentMethod').value,
-      estimatedDelivery: document.getElementById('estimatedDelivery').value,
-      parts: [],
-      totalParts: 0,
-      netProfit: rc,
-      paidAmount: advance,
-      paidDate: advance > 0 ? now : null,
-      advancePayment: advance,
-      advancePaymentDate: advance > 0 ? now : null,
-      remainingAmount: rc - advance,
-      diagnosis: '',
-      technicalNotes: '',
-      warranty: '',
-      payments: advance > 0 ? [{ amount: advance, date: now, type: 'anticipo', method: document.getElementById('paymentMethod').value }] : []
-    },
-    date: now,
-    userEmail: currentUser.email,
-    technician: currentUser.fullName
-  };
-  try {
-    const docRef = await addDoc(collection(db, "services"), svc);
-    hideLoading();
-    closeModal('newOrderModal');
-    this.reset();
-    document.getElementById('advancePayment').value = '0';
-    showToast('✅ Orden creada exitosamente');
-    setTimeout(() => printReceptionTicket(docRef.id), 500);
-  } catch (error) { hideLoading(); alert("Error: " + error.message); }
-});
-
-  // Función para alternar entre Código y Patrón
-window.toggleAccessType = function() {
-  const accessType = document.querySelector('input[name="accessType"]:checked').value;
-  const codigoField = document.getElementById('codigoField');
-  const patronField = document.getElementById('patronField');
-  const passwordInput = document.getElementById('devicePassword');
-  
-  if (accessType === 'codigo') {
-    codigoField.classList.remove('hidden');
-    patronField.classList.add('hidden');
-    passwordInput.removeAttribute('required');
-  } else {
-    codigoField.classList.add('hidden');
-    patronField.classList.remove('hidden');
-    passwordInput.value = '';
-  }
-};
-  
-window.openAddPartModal = function() {
-  selectedServiceForPart = null;
-  document.getElementById('addPartStep1').classList.remove('hidden');
-  document.getElementById('addPartStep2').classList.add('hidden');
-  document.getElementById('searchServiceForPart').value = '';
-  document.getElementById('newPartDesc').value = '';
-  document.getElementById('newPartCost').value = '';
-  renderServicesForPartList();
-  openModal('addPartModal');
-}
-
-function renderServicesForPartList(filter = '') {
-  const active = allServices.filter(s => s && s.service && s.service.status !== 'Entregado');
-  const filtered = filter ? active.filter(s => s.client.name.toLowerCase().includes(filter.toLowerCase()) || s.client.phone.includes(filter) || s.folio.toLowerCase().includes(filter.toLowerCase())) : active;
-  const container = document.getElementById('servicesForPartList');
-  if (filtered.length === 0) { container.innerHTML = '<p class="text-center text-slate-400 py-8">📭 No hay servicios activos</p>'; return; }
-  container.innerHTML = filtered.map(s => `
-    <div class="p-4 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50 transition" onclick="selectServiceForPart('${s.id}')">
-      <div class="flex justify-between items-start gap-3">
-        <div class="flex-1 min-w-0">
-          <p class="font-semibold text-slate-800">${s.folio}</p>
-          <p class="text-sm text-slate-600">${s.client.name}</p>
-          <p class="text-xs text-slate-500 mt-1">${s.device.brand} ${s.device.model} • Precio: $${s.service.repairCost.toFixed(2)}</p>
-        </div>
-        <span class="text-xs px-2 py-1 rounded-full whitespace-nowrap ${STATUS_COLORS[s.service.status] || 'bg-slate-100 text-slate-700'}">${s.service.status}</span>
+        <h1 class="font-bold text-slate-900 text-sm tracking-tight">VELOCELL</h1>
+        <p class="text-xs text-slate-500">Gestión de Taller</p>
       </div>
     </div>
-  `).join('');
-}
-
-window.filterServicesForPart = function() { renderServicesForPartList(document.getElementById('searchServiceForPart').value); }
-window.selectServiceForPart = function(id) {
-  selectedServiceForPart = allServices.find(s => s.id === id);
-  if (!selectedServiceForPart) return;
-  document.getElementById('selectedServiceInfo').textContent = `${selectedServiceForPart.folio} - ${selectedServiceForPart.client.name} (${selectedServiceForPart.device.brand} ${selectedServiceForPart.device.model})`;
-  document.getElementById('addPartStep1').classList.add('hidden');
-  document.getElementById('addPartStep2').classList.remove('hidden');
-}
-window.backToServiceSelection = function() {
-  selectedServiceForPart = null;
-  document.getElementById('addPartStep1').classList.remove('hidden');
-  document.getElementById('addPartStep2').classList.add('hidden');
-}
-
-window.confirmAddPart = async function() {
-  const desc = document.getElementById('newPartDesc').value.trim();
-  const cost = parseFloat(document.getElementById('newPartCost').value);
-  if (!desc || !cost) { alert('Completa descripción y costo'); return; }
-  if (!selectedServiceForPart) { alert('Selecciona un servicio'); return; }
-  showLoading('Agregando refacción...');
-  try {
-    const currentParts = selectedServiceForPart.service.parts || [];
-    const newParts = [...currentParts, { description: desc, cost: cost }];
-    const totalParts = newParts.reduce((sum, p) => sum + p.cost, 0);
-    const repairCost = selectedServiceForPart.service.repairCost || 0;
-    await updateDoc(doc(db, "services", selectedServiceForPart.id), { 'service.parts': newParts, 'service.totalParts': totalParts, 'service.netProfit': repairCost - totalParts });
-    hideLoading();
-    closeModal('addPartModal');
-    showToast('✅ Refacción agregada (registro interno)');
-  } catch (error) { hideLoading(); alert("Error: " + error.message); }
-}
-
-window.cobrarServicio = function(id) {
-  checkoutServiceId = id;
-  const s = allServices.find(x => x.id === id);
-  if (!s) return;
-  renderCheckout(s);
-  openModal('checkoutModal');
-}
-
-function renderCheckout(s) {
-  const parts = s.service.parts || [];
-  const warrantyOptions = ['30 días','60 días','90 días','180 días','1 año','Sin garantía'];
-  const currentWarranty = s.service.warranty || '';
-  const advance = s.service.advancePayment || 0;
-  const remaining = s.service.remainingAmount !== undefined ? s.service.remainingAmount : (s.service.repairCost - advance);
-  document.getElementById('checkoutContent').innerHTML = `
-    <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
-      <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
-      <h3 class="text-2xl font-bold mt-1">${s.client.name}</h3>
-      <p class="text-indigo-100 text-sm mt-1">📞 ${s.client.phone}</p>
-    </div>
-    <div class="grid md:grid-cols-2 gap-4 mb-6">
-      <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="font-semibold text-slate-800">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
-      <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">Problema</p><p class="text-sm text-slate-800">${s.device.problem || '—'}</p></div>
-    </div>
-    ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-sm text-slate-800">${s.service.diagnosis}</p></div>` : ''}
-    <div class="bg-slate-50 rounded-xl p-4 mb-6">
-      <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Refacciones (registro interno)</p>
-      ${parts.length ? parts.map(p => `<div class="flex justify-between py-1 text-sm"><span>${p.description}</span><span class="font-medium">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>'}
-    </div>
-    <div class="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-5 mb-6">
-      <div class="flex justify-between items-center mb-2">
-        <div><p class="text-xs text-emerald-700 font-semibold uppercase">Total acordado</p></div>
-        <p class="text-3xl font-bold text-emerald-700">$${s.service.repairCost.toFixed(2)}</p>
-      </div>
-      ${advance > 0 ? `<div class="flex justify-between items-center text-sm text-emerald-600 border-t border-emerald-200 pt-2 mt-2"><span>Menos anticipo ya pagado:</span><span>-$${advance.toFixed(2)}</span></div>
-      <div class="flex justify-between items-center font-bold text-emerald-800 border-t border-emerald-300 pt-2 mt-2"><span>RESTANTE POR COBRAR:</span><span>$${remaining.toFixed(2)}</span></div>` : ''}
-    </div>
-    <div class="space-y-4 mb-6">
-      <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-2">Método de pago</label>
-        <div class="grid grid-cols-3 gap-2">
-          ${['Efectivo','Transferencia','Tarjeta'].map(m => `<label class="cursor-pointer"><input type="radio" name="checkoutPayment" value="${m}" ${s.service.paymentMethod === m ? 'checked' : ''} class="peer hidden"><div class="peer-checked:bg-brand-600 peer-checked:text-white peer-checked:border-brand-600 border-2 border-slate-200 rounded-xl p-3 text-center font-medium text-sm transition hover:border-brand-400">${m === 'Efectivo' ? '💵' : m === 'Transferencia' ? '🏦' : '💳'}<br>${m}</div></label>`).join('')}
+    <nav class="flex-1 p-4 space-y-1">
+      <button onclick="showSection('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition">📊 Dashboard</button>
+      <button onclick="showSection('ordenes')" id="nav-ordenes" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition">📋 Órdenes</button>
+      <button onclick="showSection('caja')" id="nav-caja" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-accent-600 bg-accent-50 transition">💰 Caja y Finanzas</button>
+    </nav>
+    <div class="p-4 border-t border-slate-100">
+      <div class="flex items-center gap-3 px-2">
+        <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs">IR</div>
+        <div class="overflow-hidden">
+          <p class="text-xs font-semibold text-slate-900 truncate">Ismael Rodríguez</p>
+          <p class="text-[11px] text-slate-500 truncate">Técnico Administrador</p>
         </div>
       </div>
-      <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-2">Garantía a otorgar</label>
-        <select id="checkoutWarranty" class="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
-          <option value="">-- Seleccionar garantía --</option>
-          ${warrantyOptions.map(w => `<option value="${w}" ${currentWarranty === w ? 'selected' : ''}>${w}</option>`).join('')}
-          <option value="personalizada">Personalizada...</option>
-        </select>
-        <input type="text" id="checkoutWarrantyCustom" class="hidden mt-2 w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Ej: 45 días">
+    </div>
+  </aside>
+
+  <!-- CONTENT AREA -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center">
+      <h2 id="sectionTitle" class="text-lg font-bold text-slate-900">Caja / Finanzas</h2>
+      <div class="flex items-center gap-3">
+        <span class="text-xs px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/60 rounded-full font-medium flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Caja Abierta
+        </span>
       </div>
-    </div>
-    <div class="flex flex-col sm:flex-row gap-3">
-      <button onclick="confirmCheckout()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-emerald-500/30">✅ Confirmar Cobro</button>
-      <button onclick="printTicket('${s.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg> Imprimir Ticket</button>
-    </div>
-  `;
-  document.getElementById('checkoutWarranty').addEventListener('change', function() {
-    const custom = document.getElementById('checkoutWarrantyCustom');
-    if (this.value === 'personalizada') { custom.classList.remove('hidden'); custom.focus(); }
-    else { custom.classList.add('hidden'); }
-  });
-}
+    </header>
 
-window.confirmCheckout = async function() {
-  if (!checkoutServiceId) return;
-  const paymentMethod = document.querySelector('input[name="checkoutPayment"]:checked')?.value;
-  if (!paymentMethod) { alert('Selecciona un método de pago'); return; }
-  let warranty = document.getElementById('checkoutWarranty').value;
-  if (!warranty) { alert('Debes seleccionar o escribir una garantía'); return; }
-  if (warranty === 'personalizada') {
-    warranty = document.getElementById('checkoutWarrantyCustom').value.trim();
-    if (!warranty) { alert('Escribe la garantía personalizada'); return; }
-  }
-  if (!confirm(`¿Confirmar cobro?\n\nSe marcará como PAGADO y ENTREGADO.`)) return;
-  showLoading('Procesando cobro...');
-  try {
-    const svc = allServices.find(s => s.id === checkoutServiceId);
-    const now = new Date().toISOString();
-    const remaining = svc.service.remainingAmount || (svc.service.repairCost - (svc.service.advancePayment || 0));
-    
-    // Agregar el pago del resto al historial de payments
-    const payments = svc.service.payments || [];
-    payments.push({ 
-      amount: remaining, 
-      date: now, 
-      type: 'cobro_final', 
-      method: paymentMethod 
-    });
-    
-    await updateDoc(doc(db, "services", checkoutServiceId), { 
-      'service.paymentStatus': 'Pagado', 
-      'service.paidAmount': svc.service.repairCost,
-      'service.paidDate': now,
-      'service.paymentMethod': paymentMethod, 
-      'service.warranty': warranty, 
-      'service.status': 'Entregado',
-      'service.payments': payments
-    });
-    hideLoading();
-    closeModal('checkoutModal');
-    showToast('✅ Cobro confirmado. Servicio marcado como Entregado.');
-    setTimeout(() => printTicket(checkoutServiceId), 500);
-  } catch (error) { hideLoading(); alert("Error: " + error.message); }
-};
-
-window.printTicket = function(id) {
-  const s = allServices.find(x => x.id === id);
-  if (!s) return;
-  const warranty = s.service.warranty || 'No especificada';
-  const paymentMethod = s.service.paymentMethod || 'No especificado';
-  const paidDate = s.service.paidDate ? new Date(s.service.paidDate).toLocaleString('es-MX') : new Date().toLocaleString('es-MX');
-  const isPaid = s.service.paymentStatus === 'Pagado';
-  const tech = s.technician || 'No especificado';
-  const ticketHTML = `
-    <div class="ticket-thermal">
-      <div class="t-header"><h2>${workshopSettings.workshopName}</h2><p>Ticket de ${isPaid ? 'Cobro' : 'Servicio'}</p></div>
-      <div class="t-divider"></div>
-      <div class="t-row"><span><strong>Folio:</strong></span><span><strong>${s.folio}</strong></span></div>
-      <div class="t-row"><span>Fecha:</span><span>${paidDate}</span></div>
-      <div class="t-divider"></div>
-      <p class="t-section-title">CLIENTE</p>
-      <div class="t-row"><span>Nombre:</span><span>${s.client.name}</span></div>
-      <div class="t-row"><span>Teléfono:</span><span>${s.client.phone}</span></div>
-      <div class="t-divider"></div>
-      <p class="t-section-title">EQUIPO</p>
-      <div class="t-row"><span>Equipo:</span><span>${s.device.brand} ${s.device.model}</span></div>
-      ${s.device.imei ? `<div class="t-row"><span>IMEI:</span><span>${s.device.imei}</span></div>` : ''}
-      <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
-      ${s.service.diagnosis ? `<div style="margin:4px 0"><span style="font-weight:bold">Diagnóstico:</span><br>${s.service.diagnosis}</div>` : ''}
-      <div class="t-divider"></div>
-      <div class="t-row t-total"><span>TOTAL A PAGAR:</span><span>$${s.service.repairCost.toFixed(2)}</span></div>
-      ${s.service.advancePayment > 0 ? `<div class="t-row"><span>Anticipo:</span><span>-$${s.service.advancePayment.toFixed(2)}</span></div><div class="t-row t-total"><span>RESTANTE:</span><span>$${(s.service.remainingAmount !== undefined ? s.service.remainingAmount : s.service.repairCost - s.service.advancePayment).toFixed(2)}</span></div>` : ''}
-      <div class="t-row"><span>Método de pago:</span><span>${paymentMethod}</span></div>
-      <div class="t-row"><span>Estado:</span><span><strong>${isPaid ? 'PAGADO' : 'PENDIENTE'}</strong></span></div>
-      <div class="t-divider"></div>
-      <div class="t-warranty"><div class="t-row"><span><strong>GARANTÍA:</strong></span><span><strong>${warranty}</strong></span></div></div>
-      <div class="t-footer">
-        <p>Atendido por: ${tech}</p>
-        <div class="t-divider"></div>
-        <p style="white-space:pre-line">${workshopSettings.policies}</p>
-        <p style="margin-top:10px;font-weight:bold">Contacto: ${workshopSettings.phone}</p>
-      </div>
-    </div>
-  `;
-  const printContainer = document.getElementById('printContainer');
-  printContainer.className = 'print-ticket';
-  printContainer.innerHTML = `
-    <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-      <div><strong>🖨️ Vista previa del ticket</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
-      <div style="display:flex;gap:10px">
-        <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
-        <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
-      </div>
-    </div>
-    <div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper ticket-mode">${ticketHTML}</div></div>
-  `;
-  printContainer.classList.add('active');
-}
-
-window.printReceptionTicket = function(id) {
-  const s = allServices.find(x => x.id === id);
-  if (!s) return;
-  const isDouble = workshopSettings.printFormat === 'letter_double';
-  const fecha = new Date(s.date).toLocaleString('es-MX');
-  const tech = s.technician || 'No especificado';
-  const conditions = s.device.physCondition && s.device.physCondition.length > 0 ? s.device.physCondition.join(', ') : 'Ninguno especificado';
-  let html = '';
-  if (isDouble) {
-    const half = `
-      <div class="letter-half">
-        <div class="letter-header">
-          <h2>${workshopSettings.workshopName}</h2>
-          <p style="font-size:14px;font-weight:bold;margin-top:5px">NOTA DE RECEPCIÓN ${s.folio}</p>
-        </div>
-        <div class="letter-section">
-          <h3>Datos del Cliente</h3>
-          <div class="letter-row"><span><strong>Nombre:</strong></span><strong>${s.client.name}</strong></div>
-          <div class="letter-row"><span><strong>Teléfono:</strong></span><strong>${s.client.phone}</strong></div>
-          <div class="letter-row"><span><strong>Fecha:</strong></span><span>${fecha}</span></div>
-        </div>
-        <div class="letter-section">
-          <h3>Equipo Recibido</h3>
-          <div class="letter-row"><span><strong>Equipo:</strong></span><strong>${s.device.brand} ${s.device.model}</strong></div>
-          ${s.device.imei ? `<div class="letter-row"><span><strong>IMEI/Serie:</strong></span><span>${s.device.imei}</span></div>` : ''}
-          ${s.device.accessType === 'patron' ? `
-  <div style="margin:10px 0; padding:10px; border:1px dashed #000; border-radius:6px; background:#fafafa;">
-    <strong style="font-size:11px; display:block; margin-bottom:8px;"> Patrón de desbloqueo (dibujar abajo):</strong>
-    <div style="display:grid; grid-template-columns:repeat(3, 45px); grid-template-rows:repeat(3, 45px); gap:12px; margin:0 auto; width:fit-content;">
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-      <div style="width:45px; height:45px; display:flex; align-items:center; justify-content:center;"><div style="width:14px; height:14px; background:#000; border-radius:50%;"></div></div>
-    </div>
-  </div>
-` : (s.device.password ? `<div class="letter-row"><span><strong>Código/Contraseña:</strong></span><span class="font-bold text-amber-700">${s.device.password}</span></div>` : '')}
-          <div style="margin:6px 0"><strong>Problema:</strong> ${s.device.problem || '—'}</div>
-          <div style="margin:6px 0"><strong>Estado físico:</strong> ${conditions}</div>
-          ${s.device.accessories ? `<div style="margin:6px 0"><strong>Trabajo a realizar:</strong> ${s.device.accessories}</div>` : ''}
-        </div>
-        <div class="letter-section">
-          <h3>Condiciones del Servicio</h3>
-          <p style="font-size:11px;white-space:pre-line;line-height:1.5">${workshopSettings.policies}</p>
-        </div>
-        <div class="letter-sign">
-          <div>Firma del Cliente</div>
-          <div>Recibido por: ${tech}</div>
-        </div>
-        <div class="letter-footer">
-          Contacto: ${workshopSettings.phone} | ${workshopSettings.workshopName}
-        </div>
-      </div>
-    `;
-    html = `<div class="letter-double">${half}<div style="height:30px"></div>${half}</div>`;
-  } else {
-    html = `
-      <div class="ticket-thermal">
-        <div class="t-header"><h2>${workshopSettings.workshopName}</h2><p>NOTA DE RECEPCIÓN</p><p style="font-size:10px">${s.folio}</p></div>
-        <div class="t-divider"></div>
-        <div class="t-row"><span><strong>Fecha:</strong></span><span>${fecha}</span></div>
-        <div class="t-divider"></div>
-        <p class="t-section-title">CLIENTE</p>
-        <div class="t-row"><span>Nombre:</span><span>${s.client.name}</span></div>
-        <div class="t-row"><span>Teléfono:</span><span>${s.client.phone}</span></div>
-        <div class="t-divider"></div>
-        <p class="t-section-title">EQUIPO RECIBIDO</p>
-        <div class="t-row"><span>Equipo:</span><span>${s.device.brand} ${s.device.model}</span></div>
-        ${s.device.imei ? `<div class="t-row"><span>IMEI:</span><span>${s.device.imei}</span></div>` : ''}
-        ${s.device.password ? `<div class="t-row"><span><strong>Contraseña:</strong></span><span>${s.device.password}</span></div>` : ''}
-        <div style="margin:4px 0"><span style="font-weight:bold">Problema:</span><br>${s.device.problem || '—'}</div>
-        <div style="margin:4px 0"><span style="font-weight:bold">Estado físico:</span><br>${conditions}</div>
-        ${s.device.accessories ? `<div style="margin:4px 0"><span style="font-weight:bold">Trabajo a realizar:</span><br>${s.device.accessories}</div>` : ''}
-        <div class="t-divider"></div>
-        <p class="t-section-title">CONDICIONES</p>
-        <p style="font-size:10px;white-space:pre-line">${workshopSettings.policies}</p>
-        <div class="t-divider"></div>
-        <div style="display:flex;justify-content:space-between;margin-top:15px;font-size:9px">
-          <div style="width:45%;border-top:1px solid #000;padding-top:3px;text-align:center">Firma Cliente</div>
-          <div style="width:45%;border-top:1px solid #000;padding-top:3px;text-align:center">Recibido: ${tech}</div>
-        </div>
-        <div class="t-footer">Contacto: ${workshopSettings.phone}</div>
-      </div>
-    `;
-  }
-  const printContainer = document.getElementById('printContainer');
-  printContainer.className = isDouble ? 'print-letter' : 'print-ticket';
-  printContainer.innerHTML = `
-    <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-      <div><strong>🖨️ Vista previa de Nota de Recepción</strong><p style="margin:0;font-size:12px;opacity:0.8">Formato: ${isDouble ? 'Hoja Carta (Doble copia)' : 'Ticket 80mm'}</p></div>
-      <div style="display:flex;gap:10px">
-        <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
-        <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
-      </div>
-    </div>
-    <div style="padding-top:70px;background:#f1f5f9;min-height:100vh">
-      <div class="preview-wrapper ${isDouble ? 'letter-mode' : 'ticket-mode'}">${html}</div>
-    </div>
-  `;
-  printContainer.classList.add('active');
-}
-
-window.doPrint = function() { window.print(); }
-window.closePrintPreview = function() {
-  const printContainer = document.getElementById('printContainer');
-  printContainer.classList.remove('active', 'print-ticket', 'print-letter');
-  printContainer.className = '';
-  printContainer.innerHTML = '';
-}
-
-window.openEdit = function(id) {
-  const s = allServices.find(x => x.id === id);
-  if (!s) return;
-  editId = id;
-  editParts = s.service.parts ? [...s.service.parts] : [];
-  editStatus = s.service.status;
-  document.getElementById('editFolio').textContent = s.folio;
-  document.getElementById('editRepairCost').value = s.service.repairCost;
-  document.getElementById('editPaymentMethod').value = s.service.paymentMethod || '';
-  document.getElementById('editDelivery').value = s.service.estimatedDelivery || '';
-  document.getElementById('editDiagnosis').value = s.service.diagnosis || '';
-  document.getElementById('editTechnicalNotes').value = s.service.technicalNotes || '';
-  document.getElementById('editAdvancePayment').value = s.service.advancePayment || 0;
-  renderEditStatus();
-  renderEditParts();
-  openModal('editModal');
-}
-
-function renderEditStatus() {
-  document.getElementById('statusFlow').innerHTML = STATUSES.map(s => `<button type="button" onclick="setEditStatus('${s}')" class="px-3 py-2 rounded-lg text-xs font-medium transition ${editStatus === s ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">${s}</button>`).join('');
-}
-window.setEditStatus = function(s) { editStatus = s; renderEditStatus(); }
-
-function renderEditParts() {
-  document.getElementById('editPartsList').innerHTML = editParts.length ? editParts.map((p,i) => `<div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg"><div><p class="font-medium text-sm">${p.description}</p><p class="text-xs text-slate-500">$${p.cost.toFixed(2)}</p></div><button onclick="removeEditPart(${i})" class="text-red-500 hover:text-red-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>';
-  const t = editParts.reduce((s,p) => s + p.cost, 0);
-  const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
-  document.getElementById('editTotalParts').textContent = t.toFixed(2);
-  document.getElementById('editRepairCostDisplay').textContent = rc.toFixed(2);
-  document.getElementById('editNetProfit').textContent = (rc - t).toFixed(2);
-}
-window.removeEditPart = function(i) { editParts.splice(i,1); renderEditParts(); }
-document.getElementById('editRepairCost').addEventListener('input', renderEditParts);
-
-window.saveEdit = async function() {
-  showLoading('Guardando cambios...');
-  const rc = parseFloat(document.getElementById('editRepairCost').value) || 0;
-  const advance = parseFloat(document.getElementById('editAdvancePayment').value) || 0;
-  const tp = editParts.reduce((s,p) => s + p.cost, 0);
-  try {
-    await updateDoc(doc(db, "services", editId), {
-      'service.status': editStatus,
-      'service.repairCost': rc,
-      'service.paymentMethod': document.getElementById('editPaymentMethod').value,
-      'service.estimatedDelivery': document.getElementById('editDelivery').value,
-      'service.diagnosis': document.getElementById('editDiagnosis').value,
-      'service.technicalNotes': document.getElementById('editTechnicalNotes').value,
-      'service.advancePayment': advance,
-      'service.remainingAmount': rc - advance,
-      'service.parts': [...editParts],
-      'service.totalParts': tp,
-      'service.netProfit': rc - tp
-    });
-    hideLoading();
-    closeModal('editModal');
-    showToast('✅ Servicio actualizado');
-  } catch (error) { hideLoading(); alert("Error: " + error.message); }
-}
-
-window.deleteSvc = async function(id) {
-  if (!confirm('¿Eliminar este servicio?')) return;
-  try { await deleteDoc(doc(db, "services", id)); showToast('🗑️ Servicio eliminado'); } catch (error) { alert("Error: " + error.message); }
-}
-
-window.openDetail = function(id) {
-  const s = allServices.find(x => x.id === id);
-  if (!s) return;
-  const parts = s.service.parts || [];
-  const tp = parts.reduce((sum,p) => sum + p.cost, 0);
-  const isPaid = s.service.paymentStatus === 'Pagado';
-  const payBadge = isPaid ? '<span class="text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold">✅ PAGADO</span>' : '<span class="text-xs px-3 py-1 rounded-full bg-red-100 text-red-700 font-semibold">⏳ PENDIENTE</span>';
-  const cobrarBtn = !isPaid ? `<button onclick="closeModal('detailModal');cobrarServicio('${s.id}')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition">💰 Cobrar ahora</button>` : '';
-  const tech = s.technician || 'No especificado';
-  const conditions = s.device.physCondition && s.device.physCondition.length > 0 ? s.device.physCondition.join(', ') : 'Ninguno';
-  const photos = servicePhotos[s.folio] || [];
-  const photosHTML = photos.length > 0 ? `
-    <div class="bg-slate-50 rounded-xl p-4 mb-4">
-      <p class="text-xs font-semibold text-slate-500 uppercase mb-3">📷 Fotos de Evidencia (${photos.length})</p>
-      <div class="photo-grid">
-        ${photos.map(photo => `
-          <div class="photo-item">
-            <img src="${photo.url}" onclick="window.open('${photo.url}', '_blank')" alt="Evidencia">
-            <button class="delete-photo" onclick="deleteEvidencePhoto('${photo.id}', '${photo.storagePath}'); openDetail('${s.id}');">×</button>
+    <main class="flex-1 overflow-y-auto p-6 lg:p-8 bg-surface-50">
+      
+      <!-- SECCIÓN CAJA -->
+      <section id="cajaSection" class="space-y-6 fade-in">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
+            <p class="text-xs text-slate-500 font-medium mb-1">Saldo Inicial</p>
+            <h3 class="text-2xl font-bold text-slate-900" id="boxInitial">$0.00</h3>
           </div>
-        `).join('')}
-      </div>
-    </div>
-  ` : '<div class="bg-slate-50 rounded-xl p-4 mb-4 text-center text-slate-400">📷 Sin fotos de evidencia</div>';
-  const currentUrl = window.location.origin + window.location.pathname;
-  const evidenceUrl = currentUrl + '?folio=' + s.folio;
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(evidenceUrl)}`;
-  document.getElementById('detailContent').innerHTML = `
-    <div class="bg-gradient-to-br from-brand-500 to-purple-600 rounded-xl p-6 text-white mb-6">
-      <p class="text-indigo-100 text-sm">Folio: ${s.folio}</p>
-      <h3 class="text-2xl font-bold mt-1">${s.client.name}</h3>
-      <div class="mt-3">${payBadge}</div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-4 mb-6">
-      <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">👤 Cliente</p><p class="text-sm"><span class="text-slate-500">Teléfono:</span> <span class="font-semibold">${s.client.phone}</span></p></div>
-      <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs font-semibold text-slate-500 uppercase mb-2">📱 Equipo</p><p class="text-sm font-semibold">${s.device.brand} ${s.device.model}</p>${s.device.imei ? `<p class="text-xs text-slate-500 mt-1">IMEI: ${s.device.imei}</p>` : ''}</div>
-    </div>
-    <div class="bg-slate-50 rounded-xl p-4 mb-4">
-      <p class="text-xs font-semibold text-slate-500 uppercase mb-1">Problema reportado</p>
-      <p class="text-slate-800 font-medium">${s.device.problem}</p>
-      ${s.device.accessories ? `<p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Trabajo a realizar</p><p class="text-sm text-slate-700">${s.device.accessories}</p>` : ''}
-      <p class="text-xs font-semibold text-slate-500 uppercase mb-1 mt-3">Estado físico al recibir</p>
-      <p class="text-sm text-slate-700">${conditions}</p>
-${s.device.accessType === 'patron' ? `
-  <div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-    <p class="text-xs font-semibold text-amber-700 uppercase mb-1">🔐 Patrón de desbloqueo</p>
-    <p class="text-sm text-slate-700">Ver en nota física impresa</p>
-  </div>
-` : (s.device.password ? `
-  <div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-    <p class="text-xs font-semibold text-amber-700 uppercase mb-1">🔐 Contraseña del equipo</p>
-    <p class="text-sm text-slate-800 font-bold">${s.device.password}</p>
-  </div>
-` : '')}    </div>
-    ${s.service.diagnosis ? `<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-blue-700 uppercase mb-1">Diagnóstico técnico</p><p class="text-slate-800">${s.service.diagnosis}</p></div>` : ''}
-    ${s.service.technicalNotes ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4"><p class="text-xs font-semibold text-amber-700 uppercase mb-1">Notas técnicas</p><p class="text-slate-800">${s.service.technicalNotes}</p></div>` : ''}
-    ${photosHTML}
-    <div class="bg-brand-50 border-2 border-brand-200 rounded-xl p-4 mb-4 text-center">
-      <p class="text-xs font-semibold text-brand-700 uppercase mb-2">📱 Escanea para agregar fotos de evidencia</p>
-      <img src="${qrUrl}" alt="QR Evidencia" class="mx-auto" style="width:120px;height:120px">
-      <p class="text-xs text-brand-600 mt-2 break-all">${evidenceUrl}</p>
-    </div>
-    <div class="bg-slate-50 rounded-xl p-4 mb-4">
-      <p class="text-xs font-semibold text-slate-500 uppercase mb-2">🔧 Refacciones (${parts.length}) - Registro interno</p>
-      ${parts.length ? parts.map(p => `<div class="flex justify-between py-2 border-b border-slate-200 last:border-0"><span>${p.description}</span><span class="font-semibold">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-sm">Sin refacciones</p>'}
-      <div class="flex justify-between pt-3 mt-2 border-t-2 border-slate-300 font-bold"><span>Total refacciones (interno)</span><span>$${tp.toFixed(2)}</span></div>
-    </div>
-    <div class="grid grid-cols-2 gap-4 mb-6">
-      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center"><p class="text-xs text-emerald-700 uppercase font-semibold">Precio al cliente</p><p class="text-2xl font-bold text-emerald-700">$${s.service.repairCost.toFixed(2)}</p></div>
-      <div class="bg-brand-50 border border-brand-200 rounded-xl p-4 text-center"><p class="text-xs text-brand-700 uppercase font-semibold">Ganancia neta</p><p class="text-2xl font-bold text-brand-700">$${(s.service.repairCost - tp).toFixed(2)}</p></div>
-    </div>
-    ${s.service.warranty ? `<div class="bg-purple-50 border border-purple-200 rounded-xl p-3 mb-4 text-center"><p class="text-xs text-purple-700 uppercase font-semibold">Garantía</p><p class="font-bold text-purple-800">${s.service.warranty}</p></div>` : ''}
-    <div class="bg-slate-50 rounded-xl p-3 mb-4 text-center"><p class="text-xs text-slate-600">Atendido por: <strong>${tech}</strong></p></div>
-    <div class="flex flex-wrap gap-2">
-      ${cobrarBtn}
-      <button onclick="printReceptionTicket('${s.id}')" class="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium transition">📄 Nota de Recepción</button>
-      <button onclick="closeModal('detailModal');openEdit('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">✏️ Editar</button>
-      ${!isPaid && s.service.remainingAmount > 0 ? `<button onclick="closeModal('detailModal');registrarAnticipo('${s.id}')" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition">💰 Registrar Anticipo</button>` : ''}
-      <button onclick="printTicket('${s.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition">🖨️ Ticket de Cobro</button>
-      <button onclick="if(confirm('¿Eliminar?')){deleteSvc('${s.id}');closeModal('detailModal')}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition">🗑️ Eliminar</button>
-    </div>
-  `;
-  openModal('detailModal');
-}
-
-// ===== CORTES DE CAJA =====
-window.generarCorteDiario = async function() {
-  const hoy = new Date();
-  const hoyStr = hoy.toDateString();
-  const corteHoy = allCortes.find(c => c.type === 'dia' && new Date(c.date).toDateString() === hoyStr);
-  if (corteHoy) { if (!confirm('Ya existe un corte del día de hoy. ¿Deseas generar uno nuevo (se creará un duplicado)?')) return; }
-  if (!confirm('¿Generar corte de caja del día de hoy?\n\nSe calcularán todos los ingresos, gastos y servicios del día.')) return;
-  showLoading('Generando corte del día...');
-  const hoyInicio = new Date(hoy); hoyInicio.setHours(0,0,0,0);
-  const hoyFin = new Date(hoy); hoyFin.setHours(23,59,59,999);
-  const serviciosHoy = allServices.filter(s => { 
-    if (!s || !s.service) return false;
-    const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; 
-    return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= hoyInicio && paidDate <= hoyFin; 
-  });
-  const nuevosHoy = allServices.filter(s => { 
-    if (!s) return false;
-    const createdDate = new Date(s.date); 
-    return createdDate >= hoyInicio && createdDate <= hoyFin; 
-  });
-  const gastosHoy = allExpenses.filter(e => { 
-    const expDate = new Date(e.date); 
-    return expDate >= hoyInicio && expDate <= hoyFin; 
-  });
-  const ingresos = serviciosHoy.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
-  const refacciones = serviciosHoy.reduce((sum, s) => sum + (s.service.totalParts || 0), 0);
-  const gastosPersonales = gastosHoy.reduce((sum, e) => sum + e.amount, 0);
-  const gananciaNeta = ingresos - refacciones - gastosPersonales;
-  const pagosEfectivo = serviciosHoy.filter(s => s.service.paymentMethod === 'Efectivo').reduce((sum, s) => sum + s.service.repairCost, 0);
-  const pagosTransferencia = serviciosHoy.filter(s => s.service.paymentMethod === 'Transferencia').reduce((sum, s) => sum + s.service.repairCost, 0);
-  const pagosTarjeta = serviciosHoy.filter(s => s.service.paymentMethod === 'Tarjeta').reduce((sum, s) => sum + s.service.repairCost, 0);
-  const cashOpenedData = localStorage.getItem('cashOpened_' + hoyStr);
-  const initialCash = cashOpenedData ? JSON.parse(cashOpenedData).initialCash : 0;
- const corte = {
-  type: 'dia', date: hoy.toISOString(), dateLabel: hoy.toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' }),
-  initialCash: initialCash, ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosHoy.length, serviciosNuevos: nuevosHoy.length,
-  pagosEfectivo, pagosTransferencia, pagosTarjeta,
-  serviciosDetalle: serviciosHoy.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
-  gastosDetalle: gastosHoy.map(e => ({ fecha: e.date, categoria: e.category, descripcion: e.description, monto: e.amount })),
-  createdBy: currentUser.fullName, createdAt: new Date().toISOString()
-};
-  try {
-    await addDoc(collection(db, "dailyCuts"), corte);
-    localStorage.removeItem('cashOpened_' + hoyStr);
-    hideLoading();
-    showToast('✅ Corte del día generado exitosamente');
-  } catch (error) { hideLoading(); alert("Error: " + error.message); }
-}
-
-window.generarCorteMensual = async function() {
-  const ahora = new Date();
-  const mesActual = ahora.getMonth();
-  const añoActual = ahora.getFullYear();
-  if (!confirm(`¿Generar corte del mes de ${MESES[mesActual]} ${añoActual}?\n\nSe calcularán todos los ingresos, gastos y servicios del mes.`)) return;
-  showLoading('Generando corte mensual...');
-  const mesInicio = new Date(añoActual, mesActual, 1, 0, 0, 0, 0);
-  const mesFin = new Date(añoActual, mesActual + 1, 0, 23, 59, 59, 999);
-  const serviciosMes = allServices.filter(s => { 
-    if (!s || !s.service) return false;
-    const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null; 
-    return s.service.paymentStatus === 'Pagado' && paidDate && paidDate >= mesInicio && paidDate <= mesFin; 
-  });
-  const nuevosMes = allServices.filter(s => { 
-    if (!s) return false;
-    const createdDate = new Date(s.date); 
-    return createdDate >= mesInicio && createdDate <= mesFin; 
-  });
-  const gastosMes = allExpenses.filter(e => { 
-    const expDate = new Date(e.date); 
-    return expDate >= mesInicio && expDate <= mesFin; 
-  });
-  const ingresos = serviciosMes.reduce((sum, s) => sum + (s.service.repairCost || 0), 0);
-  const refacciones = serviciosMes.reduce((sum, s) => sum + (s.service.totalParts || 0), 0);
-  const gastosPersonales = gastosMes.reduce((sum, e) => sum + e.amount, 0);
-  const gananciaNeta = ingresos - refacciones - gastosPersonales;
-  const pagosEfectivo = serviciosMes.filter(s => s.service.paymentMethod === 'Efectivo').reduce((sum, s) => sum + s.service.repairCost, 0);
-  const pagosTransferencia = serviciosMes.filter(s => s.service.paymentMethod === 'Transferencia').reduce((sum, s) => sum + s.service.repairCost, 0);
-  const pagosTarjeta = serviciosMes.filter(s => s.service.paymentMethod === 'Tarjeta').reduce((sum, s) => sum + s.service.repairCost, 0);
-  const corte = {
-  type: 'mes', date: ahora.toISOString(), dateLabel: `${MESES[mesActual]} ${añoActual}`, mes: mesActual, año: añoActual,
-  ingresos, refacciones, gastosPersonales, gananciaNeta, serviciosCobrados: serviciosMes.length, serviciosNuevos: nuevosMes.length,
-  pagosEfectivo, pagosTransferencia, pagosTarjeta,
-  serviciosDetalle: serviciosMes.map(s => ({ folio: s.folio, cliente: s.client.name, monto: s.service.repairCost, metodo: s.service.paymentMethod || 'No especificado' })),
-  gastosDetalle: gastosMes.map(e => ({ fecha: e.date, categoria: e.category, descripcion: e.description, monto: e.amount })),
-  createdBy: currentUser.fullName, createdAt: new Date().toISOString()
-};
-  try { await addDoc(collection(db, "dailyCuts"), corte); hideLoading(); showToast('✅ Corte mensual generado exitosamente'); } catch (error) { hideLoading(); alert("Error: " + error.message); }
-}
-
-function renderCortes() {
-  const tbody = document.getElementById('cortesList');
-  const empty = document.getElementById('cortesEmpty');
-  let filtered = allCortes;
-  if (corteFilter === 'dia') filtered = allCortes.filter(c => c.type === 'dia');
-  if (corteFilter === 'mes') filtered = allCortes.filter(c => c.type === 'mes');
-  if (filtered.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
-  empty.classList.add('hidden');
-  tbody.innerHTML = filtered.map(c => {
-    const tipoBadge = c.type === 'dia' ? '<span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 font-medium">Diario</span>' : '<span class="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-700 font-medium">Mensual</span>';
-    const fecha = new Date(c.date).toLocaleDateString('es-MX', { year:'numeric', month:'short', day:'numeric' });
-    return `<tr class="hover:bg-slate-50 cursor-pointer" onclick="verDetalleCorte('${c.id}')">
-      <td class="p-4 font-medium text-slate-800">${fecha}</td>
-      <td class="p-4">${tipoBadge}</td>
-      <td class="p-4 text-right font-semibold text-emerald-600">$${(c.ingresos||0).toFixed(2)}</td>
-      <td class="p-4 text-right text-red-600">$${((c.refacciones||0) + (c.gastosPersonales||0)).toFixed(2)}</td>
-      <td class="p-4 text-right font-bold ${(c.gananciaNeta||0) >= 0 ? 'text-emerald-600' : 'text-red-600'}">$${(c.gananciaNeta||0).toFixed(2)}</td>
-      <td class="p-4 text-right">${c.serviciosCobrados||0}</td>
-      <td class="p-4 text-right">
-        <button onclick="event.stopPropagation();verDetalleCorte('${c.id}')" class="text-brand-600 hover:text-brand-700 font-medium text-sm mr-2">Ver detalle</button>
-        <button onclick="event.stopPropagation();deleteCorte('${c.id}')" class="text-red-600 hover:text-red-700 font-medium text-sm" title="Eliminar corte">🗑️</button>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-window.filtrarCortes = function(filter) {
-  corteFilter = filter;
-  document.querySelectorAll('.corte-filter-btn').forEach(btn => {
-    if (btn.dataset.filter === filter) { btn.classList.add('bg-brand-600','text-white'); btn.classList.remove('bg-slate-100','text-slate-700'); }
-    else { btn.classList.remove('bg-brand-600','text-white'); btn.classList.add('bg-slate-100','text-slate-700'); }
-  });
-  renderCortes();
-}
-
-window.verDetalleCorte = function(id) {
-  const c = allCortes.find(x => x.id === id);
-  if (!c) return;
-  document.getElementById('corteDetailTitle').textContent = `Corte ${c.type === 'dia' ? 'Diario' : 'Mensual'} - ${c.dateLabel}`;
-  const serviciosHTML = c.serviciosDetalle && c.serviciosDetalle.length > 0
-    ? c.serviciosDetalle.map(s => `<div class="flex justify-between py-2 border-b border-slate-100 last:border-0"><div><p class="font-semibold text-slate-800">${s.folio}</p><p class="text-xs text-slate-500">${s.cliente}</p></div><div class="text-right"><p class="font-semibold text-emerald-600">$${s.monto.toFixed(2)}</p><p class="text-xs text-slate-500">${s.metodo}</p></div></div>`).join('')
-    : '<p class="text-slate-400 text-center py-4">Sin servicios en este corte</p>';
-  document.getElementById('corteDetailContent').innerHTML = `
-    <div class="grid grid-cols-2 gap-4 mb-6">
-      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4"><p class="text-xs text-emerald-700 uppercase font-semibold mb-1">Ingresos</p><p class="text-2xl font-bold text-emerald-700">$${(c.ingresos||0).toFixed(2)}</p></div>
-      <div class="bg-brand-50 border border-brand-200 rounded-xl p-4"><p class="text-xs text-brand-700 uppercase font-semibold mb-1">Ganancia neta</p><p class="text-2xl font-bold text-brand-700">$${(c.gananciaNeta||0).toFixed(2)}</p></div>
-    </div>
-    <div class="grid grid-cols-3 gap-3 mb-6">
-      <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💵 Efectivo</p><p class="font-bold text-slate-800">$${(c.pagosEfectivo||0).toFixed(2)}</p></div>
-      <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">🏦 Transferencia</p><p class="font-bold text-slate-800">$${(c.pagosTransferencia||0).toFixed(2)}</p></div>
-      <div class="bg-slate-50 rounded-xl p-3 text-center"><p class="text-xs text-slate-500 mb-1">💳 Tarjeta</p><p class="font-bold text-slate-800">$${(c.pagosTarjeta||0).toFixed(2)}</p></div>
-    </div>
-    <div class="bg-slate-50 rounded-xl p-4 mb-6">
-      <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Saldo inicial</span><span class="font-semibold">$${(c.initialCash||0).toFixed(2)}</span></div>
-      <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Servicios cobrados</span><span class="font-semibold">${c.serviciosCobrados||0}</span></div>
-      <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Servicios nuevos</span><span class="font-semibold">${c.serviciosNuevos||0}</span></div>
-      <div class="flex justify-between py-2 border-b border-slate-200"><span class="text-slate-600">Costo refacciones</span><span class="font-semibold text-amber-600">$${(c.refacciones||0).toFixed(2)}</span></div>
-      <div class="flex justify-between py-2"><span class="text-slate-600">Gastos personales</span><span class="font-semibold text-red-600">$${(c.gastosPersonales||0).toFixed(2)}</span></div>
-    </div>
-    ${c.gastosDetalle && c.gastosDetalle.length > 0 ? `
-  <h3 class="font-bold text-slate-800 mb-3 mt-6">💸 Gastos personales del período</h3>
-  <div class="bg-white border border-slate-200 rounded-xl p-4 max-h-60 overflow-y-auto">
-    ${c.gastosDetalle.map(g => `
-      <div class="flex justify-between py-2 border-b border-slate-100 last:border-0">
-        <div>
-          <p class="font-medium text-slate-800">${g.descripcion}</p>
-          <p class="text-xs text-slate-500">${g.categoria} • ${new Date(g.fecha).toLocaleDateString('es-MX')}</p>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
+            <p class="text-xs text-slate-500 font-medium mb-1">Ingresos Totales (Efectivo + Transf.)</p>
+            <h3 class="text-2xl font-bold text-emerald-600" id="boxTotalIncome">$0.00</h3>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
+            <p class="text-xs text-slate-500 font-medium mb-1">Efectivo Esperado en Caja</p>
+            <h3 class="text-2xl font-bold text-accent-600" id="boxExpectedCash">$0.00</h3>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
+            <p class="text-xs text-slate-500 font-medium mb-1">Ganancia Neta Real</p>
+            <h3 class="text-2xl font-bold text-indigo-600" id="boxNetProfit">$0.00</h3>
+          </div>
         </div>
-        <div class="text-right">
-          <p class="font-bold text-red-600">-$${parseFloat(g.monto).toFixed(2)}</p>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base">Movimientos de Caja de Hoy</h3>
+              <p class="text-xs text-slate-500">Control detallado de anticipos y cobros</p>
+            </div>
+            <button onclick="openModal('newOrderModal')" class="bg-accent-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-accent-700 transition shadow-sm">+ Nueva Orden / Ingreso</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-xs text-slate-400 uppercase border-b border-slate-100">
+                  <th class="text-left pb-3 font-semibold">Folio</th>
+                  <th class="text-left pb-3 font-semibold">Cliente / Equipo</th>
+                  <th class="text-left pb-3 font-semibold">Estado de Pago</th>
+                  <th class="text-right pb-3 font-semibold">Monto / Pendiente</th>
+                  <th class="text-right pb-3 font-semibold">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="cajaTransactionsList" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    `).join('')}
+      </section>
+
+    </main>
   </div>
-` : ''}
-    <h3 class="font-bold text-slate-800 mb-3">📋 Servicios incluidos</h3>
-    <div class="bg-white border border-slate-200 rounded-xl p-4 max-h-60 overflow-y-auto">${serviciosHTML}</div>
-    <div class="mt-4 text-xs text-slate-500 text-center">Corte generado por ${c.createdBy} el ${new Date(c.createdAt).toLocaleString('es-MX')}</div>
-    <div class="mt-6 flex gap-3">
-      <button onclick="printCorte('${c.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-        Imprimir Corte
-      </button>
-      <button onclick="deleteCorte('${c.id}')" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-        Eliminar Corte
-      </button>
-      <button onclick="closeModal('corteDetailModal')" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 rounded-xl transition">Cerrar</button>
-    </div>
-  `;
-  openModal('corteDetailModal');
-}
+</div>
 
-window.deleteCorte = async function(id) {
-  if (!confirm('⚠️ ¿Estás seguro de eliminar este corte de caja?\n\nEsta acción no se puede deshacer y afectará tu historial de reportes.')) return;
-  showLoading('Eliminando corte...');
-  try {
-    await deleteDoc(doc(db, "dailyCuts", id));
-    hideLoading();
-    showToast('🗑️ Corte eliminado correctamente');
-    closeModal('corteDetailModal');
-  } catch (error) {
-    hideLoading();
-    alert("Error al eliminar: " + error.message);
+<script>
+let db = JSON.parse(localStorage.getItem('velocell_pro_db')) || {
+  initialCash: 0,
+  isBoxOpen: false,
+  orders: []
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (!db.isBoxOpen) {
+    document.getElementById('openCashModal').classList.add('active');
+  } else {
+    updateCajaUI();
   }
-}
-
-window.printCorte = function(id) {
-  const c = allCortes.find(x => x.id === id);
-  if (!c) return;
-  const fecha = new Date(c.date).toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-  const tipoCorte = c.type === 'dia' ? 'CORTE DIARIO' : 'CORTE MENSUAL';
-  const serviciosHTML = c.serviciosDetalle && c.serviciosDetalle.length > 0
-    ? c.serviciosDetalle.map(s => `<div class="t-row"><span>${s.folio}</span><span>$${s.monto.toFixed(2)}</span></div>`).join('')
-    : '<div class="t-row"><span>Sin servicios</span><span></span></div>';
-  const ticketHTML = `
-    <div class="ticket-thermal">
-      <div class="t-header"><h2>${workshopSettings.workshopName}</h2><p>${tipoCorte}</p></div>
-      <div class="t-divider"></div>
-      <div class="t-row"><span><strong>Fecha:</strong></span><span><strong>${fecha}</strong></span></div>
-      <div class="t-divider"></div>
-      <p class="t-section-title">RESUMEN FINANCIERO</p>
-      <div class="t-row"><span>Saldo inicial:</span><span>$${(c.initialCash||0).toFixed(2)}</span></div>
-      <div class="t-row"><span>Ingresos:</span><span>$${(c.ingresos||0).toFixed(2)}</span></div>
-      <div class="t-row"><span>Costo refacciones:</span><span>-$${(c.refacciones||0).toFixed(2)}</span></div>
-      <div class="t-row"><span>Gastos personales:</span><span>-$${(c.gastosPersonales||0).toFixed(2)}</span></div>
-      <div class="t-divider"></div>
-      <div class="t-row t-total"><span>GANANCIA NETA:</span><span>$${(c.gananciaNeta||0).toFixed(2)}</span></div>
-      <div class="t-divider"></div>
-      <p class="t-section-title">MÉTODOS DE PAGO</p>
-      <div class="t-row"><span>💵 Efectivo:</span><span>$${(c.pagosEfectivo||0).toFixed(2)}</span></div>
-      <div class="t-row"><span>🏦 Transferencia:</span><span>$${(c.pagosTransferencia||0).toFixed(2)}</span></div>
-      <div class="t-row"><span>💳 Tarjeta:</span><span>$${(c.pagosTarjeta||0).toFixed(2)}</span></div>
-      <div class="t-divider"></div>
-      <p class="t-section-title">ESTADÍSTICAS</p>
-      <div class="t-row"><span>Servicios cobrados:</span><span>${c.serviciosCobrados||0}</span></div>
-      <div class="t-row"><span>Servicios nuevos:</span><span>${c.serviciosNuevos||0}</span></div>
-      <div class="t-divider"></div>
-      <p class="t-section-title">SERVICIOS INCLUIDOS</p>
-      ${serviciosHTML}
-      <div class="t-divider"></div>
-      <div class="t-footer">
-        <p>Generado por: ${c.createdBy}</p>
-        <p>${new Date(c.createdAt).toLocaleString('es-MX')}</p>
-        <p style="margin-top:10px;font-weight:bold">*** Fin del reporte ***</p>
-      </div>
-    </div>
-  `;
-  const printContainer = document.getElementById('printContainer');
-  printContainer.className = 'print-ticket';
-  printContainer.innerHTML = `
-    <div class="no-print" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center;z-index:100000;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
-      <div><strong>🖨️ Vista previa del corte</strong><p style="margin:0;font-size:12px;opacity:0.8">Así se verá al imprimir</p></div>
-      <div style="display:flex;gap:10px">
-        <button onclick="window.doPrint()" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">🖨️ Imprimir</button>
-        <button onclick="window.closePrintPreview()" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px">✕ Cerrar</button>
-      </div>
-    </div>
-    <div style="padding-top:70px;background:#f1f5f9;min-height:100vh"><div class="preview-wrapper ticket-mode">${ticketHTML}</div></div>
-  `;
-  printContainer.classList.add('active');
-}
-
-function updateCorteCount() { document.getElementById('totalCortesCount').textContent = allCortes.length; }
-
-// ===== CEO / ESTADÍSTICAS =====
-function updateCEOStats() {
-  const ahora = new Date();
-  const mesActual = ahora.getMonth();
-  const añoActual = ahora.getFullYear();
-  const mesAnterior = mesActual === 0 ? 11 : mesActual - 1;
-  const añoAnterior = mesActual === 0 ? añoActual - 1 : añoActual;
-  const mesInicio = new Date(añoActual, mesActual, 1, 0, 0, 0, 0);
-  const mesFin = new Date(añoActual, mesActual + 1, 0, 23, 59, 59, 999);
-  const mesAntInicio = new Date(añoAnterior, mesAnterior, 1, 0, 0, 0, 0);
-  const mesAntFin = new Date(añoAnterior, mesAnterior + 1, 0, 23, 59, 59, 999);
-  
-  // Calcular ingresos REALES del mes (pagos recibidos)
-  let ingresosMes = 0;
-  let ingresosMesAnt = 0;
-  let refaccionesMes = 0;
-  let serviciosMesCount = 0;
-  
-  allServices.forEach(s => {
-    if (!s || !s.service) return;
-    const payments = s.service.payments || [];
-    payments.forEach(p => {
-      const pDate = new Date(p.date);
-      if (pDate >= mesInicio && pDate <= mesFin) {
-        ingresosMes += p.amount;
-        serviciosMesCount++;
-      }
-      if (pDate >= mesAntInicio && pDate <= mesAntFin) {
-        ingresosMesAnt += p.amount;
-      }
-    });
-    if (s.service.paidDate) {
-      const paidDate = new Date(s.service.paidDate);
-      if (paidDate >= mesInicio && paidDate <= mesFin) {
-        refaccionesMes += (s.service.totalParts || 0);
-      }
-    }
-  });
-  
-  const gastosMes = allExpenses.filter(e => { const expDate = new Date(e.date); return expDate >= mesInicio && expDate <= mesFin; }).reduce((sum, e) => sum + e.amount, 0);
-  const gananciaNeta = ingresosMes - refaccionesMes - gastosMes;
-  
-  document.getElementById('ceoIngresosMes').textContent = '$' + ingresosMes.toFixed(2);
-  document.getElementById('ceoServiciosMes').textContent = serviciosMesCount;
-  document.getElementById('ceoGananciaMes').textContent = '$' + gananciaNeta.toFixed(2);
-  document.getElementById('ceoTicketPromedio').textContent = serviciosMesCount > 0 ? '$' + (ingresosMes / serviciosMesCount).toFixed(2) : '$0';
-  
-  const trendIngresos = ingresosMesAnt > 0 ? ((ingresosMes - ingresosMesAnt) / ingresosMesAnt * 100).toFixed(1) : 0;
-  document.getElementById('ceoIngresosTrend').innerHTML = trendIngresos >= 0 ? `<span class="text-emerald-600">▲ ${trendIngresos}% vs mes anterior</span>` : `<span class="text-red-600">▼ ${Math.abs(trendIngresos)}% vs mes anterior</span>`;
-  document.getElementById('ceoServiciosTrend').innerHTML = '';
-  
-  renderBarChart();
-  renderTopServicios(allServices.filter(s => s && s.service && s.service.paymentStatus === 'Pagado'));
-  renderTopMarcas(allServices.filter(s => s && s.service && s.service.paymentStatus === 'Pagado'));
-  renderMetodosPago(allServices.filter(s => s && s.service && s.service.paymentStatus === 'Pagado'));
-  renderDiaProductivo(allServices.filter(s => s && s.service && s.service.paymentStatus === 'Pagado'));
-}
-
-function renderBarChart() {
-  const ahora = new Date();
-  const meses = [];
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date(ahora.getFullYear(), ahora.getMonth() - i, 1);
-    const mesInicio = new Date(d.getFullYear(), d.getMonth(), 1, 0, 0, 0, 0);
-    const mesFin = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
-    
-    let ingresos = 0;
-    allServices.forEach(s => {
-      if (!s || !s.service) return;
-      const payments = s.service.payments || [];
-      payments.forEach(p => {
-        const pDate = new Date(p.date);
-        if (pDate >= mesInicio && pDate <= mesFin) {
-          ingresos += p.amount;
-        }
-      });
-    });
-    meses.push({ label: MESES[d.getMonth()].substring(0,3), value: ingresos });
-  }
-  const max = Math.max(...meses.map(m => m.value), 1);
-  const container = document.getElementById('barChartIngresos');
-  container.innerHTML = meses.map(m => {
-    const height = (m.value / max) * 100;
-    return `<div class="bar-item"><div class="bar-value">$${m.value > 0 ? (m.value/1000).toFixed(1) + 'k' : '0'}</div><div class="bar" style="height:${Math.max(height, 2)}%"></div><div class="bar-label">${m.label}</div></div>`;
-  }).join('');
-}
-
-function renderTopServicios(servicios) {
-  const container = document.getElementById('topServiciosList');
-  if (servicios.length === 0) { container.innerHTML = '<p class="text-slate-400 text-center py-4">Sin datos este mes</p>'; return; }
-  const problemas = {};
-  servicios.forEach(s => {
-    const p = s.device.problem || 'Sin descripción';
-    const corto = p.length > 30 ? p.substring(0,30) + '...' : p;
-    if (!problemas[corto]) problemas[corto] = { count: 0, total: 0 };
-    problemas[corto].count++;
-    problemas[corto].total += s.service.repairCost;
-  });
-  const top = Object.entries(problemas).sort((a,b) => b[1].count - a[1].count).slice(0,5);
-  const maxCount = top[0]?.[1].count || 1;
-  container.innerHTML = top.map(([nombre, data], i) => `
-    <div>
-      <div class="flex justify-between items-center mb-1"><span class="text-sm font-medium text-slate-800">${i+1}. ${nombre}</span><span class="text-xs font-semibold text-brand-600">${data.count} servicios • $${data.total.toFixed(0)}</span></div>
-      <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-gradient-to-r from-brand-500 to-purple-600 h-2 rounded-full" style="width:${(data.count/maxCount)*100}%"></div></div>
-    </div>
-  `).join('');
-}
-
-function renderTopMarcas(servicios) {
-  const container = document.getElementById('topMarcasList');
-  if (servicios.length === 0) { container.innerHTML = '<p class="text-slate-400 text-center py-4">Sin datos este mes</p>'; return; }
-  const marcas = {};
-  servicios.forEach(s => { const m = s.device.brand || 'Otro'; if (!marcas[m]) marcas[m] = 0; marcas[m]++; });
-  const top = Object.entries(marcas).sort((a,b) => b[1] - a[1]);
-  const max = top[0]?.[1] || 1;
-  const colors = ['from-blue-500 to-blue-600','from-emerald-500 to-emerald-600','from-amber-500 to-amber-600','from-red-500 to-red-600','from-purple-500 to-purple-600'];
-  container.innerHTML = top.map(([marca, count], i) => `
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 bg-gradient-to-br ${colors[i % colors.length]} rounded-lg flex items-center justify-center text-white font-bold text-sm">${i+1}</div>
-      <div class="flex-1">
-        <div class="flex justify-between mb-1"><span class="text-sm font-medium text-slate-800">${marca}</span><span class="text-xs font-semibold text-slate-600">${count} equipos</span></div>
-        <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-gradient-to-r ${colors[i % colors.length]} h-2 rounded-full" style="width:${(count/max)*100}%"></div></div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderMetodosPago(servicios) {
-  const container = document.getElementById('metodosPagoList');
-  if (servicios.length === 0) { container.innerHTML = '<p class="text-slate-400 text-center py-4">Sin datos este mes</p>'; return; }
-  const metodos = { 'Efectivo': 0, 'Transferencia': 0, 'Tarjeta': 0, 'No especificado': 0 };
-  servicios.forEach(s => { const m = s.service.paymentMethod || 'No especificado'; metodos[m] = (metodos[m] || 0) + 1; });
-  const total = servicios.length;
-  const icons = { 'Efectivo': '💵', 'Transferencia': '🏦', 'Tarjeta': '💳', 'No especificado': '❓' };
-  const colors = { 'Efectivo': 'bg-emerald-500', 'Transferencia': 'bg-blue-500', 'Tarjeta': 'bg-purple-500', 'No especificado': 'bg-slate-400' };
-  container.innerHTML = Object.entries(metodos).filter(([_,v]) => v > 0).map(([metodo, count]) => {
-    const pct = ((count/total)*100).toFixed(0);
-    return `<div>
-      <div class="flex justify-between items-center mb-1"><span class="text-sm font-medium text-slate-800">${icons[metodo]} ${metodo}</span><span class="text-xs font-semibold text-slate-600">${count} (${pct}%)</span></div>
-      <div class="w-full bg-slate-100 rounded-full h-2"><div class="${colors[metodo]} h-2 rounded-full" style="width:${pct}%"></div></div>
-    </div>`;
-  }).join('');
-}
-
-function renderDiaProductivo(servicios) {
-  if (servicios.length === 0) { document.getElementById('diaProductivoNombre').textContent = '—'; document.getElementById('diaProductivoDetalle').textContent = 'Sin datos este mes'; return; }
-  const dias = {};
-  servicios.forEach(s => {
-    if (!s || !s.service) return;
-    const paidDate = s.service.paidDate ? new Date(s.service.paidDate) : null;
-    if (!paidDate) return;
-    const dia = DIAS_SEMANA[paidDate.getDay()];
-    if (!dias[dia]) dias[dia] = { count: 0, total: 0 };
-    dias[dia].count++;
-    dias[dia].total += s.service.repairCost;
-  });
-  const top = Object.entries(dias).sort((a,b) => b[1].total - a[1].total)[0];
-  document.getElementById('diaProductivoNombre').textContent = top[0];
-  document.getElementById('diaProductivoDetalle').textContent = `${top[1].count} servicios • $${top[1].total.toFixed(2)} en ingresos`;
-}
-
-// ===== CAJA =====
-function loadCajaHoy() {
-  const hoy = new Date();
-  const hoyStr = hoy.toDateString();
-  const cashOpenedData = localStorage.getItem('cashOpened_' + hoyStr);
-  const initialCash = cashOpenedData ? JSON.parse(cashOpenedData).initialCash : 0;
-  const hoyInicio = new Date(hoy); hoyInicio.setHours(0,0,0,0);
-  const hoyFin = new Date(hoy); hoyFin.setHours(23,59,59,999);
-  
-  // Calcular ingresos REALES del día (suma de todos los pagos recibidos hoy)
-  let ingresos = 0;
-  let refacciones = 0;
-  
-  allServices.forEach(s => {
-    if (!s || !s.service) return;
-    const payments = s.service.payments || [];
-    payments.forEach(p => {
-      const pDate = new Date(p.date);
-      if (pDate >= hoyInicio && pDate <= hoyFin) {
-        ingresos += p.amount;
-      }
-    });
-    // Refacciones pagadas hoy
-    if (s.service.paidDate) {
-      const paidDate = new Date(s.service.paidDate);
-      if (paidDate >= hoyInicio && paidDate <= hoyFin) {
-        refacciones += (s.service.totalParts || 0);
-      }
-    }
-  });
-  
-  const gastosHoy = allExpenses.filter(e => { 
-    const expDate = new Date(e.date); 
-    return expDate >= hoyInicio && expDate <= hoyFin; 
-  });
-  const gastos = gastosHoy.reduce((sum, e) => sum + e.amount, 0);
-  const ganancia = ingresos - refacciones - gastos;
-  
-  document.getElementById('cajaHoyInicial').textContent = '$' + initialCash.toFixed(2);
-  document.getElementById('cajaHoyIngresos').textContent = '$' + ingresos.toFixed(2);
-  document.getElementById('cajaHoyRefacciones').textContent = '$' + refacciones.toFixed(2);
-  document.getElementById('cajaHoyGastos').textContent = '$' + gastos.toFixed(2);
-  document.getElementById('cajaHoyGanancia').textContent = '$' + ganancia.toFixed(2);
-}
-
-document.getElementById('expenseForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  showLoading('Registrando gasto...');
-  const exp = { date: document.getElementById('expenseDate').value, amount: parseFloat(document.getElementById('expenseAmount').value), category: document.getElementById('expenseCategory').value, description: document.getElementById('expenseDescription').value, userEmail: currentUser.email };
-  try {
-    await addDoc(collection(db, "expenses"), exp);
-    hideLoading();
-    this.reset();
-    document.getElementById('expenseDate').valueAsDate = new Date();
-    showToast('✅ Gasto registrado');
-  } catch (error) { hideLoading(); alert("Error: " + error.message); }
 });
 
-function loadExpenses() {
-  const tbody = document.getElementById('expensesList');
-  tbody.innerHTML = allExpenses.length ? allExpenses.map(e => `<tr class="hover:bg-slate-50">
-    <td class="p-4">${new Date(e.date).toLocaleDateString()}</td>
-    <td class="p-4"><span class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-700">${e.category}</span></td>
-    <td class="p-4 text-slate-700">${e.description}</td>
-    <td class="p-4 text-right font-semibold text-red-600">-$${e.amount.toFixed(2)}</td>
-    <td class="p-4 text-right"><button onclick="deleteExp('${e.id}')" class="text-red-500 hover:text-red-700"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></td>
-  </tr>`).join('') : '<tr><td colspan="5" class="py-12 text-center text-slate-400">Sin gastos registrados</td></tr>';
-  
-  const now = new Date();
-  const me = allExpenses.filter(e => { const d = new Date(e.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
-  const te = me.reduce((s,e) => s + e.amount, 0);
-  document.getElementById('cajaGastos').textContent = '$' + te.toFixed(2);
-  
-  // Calcular ingresos REALES del mes (todos los pagos recibidos este mes)
-  let ingresos = 0;
-  let gastoRefacciones = 0;
-  const mesInicio = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
-  const mesFin = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
-  
-  allServices.forEach(s => {
-    if (!s || !s.service) return;
-    const payments = s.service.payments || [];
-    payments.forEach(p => {
-      const pDate = new Date(p.date);
-      if (pDate >= mesInicio && pDate <= mesFin) {
-        ingresos += p.amount;
-      }
-    });
-    // Refacciones del servicio si se pagó este mes
-    if (s.service.paidDate) {
-      const paidDate = new Date(s.service.paidDate);
-      if (paidDate >= mesInicio && paidDate <= mesFin) {
-        gastoRefacciones += (s.service.totalParts || 0);
-      }
+function confirmOpenCash() {
+  const val = parseFloat(document.getElementById('initialCashInput').value) || 0;
+  db.initialCash = val;
+  db.isBoxOpen = true;
+  saveDB();
+  document.getElementById('openCashModal').classList.remove('active');
+  updateCajaUI();
+}
+
+function saveDB() {
+  localStorage.setItem('velocell_pro_db', JSON.stringify(db));
+}
+
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+function calculatePending() {
+  const total = parseFloat(document.getElementById('orderTotalPrice').value) || 0;
+  const advance = parseFloat(document.getElementById('orderAdvance').value) || 0;
+  const pending = Math.max(0, total - advance);
+  document.getElementById('orderPendingDisplay').value = `$${pending.toFixed(2)}`;
+}
+
+function saveNewOrder(e) {
+  e.preventDefault();
+  const total = parseFloat(document.getElementById('orderTotalPrice').value) || 0;
+  const advance = parseFloat(document.getElementById('orderAdvance').value) || 0;
+  const partCost = parseFloat(document.getElementById('orderPartCost').value) || 0;
+  const pending = Math.max(0, total - advance);
+
+  const newOrder = {
+    id: 'VC-' + Math.floor(1000 + Math.random() * 9000),
+    client: document.getElementById('orderClientName').value,
+    phone: document.getElementById('orderClientPhone').value,
+    device: document.getElementById('orderDevice').value,
+    problem: document.getElementById('orderProblem').value,
+    partCost: partCost,
+    totalPrice: total,
+    advance: advance,
+    advanceMethod: document.getElementById('orderAdvanceMethod').value,
+    pending: pending,
+    status: pending === 0 ? 'Liquidado' : (advance > 0 ? 'Con Anticipo' : 'Pendiente'),
+    date: new Date().toLocaleDateString()
+  };
+
+  db.orders.unshift(newOrder);
+  saveDB();
+  closeModal('newOrderModal');
+  document.getElementById('newOrderForm').reset();
+  updateCajaUI();
+}
+
+function liquidateOrder(id) {
+  const order = db.orders.find(o => o.id === id);
+  if (!order || order.pending <= 0) return;
+
+  const method = prompt(`¿Cómo se liquidará el saldo pendiente de $${order.pending.toFixed(2)}?\nEscribe: Efectivo o Transferencia`, "Efectivo");
+  if (!method) return;
+
+  order.finalPaymentMethod = method.trim();
+  order.advance += order.pending;
+  order.pending = 0;
+  order.status = 'Liquidado / Entregado';
+  saveDB();
+  updateCajaUI();
+}
+
+function updateCajaUI() {
+  document.getElementById('boxInitial').innerText = `$${db.initialCash.toFixed(2)}`;
+
+  let totalIncome = 0;
+  let totalCash = db.initialCash;
+  let totalPartsCost = 0;
+  let html = '';
+
+  db.orders.forEach(o => {
+    totalPartsCost += (o.partCost || 0);
+    const paidSoFar = o.advance; 
+    totalIncome += paidSoFar;
+
+    // Sumar al efectivo físico solo si el anticipo o cobro fue en Efectivo
+    if (o.advanceMethod === 'Efectivo') {
+      // Para efectos prácticos del ejemplo sumamos el anticipo en efectivo
     }
-  });
-  
-  document.getElementById('cajaIngresos').textContent = '$' + ingresos.toFixed(2);
-  document.getElementById('cajaRefacciones').textContent = '$' + gastoRefacciones.toFixed(2);
-  document.getElementById('cajaBalance').textContent = '$' + (ingresos - gastoRefacciones - te).toFixed(2);
-}
 
-window.deleteExp = async function(id) {
-  if (!confirm('¿Eliminar este gasto?')) return;
-  try { await deleteDoc(doc(db, "expenses", id)); showToast('🗑️ Gasto eliminado'); } catch (error) { console.error(error); }
-}
+    const badgeClass = o.pending === 0 
+      ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+      : 'bg-amber-50 text-amber-700 border-amber-200';
 
-function refreshAll() {
-  updateDashboard();
-  loadServices();
-  renderStatusFilters();
-  loadCajaHoy();
-}
-
-function updateDashboard() {
-  const activas = allServices.filter(s => s && s.service && s.service.status !== 'Entregado').length;
-  document.getElementById('kpiActivas').textContent = activas;
-  
-  const hoy = new Date().toDateString();
-  let ingresosHoy = 0;
-  allServices.forEach(s => {
-    if (!s || !s.service) return;
-    const payments = s.service.payments || [];
-    payments.forEach(p => {
-      const pDate = new Date(p.date);
-      if (pDate.toDateString() === hoy) {
-        ingresosHoy += p.amount;
-      }
-    });
-  });
-  document.getElementById('kpiIngresos').textContent = '$' + ingresosHoy.toFixed(2);
-  
-  const espera = allServices.filter(s => s && s.service && s.service.status === 'Reparado (en espera de que pasen por él)').length;
-  document.getElementById('kpiEspera').textContent = espera;
-  const entregados = allServices.filter(s => s && s.service && s.service.status === 'Entregado').length;
-  document.getElementById('kpiEntregados').textContent = entregados;
-  
-  const recent = allServices.filter(s => s && s.service).slice(0, 5);
-  const tbody = document.getElementById('recentOrdersTable');
-  if (recent.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-400">Sin órdenes aún</td></tr>'; }
-  else {
-    tbody.innerHTML = recent.map(s => `
-      <tr class="hover:bg-slate-50 cursor-pointer" onclick="openDetail('${s.id}')">
-        <td class="py-3 font-semibold text-brand-600">${s.folio}</td>
-        <td class="py-3">${s.client.name}</td>
-        <td class="py-3"><span class="text-xs px-2 py-1 rounded-full ${STATUS_COLORS[s.service.status] || 'bg-slate-100 text-slate-700'}">${s.service.status}</span></td>
-        <td class="py-3 text-right font-semibold">$${s.service.repairCost.toFixed(2)}</td>
+    html += `
+      <tr class="hover:bg-slate-50/50 transition">
+        <td class="py-3.5 font-semibold text-accent-600">${o.id}</td>
+        <td class="py-3.5">
+          <strong class="text-slate-900">${o.client}</strong>
+          <div class="text-xs text-slate-500">${o.device}</div>
+        </td>
+        <td class="py-3.5">
+          <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${badgeClass}">
+            ${o.status}
+          </span>
+        </td>
+        <td class="py-3.5 text-right">
+          <span class="font-bold text-slate-900">$${o.totalPrice.toFixed(2)}</span>
+          <div class="text-xs text-slate-500">Pendiente: <strong class="text-slate-700">$${o.pending.toFixed(2)}</strong></div>
+        </td>
+        <td class="py-3.5 text-right">
+          ${o.pending > 0 ? `<button onclick="liquidateOrder('${o.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-xl font-medium transition shadow-sm">Cobrar Restante</button>` : '<span class="text-xs text-emerald-600 font-semibold">Completado</span>'}
+        </td>
       </tr>
-    `).join('');
-  }
-}
+    `;
 
-function renderStatusFilters() {
-  const counts = {};
-  STATUSES.forEach(s => counts[s] = 0);
-  allServices.forEach(s => { if (s && s.service && counts[s.service.status] !== undefined) counts[s.service.status]++; });
-  const container = document.getElementById('statusFilters');
-  container.innerHTML = `
-    <button onclick="setStatusFilter('')" class="whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium transition ${statusFilter === '' ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">Todas (${allServices.filter(s => s && s.service).length})</button>
-    ${STATUSES.map(s => `<button onclick="setStatusFilter('${s}')" class="whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium transition ${statusFilter === s ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">${s} (${counts[s]})</button>`).join('')}
-  `;
-}
-
-window.setStatusFilter = function(s) { statusFilter = s; renderStatusFilters(); loadServices(); }
-
-function loadServices() {
-  const search = document.getElementById('searchClient')?.value.toLowerCase() || '';
-  const filtered = allServices.filter(s => {
-    if (!s || !s.service || !s.client || !s.device) return false;
-    const ms = !search || s.client.name.toLowerCase().includes(search) || s.client.phone.includes(search) || s.folio.toLowerCase().includes(search);
-    const mst = !statusFilter || s.service.status === statusFilter;
-    return ms && mst;
+    if (o.advanceMethod === 'Efectivo') {
+      totalCash += o.advance;
+    }
   });
-  const tbody = document.getElementById('servicesList');
-  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" class="py-12 text-center text-slate-400">📭 No hay servicios</td></tr>'; return; }
-  tbody.innerHTML = filtered.map(s => {
-    const payBadge = s.service.paymentStatus === 'Pagado' ? '<span class="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium">Pagado</span>' : '<span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700 font-medium">Pendiente</span>';
-    const cobrarBtn = s.service.paymentStatus !== 'Pagado' ? `<button class="text-emerald-600 hover:text-emerald-700 p-1" onclick="event.stopPropagation();cobrarServicio('${s.id}')" title="Cobrar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>` : '';
-    return `<tr class="hover:bg-slate-50 cursor-pointer" onclick="openDetail('${s.id}')">
-      <td class="p-4 font-semibold text-brand-600">${s.folio}</td>
-      <td class="p-4"><p class="font-medium text-slate-800">${s.client.name}</p><p class="text-xs text-slate-500">${s.client.phone}</p></td>
-      <td class="p-4 text-slate-700">${s.device.brand} ${s.device.model}</td>
-      <td class="p-4"><span class="text-xs px-2 py-1 rounded-full ${STATUS_COLORS[s.service.status] || 'bg-slate-100 text-slate-700'}">${s.service.status}</span></td>
-      <td class="p-4">${payBadge}</td>
-      <td class="p-4 text-right font-semibold">$${s.service.repairCost.toFixed(2)}</td>
-      <td class="p-4 text-right" onclick="event.stopPropagation()">
-        <div class="flex justify-end gap-1">
-          ${cobrarBtn}
-          <button class="text-amber-600 hover:text-amber-700 p-1" onclick="openEdit('${s.id}')" title="Editar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
-          <button class="text-blue-600 hover:text-blue-700 p-1" onclick="printTicket('${s.id}')" title="Ticket"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg></button>
-          <button class="text-red-600 hover:text-red-700 p-1" onclick="deleteSvc('${s.id}')" title="Eliminar"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
+
+  // Cálculo de efectivo esperado y ganancia neta real
+  document.getElementById('boxTotalIncome').innerText = `$${totalIncome.toFixed(2)}`;
+  document.getElementById('boxExpectedCash').innerText = `$${totalCash.toFixed(2)}`;
+  
+  const netProfit = totalIncome - totalPartsCost;
+  document.getElementById('boxNetProfit').innerText = `$${netProfit.toFixed(2)}`;
+
+  document.getElementById('cajaTransactionsList').innerHTML = html || '<tr><td colspan="5" class="text-center py-8 text-slate-400 text-sm">No hay órdenes registradas en caja el día de hoy.</td></tr>';
 }
 
-function loadConfigForm() {
-  document.getElementById('cfgWorkshopName').value = workshopSettings.workshopName;
-  document.getElementById('cfgPhone').value = workshopSettings.phone;
-  document.getElementById('cfgPrintFormat').value = workshopSettings.printFormat;
-  document.getElementById('cfgPolicies').value = workshopSettings.policies;
+function showSection(sec) {
+  // Manejo de navegación entre vistas
 }
-
-document.getElementById('configForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  showLoading('Guardando configuración...');
-  try {
-    await setDoc(doc(db, "settings", "general"), {
-      workshopName: document.getElementById('cfgWorkshopName').value,
-      phone: document.getElementById('cfgPhone').value,
-      printFormat: document.getElementById('cfgPrintFormat').value,
-      policies: document.getElementById('cfgPolicies').value
-    });
-    hideLoading();
-    showToast('✅ Configuración guardada');
-  } catch (error) { hideLoading(); alert("Error: " + error.message); }
-});
-
-function showLoading(text) { document.getElementById('loadingText').textContent = text; document.getElementById('loading').classList.remove('hidden'); }
-function hideLoading() { document.getElementById('loading').classList.add('hidden'); }
-function showToast(msg) {
-  const toast = document.createElement('div');
-  toast.className = 'fixed bottom-6 right-6 bg-slate-800 text-white px-6 py-3 rounded-xl shadow-2xl z-[200] fade-in';
-  toast.textContent = msg;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-}
-
-document.getElementById('expenseDate').valueAsDate = new Date();
 </script>
 </body>
 </html>
