@@ -7,14 +7,23 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        brand: { 50:'#eef2ff', 100:'#e0e7ff', 500:'#6366f1', 600:'#4f46e5', 700:'#4338ca' },
-        surface: { 50:'#f8fafc', 100:'#f1f5f9', 200:'#e2e8f0' }
-      }
-    }
-  }
+theme: {
+extend: {
+colors: {
+// Actualizamos 'brand' para usar tonos azules/zafiro
+brand: { 
+    50:'#eff6ff', 
+    100:'#dbeafe', 
+    500:'#3b82f6', // Azul estándar
+    600:'#2563eb', // Azul Zafiro (para selección)
+    700:'#1d4ed8', // Azul más oscuro
+    800:'#1e3a8a', // Azul Marino (para sidebar)
+    900:'#1e3a8a' 
+},
+surface: { 50:'#f8fafc', 100:'#f1f5f9', 200:'#e2e8f0' }
+}
+}
+}
 }
 </script>
 <style>
