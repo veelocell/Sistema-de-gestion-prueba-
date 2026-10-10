@@ -184,6 +184,8 @@ input:focus,select:focus,textarea:focus{border-color:#2563eb!important;box-shado
 #detailModal.active>div,#addPartModal.active>div{animation:none}
 .photo-grid.sm{grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
 .photo-grid.sm .photo-item img{height:92px}
+/* ===== ORDEN TAMAÑO FIJO (ESTILO-V7) ===== */
+#detailModal>div,#editModal>div,#diagModal>div,#costsModal>div,#addPartModal>div,#evidenceModal>div{width:100%!important;max-width:820px!important;height:min(88vh,860px)!important;height:min(88dvh,860px)!important;max-height:none!important}
 </style>
 </head>
 <body class="bg-surface-50 text-slate-800">
@@ -2843,7 +2845,7 @@ function renderDiagEvidence(folio) {
           <p class="text-sm font-semibold text-slate-700">Evidencia del diagnóstico y la reparación</p>
           <p class="text-xs text-slate-500 mt-0.5">Solo fotos de esta etapa.</p>
         </div>
-        <label class="shrink-0 cursor-pointer inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">${ico('cam', 'w-4 h-4')} Agregar<input type="file" accept="image/*" multiple class="hidden" onchange="evUploadDiag(event)"></label>
+        <label class="shrink-0 whitespace-nowrap cursor-pointer inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">${ico('cam', 'w-4 h-4')} Agregar/Tomar Foto<input type="file" accept="image/*" multiple class="hidden" onchange="evUploadDiag(event)"></label>
       </div>
       <p id="diagEvStatus" class="text-xs text-slate-500 mb-2 empty:hidden"></p>
       <div id="diagGallery" class="photo-grid mb-4"></div>
@@ -2978,12 +2980,12 @@ window.openDetail = function(id) {
       ${parts.length ? parts.map(p => `<div class="flex justify-between py-1.5 border-b border-slate-200 last:border-0"><span class="text-slate-700">${p.description}</span><span class="font-medium">$${p.cost.toFixed(2)}</span></div>`).join('') : '<p class="text-slate-400 text-xs">Sin refacciones</p>'}
       <div class="flex justify-between pt-2 mt-1 border-t border-slate-300 font-semibold"><span>Total refacciones</span><span>$${tp.toFixed(2)}</span></div>
     </div>
-    <div class="grid grid-cols-2 gap-3 mb-2">
-      <div class="border border-slate-200 rounded-xl p-3 text-center"><p class="text-[11px] uppercase tracking-wider text-slate-400">Precio al cliente</p><p class="text-xl font-semibold text-slate-800">$${s.service.repairCost.toFixed(2)}</p></div>
-      <div class="border border-slate-200 rounded-xl p-3 text-center"><p class="text-[11px] uppercase tracking-wider text-slate-400">Ganancia neta</p><p class="text-xl font-semibold text-emerald-600">$${(s.service.repairCost - tp).toFixed(2)}</p></div>
+    <div class="grid grid-cols-2 gap-4 mb-3">
+      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center"><p class="text-xs text-emerald-700 uppercase font-semibold">Precio al cliente</p><p class="text-2xl font-bold text-emerald-700">$${s.service.repairCost.toFixed(2)}</p></div>
+      <div class="bg-brand-50 border border-brand-200 rounded-xl p-4 text-center"><p class="text-xs text-brand-700 uppercase font-semibold">Ganancia neta</p><p class="text-2xl font-bold text-brand-700">$${(s.service.repairCost - tp).toFixed(2)}</p></div>
     </div>
     ${advance > 0 ? `<p class="text-center text-xs text-slate-500 mb-2">Anticipo <strong>$${advance.toFixed(2)}</strong> · Restante <strong>$${Math.max(remaining, 0).toFixed(2)}</strong></p>` : ''}
-    ${s.service.warranty ? `<p class="text-center text-xs text-slate-500 mb-2">Garantía: <strong>${s.service.warranty}</strong></p>` : ''}
+    ${s.service.warranty ? `<div class="bg-sky-50 border border-sky-200 rounded-xl p-3 mb-4 text-center"><p class="text-xs text-sky-700 uppercase font-semibold">Garantía</p><p class="font-bold text-sky-800">${s.service.warranty}</p></div>` : ''}
     <p class="text-center text-[11px] text-slate-400 mb-4">Atendido por ${s.technician || 'No especificado'}</p>
     <div class="flex flex-wrap items-center justify-center gap-2">
       ${ghost('doc', 'Nota de recepción', `printReceptionTicket('${s.id}')`)}
@@ -3005,12 +3007,12 @@ window.openEvidence = function(id) {
     const qr = `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=${encodeURIComponent(base + '&tipo=' + kind)}`;
     return `
     <section class="border border-slate-200 rounded-xl p-4 flex flex-col">
-      <div class="flex items-start justify-between gap-2 mb-3">
+      <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
         <div>
           <h4 class="text-sm font-semibold text-slate-800 flex items-center gap-2">${title}<span id="evCount-${kind}" class="text-[11px] font-medium bg-slate-100 text-slate-600 rounded-full px-2 py-0.5">0</span></h4>
           <p class="text-xs text-slate-500 mt-0.5">${caption}</p>
         </div>
-        <label class="shrink-0 cursor-pointer inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">${ico('cam', 'w-4 h-4')} Agregar<input type="file" accept="image/*" multiple class="hidden" onchange="evUploadKind(event,'${kind}')"></label>
+        <label class="shrink-0 whitespace-nowrap cursor-pointer inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">${ico('cam', 'w-4 h-4')} Agregar/Tomar Foto<input type="file" accept="image/*" multiple class="hidden" onchange="evUploadKind(event,'${kind}')"></label>
       </div>
       <p id="evStatus-${kind}" class="text-xs text-slate-500 mb-2 empty:hidden"></p>
       <div id="evGallery-${kind}" class="photo-grid sm mb-4"></div>
